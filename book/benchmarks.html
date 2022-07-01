@@ -179,7 +179,7 @@
 </ul>
 <p>Even if nextest doesn't result in faster test builds, you may find doing occasional nextest runs useful for identifying test bottlenecks, for its user interface, or for its other features like test retries.</p>
 <h2 id="results"><a class="header" href="#results">Results</a></h2>
-<table><thead><tr><th>Project</th><th>Revision</th><th style="text-align: right">Test count</th><th style="text-align: right">cargo test (s)</th><th style="text-align: right">nextest (s)</th><th style="text-align: right">Difference</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>Project</th><th>Revision</th><th style="text-align: right">Test count</th><th style="text-align: right">cargo test (s)</th><th style="text-align: right">nextest (s)</th><th style="text-align: right">Difference</th></tr></thead><tbody>
 <tr><td><a href="https://github.com/facebookincubator/cargo-guppy/">cargo-guppy</a></td><td><a href="https://github.com/facebookincubator/cargo-guppy/commit/c135447af716d0f985557b40042b2b6df53fa653"><code>c135447a</code></a></td><td style="text-align: right">252</td><td style="text-align: right">34.70</td><td style="text-align: right">22.14</td><td style="text-align: right">-36.2%</td></tr>
 <tr><td><a href="https://github.com/diem/diem">diem</a><sup class="footnote-reference"><a href="#diem1">1</a></sup></td><td><a href="https://github.com/diem/diem/commit/6025888b264793bc2112d2ad3a6ef40f0861ee08"><code>6025888b</code></a></td><td style="text-align: right">1476</td><td style="text-align: right">1058.46</td><td style="text-align: right">400.53</td><td style="text-align: right">-62.1%</td></tr>
 <tr><td><a href="https://github.com/meilisearch/meilisearch">meilisearch</a></td><td><a href="https://github.com/meilisearch/meilisearch/commit/f67167fa9f473c1dba5d9485093a4768fc70a32d"><code>f67167fa</code></a></td><td style="text-align: right">240</td><td style="text-align: right">41.04</td><td style="text-align: right">20.62</td><td style="text-align: right">-49.8%</td></tr>
@@ -188,6 +188,7 @@
 <tr><td><a href="https://github.com/rust-analyzer/rust-analyzer">rust-analyzer</a></td><td><a href="https://github.com/rust-analyzer/rust-analyzer/commit/4449a336f6965ebdfa9b7408e6ff40a6a990a43d"><code>4449a336</code></a></td><td style="text-align: right">3746</td><td style="text-align: right">6.76</td><td style="text-align: right">5.23</td><td style="text-align: right">-22.6%</td></tr>
 <tr><td><a href="https://github.com/tokio-rs/tokio">tokio</a></td><td><a href="https://github.com/tokio-rs/tokio/commit/e7a0da60cd997f10b33f32c4763c8ecef01144f8"><code>e7a0da60</code></a></td><td style="text-align: right">1014</td><td style="text-align: right">27.16</td><td style="text-align: right">11.72</td><td style="text-align: right">-56.8%</td></tr>
 </tbody></table>
+</div>
 <div class="footnote-definition" id="diem1"><sup class="footnote-definition-label">1</sup>
 <p>Diem ships its own in-tree tool on top of <a href="https://crates.io/crates/nextest-runner">nextest-runner</a>, so the commands were slightly different:</p>
 <ul>
