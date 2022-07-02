@@ -242,8 +242,8 @@ OPTIONS:
     -h, --help                    Print help information
 
 RUNNER OPTIONS:
-    -j, --test-threads &lt;THREADS&gt;    Number of tests to run simultaneously [default: logical CPU
-                                    count] [env: NEXTEST_TEST_THREADS=] [aliases: jobs]
+    -j, --test-threads &lt;THREADS&gt;    Number of tests to run simultaneously [possible values: integer
+                                    or &quot;num-cpus&quot;] [env: NEXTEST_TEST_THREADS=] [aliases: jobs]
         --retries &lt;RETRIES&gt;         Number of retries for failing tests [default: from profile]
         --fail-fast                 Cancel test run on the first failure
         --no-fail-fast              Run all tests regardless of failure
