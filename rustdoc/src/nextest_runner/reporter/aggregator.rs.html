@@ -376,7 +376,7 @@
     <span class="ident">reporter::TestEvent</span>,
     <span class="ident">runner</span>::{<span class="ident">ExecuteStatus</span>, <span class="ident">ExecutionDescription</span>, <span class="ident">ExecutionResult</span>},
 };
-<span class="kw">use</span> <span class="ident">camino::Utf8Path</span>;
+<span class="kw">use</span> <span class="ident">camino::Utf8PathBuf</span>;
 <span class="kw">use</span> <span class="ident">chrono</span>::{<span class="ident">DateTime</span>, <span class="ident">FixedOffset</span>, <span class="ident">Utc</span>};
 <span class="kw">use</span> <span class="ident">debug_ignore::DebugIgnore</span>;
 <span class="kw">use</span> <span class="ident">once_cell::sync::Lazy</span>;
@@ -387,16 +387,16 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">EventAggregator</span><span class="op">&lt;</span><span class="lifetime">&#39;cfg</span><span class="op">&gt;</span> {
-    <span class="ident">store_dir</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;cfg</span> <span class="ident">Utf8Path</span>,
+    <span class="ident">store_dir</span>: <span class="ident">Utf8PathBuf</span>,
     <span class="comment">// TODO: log information in a JSONable report (converting that to XML later) instead of directly</span>
     <span class="comment">// writing it to XML</span>
     <span class="ident">junit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MetadataJunit</span><span class="op">&lt;</span><span class="lifetime">&#39;cfg</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;cfg</span><span class="op">&gt;</span> <span class="ident">EventAggregator</span><span class="op">&lt;</span><span class="lifetime">&#39;cfg</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">profile</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;cfg</span> <span class="ident">NextestProfile</span><span class="op">&lt;</span><span class="lifetime">&#39;cfg</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">profile</span>: <span class="kw-2">&amp;</span><span class="ident">NextestProfile</span><span class="op">&lt;</span><span class="lifetime">&#39;cfg</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
-            <span class="ident">store_dir</span>: <span class="ident">profile</span>.<span class="ident">store_dir</span>(),
+            <span class="ident">store_dir</span>: <span class="ident">profile</span>.<span class="ident">store_dir</span>().<span class="ident">to_owned</span>(),
             <span class="ident">junit</span>: <span class="ident">profile</span>.<span class="ident">junit</span>().<span class="ident">map</span>(<span class="ident">MetadataJunit::new</span>),
         }
     }

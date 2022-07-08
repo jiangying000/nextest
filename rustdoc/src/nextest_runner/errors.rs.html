@@ -931,6 +931,44 @@
 <span id="926">926</span>
 <span id="927">927</span>
 <span id="928">928</span>
+<span id="929">929</span>
+<span id="930">930</span>
+<span id="931">931</span>
+<span id="932">932</span>
+<span id="933">933</span>
+<span id="934">934</span>
+<span id="935">935</span>
+<span id="936">936</span>
+<span id="937">937</span>
+<span id="938">938</span>
+<span id="939">939</span>
+<span id="940">940</span>
+<span id="941">941</span>
+<span id="942">942</span>
+<span id="943">943</span>
+<span id="944">944</span>
+<span id="945">945</span>
+<span id="946">946</span>
+<span id="947">947</span>
+<span id="948">948</span>
+<span id="949">949</span>
+<span id="950">950</span>
+<span id="951">951</span>
+<span id="952">952</span>
+<span id="953">953</span>
+<span id="954">954</span>
+<span id="955">955</span>
+<span id="956">956</span>
+<span id="957">957</span>
+<span id="958">958</span>
+<span id="959">959</span>
+<span id="960">960</span>
+<span id="961">961</span>
+<span id="962">962</span>
+<span id="963">963</span>
+<span id="964">964</span>
+<span id="965">965</span>
+<span id="966">966</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -946,7 +984,8 @@
 };
 <span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">FromPathBufError</span>, <span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
 <span class="kw">use</span> <span class="ident">config::ConfigError</span>;
-<span class="kw">use</span> <span class="ident">itertools</span>::{<span class="ident">Either</span>, <span class="ident">Itertools</span>};
+<span class="kw">use</span> <span class="ident">itertools::Itertools</span>;
+<span class="kw">use</span> <span class="ident">nextest_filtering::errors::FilterExpressionParseErrors</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">borrow::Cow</span>, <span class="ident">env::JoinPathsError</span>, <span class="ident">fmt</span>};
 <span class="kw">use</span> <span class="ident">thiserror::Error</span>;
 
@@ -957,19 +996,56 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ConfigParseError</span> {
     <span class="ident">config_file</span>: <span class="ident">Utf8PathBuf</span>,
     <span class="attribute">#[<span class="ident">source</span>]</span>
-    <span class="ident">err</span>: <span class="ident">Either</span><span class="op">&lt;</span><span class="ident">ConfigError</span>, <span class="ident">serde_path_to_error::Error</span><span class="op">&lt;</span><span class="ident">ConfigError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">kind</span>: <span class="ident">ConfigParseErrorKind</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ConfigParseError</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(
-        <span class="ident">config_file</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
-        <span class="ident">err</span>: <span class="ident">Either</span><span class="op">&lt;</span><span class="ident">ConfigError</span>, <span class="ident">serde_path_to_error::Error</span><span class="op">&lt;</span><span class="ident">ConfigError</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">config_file</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>, <span class="ident">kind</span>: <span class="ident">ConfigParseErrorKind</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">config_file</span>: <span class="ident">config_file</span>.<span class="ident">into</span>(),
-            <span class="ident">err</span>,
+            <span class="ident">kind</span>,
         }
     }
+
+    <span class="doccomment">/// Returns the config file for this error.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">config_file</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">config_file</span>
+    }
+
+    <span class="doccomment">/// Returns the kind of error this is.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kind</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">ConfigParseErrorKind</span> {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">kind</span>
+    }
+}
+
+<span class="doccomment">/// The kind of error that occurred while parsing a config.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Returned by [`ConfigParseError::kind`].</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Error</span>)]</span>
+<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ConfigParseErrorKind</span> {
+    <span class="doccomment">/// An error occurred while building the config.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="ident">transparent</span>)]</span>
+    <span class="ident">BuildError</span>(<span class="ident">ConfigError</span>),
+    <span class="attribute">#[<span class="ident">error</span>(<span class="ident">transparent</span>)]</span>
+    <span class="doccomment">/// An error occurred while deserializing the config.</span>
+    <span class="ident">DeserializeError</span>(<span class="ident">serde_path_to_error::Error</span><span class="op">&lt;</span><span class="ident">ConfigError</span><span class="op">&gt;</span>),
+    <span class="doccomment">/// Errors occurred while parsing overrides.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;error parsing overrides (destructure this variant for more details)&quot;</span>)]</span>
+    <span class="ident">OverrideError</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ConfigParseOverrideError</span><span class="op">&gt;</span>),
+}
+
+<span class="doccomment">/// An error that occurred while parsing config overrides.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Part of [`ConfigParseErrorKind::OverrideError`].</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ConfigParseOverrideError</span> {
+    <span class="doccomment">/// The name of the profile under which the override was found.</span>
+    <span class="kw">pub</span> <span class="ident">profile_name</span>: <span class="ident">String</span>,
+
+    <span class="doccomment">/// The expression, and the errors that occurred.</span>
+    <span class="kw">pub</span> <span class="ident">parse_errors</span>: <span class="ident">FilterExpressionParseErrors</span>,
 }
 
 <span class="doccomment">/// An error which indicates that a profile was requested but not known to nextest.</span>

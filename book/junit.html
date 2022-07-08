@@ -195,21 +195,21 @@ path = &quot;junit.xml&quot;
     &lt;testsuite name=&quot;nextest-tests::basic&quot; tests=&quot;3&quot; disabled=&quot;0&quot; errors=&quot;0&quot; failures=&quot;1&quot;&gt;
         &lt;testcase name=&quot;test_cwd&quot; classname=&quot;nextest-tests::basic&quot; timestamp=&quot;2022-02-10T20:09:34.393+00:00&quot; time=&quot;0.001&quot;&gt;
         &lt;/testcase&gt;
-        &lt;testcase name=&quot;test_flaky_mod_2&quot; classname=&quot;nextest-tests::basic&quot; timestamp=&quot;2022-02-10T20:09:34.394+00:00&quot; time=&quot;0.001&quot;&gt;
+        &lt;testcase name=&quot;test_flaky_mod_4&quot; classname=&quot;nextest-tests::basic&quot; timestamp=&quot;2022-02-10T20:09:34.394+00:00&quot; time=&quot;0.001&quot;&gt;
             &lt;flakyFailure timestamp=&quot;2022-02-10T20:09:34.393+00:00&quot; time=&quot;0.001&quot; type=&quot;test failure&quot;&gt;
                 &lt;system-out&gt;
 running 1 test
-test test_flaky_mod_2 ... FAILED
+test test_flaky_mod_4 ... FAILED
 
 failures:
 
 failures:
-    test_flaky_mod_2
+    test_flaky_mod_4
 
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.00s
 
 &lt;/system-out&gt;
-                &lt;system-err&gt;thread &amp;apos;test_flaky_mod_2&amp;apos; panicked at &amp;apos;Failed because attempt 1 % 2 != 0&amp;apos;, tests/basic.rs:33:9
+                &lt;system-err&gt;thread &amp;apos;test_flaky_mod_4&amp;apos; panicked at &amp;apos;Failed because attempt 1 % 2 != 0&amp;apos;, tests/basic.rs:33:9
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 &lt;/system-err&gt;
             &lt;/flakyFailure&gt;

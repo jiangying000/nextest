@@ -607,7 +607,7 @@
             .<span class="ident">builder</span>
             .<span class="ident">exprs</span>
             .<span class="ident">iter</span>()
-            .<span class="ident">any</span>(<span class="op">|</span><span class="ident">expr</span><span class="op">|</span> <span class="ident">expr</span>.<span class="ident">includes</span>(<span class="ident">test_binary</span>.<span class="ident">package</span>.<span class="ident">id</span>(), <span class="ident">test_name</span>))
+            .<span class="ident">any</span>(<span class="op">|</span><span class="ident">expr</span><span class="op">|</span> <span class="ident">expr</span>.<span class="ident">matches</span>(<span class="ident">test_binary</span>.<span class="ident">package</span>.<span class="ident">id</span>(), <span class="ident">test_name</span>))
         {
             <span class="ident">FilterNameMatch::MatchWithPatterns</span>
         } <span class="kw">else</span> {
