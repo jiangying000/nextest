@@ -413,9 +413,6 @@ unit, or excluding those tests from nextest.</p>
 <p>There's <a href="https://github.com/nextest-rs/nextest/issues/28">no way</a> to mark a particular test binary as excluded from nextest.</p>
 </li>
 <li>
-<p>The <code>--skip</code> and <code>--exact</code> test filter options are currently <a href="https://github.com/nextest-rs/nextest/issues/29">not supported</a> by nextest.</p>
-</li>
-<li>
 <p>Doctests are currently <a href="https://github.com/nextest-rs/nextest/issues/16">not supported</a> because of limitations in stable Rust. Locally and in CI, after <code>cargo nextest run</code>, use <code>cargo test --doc</code> to run all doctests.</p>
 </li>
 </ul>
@@ -457,6 +454,14 @@ unit, or excluding those tests from nextest.</p>
 <pre><code>cargo nextest run &lt;test-name1&gt; &lt;test-name2&gt;...
 </code></pre>
 <p>This is different from <code>cargo test</code>, where you have to specify a <code>--</code>, for example: <code>cargo test -- &lt;test-name1&gt; &lt;test-name2&gt;...</code>.</p>
+<h3 id="--skip-and---exact"><a class="header" href="#--skip-and---exact"><code>--skip</code> and <code>--exact</code></a></h3>
+<p>Nextest does not support <code>--skip</code> and <code>--exact</code> directly; instead, it supports more powerful <a href="book/filter-expressions.html">filter expressions</a> which supersede these options.</p>
+<p>Here are some examples:</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Cargo test command</th><th style="text-align: center">Nextest command</th></tr></thead><tbody>
+<tr><td style="text-align: center"><code>cargo test -- --skip skip1 --skip skip2 test3</code></td><td style="text-align: center"><code>cargo nextest run -E 'test(test3) - test(/skip[12]/)'</code></td></tr>
+<tr><td style="text-align: center"><code>cargo test -- --exact test1 test2</code></td><td style="text-align: center"><code>cargo nextest run -E 'test(=test1) + test(=test2)'</code></td></tr>
+</tbody></table>
+</div>
 <h3 id="filtering-by-build-platform"><a class="header" href="#filtering-by-build-platform">Filtering by build platform</a></h3>
 <p>While cross-compiling code, some tests (e.g. proc-macro tests) may need to be run on the host platform. To filter tests based on the build platform they're for, nextest accepts the <code>--platform-filter</code> option with values <code>target</code>, <code>host</code> or <code>any</code> (default).</p>
 <p>For example, to only run tests for the host platform:</p>

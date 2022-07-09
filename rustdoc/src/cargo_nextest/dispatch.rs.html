@@ -1496,6 +1496,13 @@
 <span id="1491">1491</span>
 <span id="1492">1492</span>
 <span id="1493">1493</span>
+<span id="1494">1494</span>
+<span id="1495">1495</span>
+<span id="1496">1496</span>
+<span id="1497">1497</span>
+<span id="1498">1498</span>
+<span id="1499">1499</span>
+<span id="1500">1500</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1954,6 +1961,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ignore_filters</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">read_trailing_filters</span> <span class="op">=</span> <span class="bool-val">false</span>;
 
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">skip_exact</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">unsupported_args</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
 
         <span class="ident">patterns</span>.<span class="ident">extend</span>(
@@ -1970,6 +1978,9 @@
                         <span class="bool-val">false</span>
                     } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">s</span> <span class="op">==</span> <span class="string">&quot;--&quot;</span> {
                         <span class="ident">read_trailing_filters</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                        <span class="bool-val">false</span>
+                    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">s</span> <span class="op">==</span> <span class="string">&quot;--skip&quot;</span> <span class="op">|</span><span class="op">|</span> <span class="ident">s</span> <span class="op">==</span> <span class="string">&quot;--exact&quot;</span> {
+                        <span class="ident">skip_exact</span>.<span class="ident">push</span>(<span class="ident">s</span>.<span class="ident">clone</span>());
                         <span class="bool-val">false</span>
                     } <span class="kw">else</span> {
                         <span class="ident">unsupported_args</span>.<span class="ident">push</span>(<span class="ident">s</span>.<span class="ident">clone</span>());
@@ -1995,6 +2006,13 @@
             } <span class="kw">else</span> {
                 <span class="kw-2">*</span><span class="ident">run_ignored</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">f</span>);
             }
+        }
+
+        <span class="kw">if</span> <span class="op">!</span><span class="ident">skip_exact</span>.<span class="ident">is_empty</span>() {
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ExpectedError::test_binary_args_parse_error</span>(
+                <span class="string">&quot;unsupported\n(hint: use a filter expression instead: &lt;https://nexte.st/book/filter-expressions&gt;)&quot;</span>,
+                <span class="ident">skip_exact</span>,
+            ));
         }
 
         <span class="kw">if</span> <span class="op">!</span><span class="ident">unsupported_args</span>.<span class="ident">is_empty</span>() {
@@ -2368,22 +2386,18 @@
     <span class="ident">target_runner</span>: <span class="ident">OnceCell</span><span class="op">&lt;</span><span class="ident">TargetRunner</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">fn</span> <span class="ident">check_experimental_filtering</span>(<span class="ident">build_filter</span>: <span class="kw-2">&amp;</span><span class="ident">TestBuildFilter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="comment">// (_output is not used, but must be passed in to ensure that the output is properly initialized</span>
+<span class="comment">// before calling this method)</span>
+<span class="kw">fn</span> <span class="ident">check_experimental_filtering</span>(<span class="ident">_output</span>: <span class="ident">OutputContext</span>) {
     <span class="kw">const</span> <span class="ident">EXPERIMENTAL_ENV</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_EXPERIMENTAL_FILTER_EXPR&quot;</span>;
-    <span class="kw">let</span> <span class="ident">enabled</span> <span class="op">=</span> <span class="ident">std::env::var</span>(<span class="ident">EXPERIMENTAL_ENV</span>).<span class="ident">is_ok</span>();
-    <span class="kw">if</span> <span class="op">!</span><span class="ident">build_filter</span>.<span class="ident">filter_expr</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">enabled</span> {
-        <span class="prelude-val">Err</span>(<span class="ident">ExpectedError::experimental_feature_error</span>(
-            <span class="string">&quot;expression filtering&quot;</span>,
-            <span class="ident">EXPERIMENTAL_ENV</span>,
-        ))
-    } <span class="kw">else</span> {
-        <span class="prelude-val">Ok</span>(())
+    <span class="kw">if</span> <span class="ident">std::env::var</span>(<span class="ident">EXPERIMENTAL_ENV</span>).<span class="ident">is_ok</span>() {
+        <span class="macro">log::warn!</span>(<span class="string">&quot;filter expressions are no longer experimental: NEXTEST_EXPERIMENTAL_FILTER_EXPR does not need to be set&quot;</span>);
     }
 }
 
 <span class="kw">impl</span> <span class="ident">App</span> {
     <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">base</span>: <span class="ident">BaseApp</span>, <span class="ident">build_filter</span>: <span class="ident">TestBuildFilter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="ident">check_experimental_filtering</span>(<span class="kw-2">&amp;</span><span class="ident">build_filter</span>)<span class="question-mark">?</span>;
+        <span class="ident">check_experimental_filtering</span>(<span class="ident">base</span>.<span class="ident">output</span>);
 
         <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
             <span class="ident">base</span>,
