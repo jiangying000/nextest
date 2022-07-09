@@ -150,6 +150,9 @@
 <span id="145">145</span>
 <span id="146">146</span>
 <span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -259,6 +262,9 @@
             <span class="kw-2">*</span><span class="ident">span</span>,
             <span class="ident">errors</span>,
         )),
+        <span class="ident">SetDef::Kind</span>(<span class="ident">matcher</span>, <span class="ident">span</span>) =&gt; <span class="ident">FilteringSet::Kind</span>(<span class="ident">matcher</span>.<span class="ident">clone</span>(), <span class="kw-2">*</span><span class="ident">span</span>),
+        <span class="ident">SetDef::Binary</span>(<span class="ident">matcher</span>, <span class="ident">span</span>) =&gt; <span class="ident">FilteringSet::Binary</span>(<span class="ident">matcher</span>.<span class="ident">clone</span>(), <span class="kw-2">*</span><span class="ident">span</span>),
+        <span class="ident">SetDef::Platform</span>(<span class="ident">platform</span>, <span class="ident">span</span>) =&gt; <span class="ident">FilteringSet::Platform</span>(<span class="kw-2">*</span><span class="ident">platform</span>, <span class="kw-2">*</span><span class="ident">span</span>),
         <span class="ident">SetDef::Test</span>(<span class="ident">matcher</span>, <span class="ident">span</span>) =&gt; <span class="ident">FilteringSet::Test</span>(<span class="ident">matcher</span>.<span class="ident">clone</span>(), <span class="kw-2">*</span><span class="ident">span</span>),
         <span class="ident">SetDef::All</span> =&gt; <span class="ident">FilteringSet::All</span>,
         <span class="ident">SetDef::None</span> =&gt; <span class="ident">FilteringSet::None</span>,

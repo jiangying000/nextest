@@ -122,6 +122,15 @@
 <span id="117">117</span>
 <span id="118">118</span>
 <span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -154,6 +163,15 @@
     <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">trailing</span>.<span class="ident">style</span>(<span class="ident">style</span>.<span class="ident">test_name</span>))<span class="question-mark">?</span>;
 
     <span class="prelude-val">Ok</span>(())
+}
+
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">convert_build_platform</span>(
+    <span class="ident">platform</span>: <span class="ident">nextest_metadata::BuildPlatform</span>,
+) -&gt; <span class="ident">guppy::graph::cargo::BuildPlatform</span> {
+    <span class="kw">match</span> <span class="ident">platform</span> {
+        <span class="ident">nextest_metadata::BuildPlatform::Target</span> =&gt; <span class="ident">guppy::graph::cargo::BuildPlatform::Target</span>,
+        <span class="ident">nextest_metadata::BuildPlatform::Host</span> =&gt; <span class="ident">guppy::graph::cargo::BuildPlatform::Host</span>,
+    }
 }
 
 <span class="comment">// ---</span>

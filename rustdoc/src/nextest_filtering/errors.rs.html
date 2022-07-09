@@ -157,6 +157,10 @@
 <span id="152">152</span>
 <span id="153">153</span>
 <span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -239,6 +243,10 @@
     <span class="doccomment">/// This matcher didn&#39;t match any packages.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;operator didn&#39;t match any packages&quot;</span>)]</span>
     <span class="ident">NoPackageMatch</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;no packages matched this&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
+
+    <span class="doccomment">/// Expected &quot;host&quot; or &quot;target&quot; for a `platform()` predicate.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;invalid argument for platform&quot;</span>)]</span>
+    <span class="ident">InvalidPlatformArgument</span>(<span class="attribute">#[<span class="ident">label</span>(<span class="string">&quot;expected \&quot;target\&quot; or \&quot;host\&quot;&quot;</span>)]</span> <span class="ident">SourceSpan</span>),
 
     <span class="doccomment">/// An unknown parsing error occurred.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;unknown parsing error&quot;</span>)]</span>

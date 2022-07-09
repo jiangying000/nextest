@@ -946,6 +946,71 @@
 <span id="941">941</span>
 <span id="942">942</span>
 <span id="943">943</span>
+<span id="944">944</span>
+<span id="945">945</span>
+<span id="946">946</span>
+<span id="947">947</span>
+<span id="948">948</span>
+<span id="949">949</span>
+<span id="950">950</span>
+<span id="951">951</span>
+<span id="952">952</span>
+<span id="953">953</span>
+<span id="954">954</span>
+<span id="955">955</span>
+<span id="956">956</span>
+<span id="957">957</span>
+<span id="958">958</span>
+<span id="959">959</span>
+<span id="960">960</span>
+<span id="961">961</span>
+<span id="962">962</span>
+<span id="963">963</span>
+<span id="964">964</span>
+<span id="965">965</span>
+<span id="966">966</span>
+<span id="967">967</span>
+<span id="968">968</span>
+<span id="969">969</span>
+<span id="970">970</span>
+<span id="971">971</span>
+<span id="972">972</span>
+<span id="973">973</span>
+<span id="974">974</span>
+<span id="975">975</span>
+<span id="976">976</span>
+<span id="977">977</span>
+<span id="978">978</span>
+<span id="979">979</span>
+<span id="980">980</span>
+<span id="981">981</span>
+<span id="982">982</span>
+<span id="983">983</span>
+<span id="984">984</span>
+<span id="985">985</span>
+<span id="986">986</span>
+<span id="987">987</span>
+<span id="988">988</span>
+<span id="989">989</span>
+<span id="990">990</span>
+<span id="991">991</span>
+<span id="992">992</span>
+<span id="993">993</span>
+<span id="994">994</span>
+<span id="995">995</span>
+<span id="996">996</span>
+<span id="997">997</span>
+<span id="998">998</span>
+<span id="999">999</span>
+<span id="1000">1000</span>
+<span id="1001">1001</span>
+<span id="1002">1002</span>
+<span id="1003">1003</span>
+<span id="1004">1004</span>
+<span id="1005">1005</span>
+<span id="1006">1006</span>
+<span id="1007">1007</span>
+<span id="1008">1008</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -961,6 +1026,7 @@
 <span class="doccomment">//!     - return an error/none variant of the expected result type</span>
 <span class="doccomment">//!     - push an error in the parsing state (in span.extra)</span>
 
+<span class="kw">use</span> <span class="ident">guppy::graph::cargo::BuildPlatform</span>;
 <span class="kw">use</span> <span class="ident">miette::SourceSpan</span>;
 <span class="kw">use</span> <span class="ident">nom</span>::{
     <span class="ident">branch::alt</span>,
@@ -991,6 +1057,9 @@
     <span class="ident">Package</span>(<span class="ident">NameMatcher</span>, <span class="ident">SourceSpan</span>),
     <span class="ident">Deps</span>(<span class="ident">NameMatcher</span>, <span class="ident">SourceSpan</span>),
     <span class="ident">Rdeps</span>(<span class="ident">NameMatcher</span>, <span class="ident">SourceSpan</span>),
+    <span class="ident">Kind</span>(<span class="ident">NameMatcher</span>, <span class="ident">SourceSpan</span>),
+    <span class="ident">Binary</span>(<span class="ident">NameMatcher</span>, <span class="ident">SourceSpan</span>),
+    <span class="ident">Platform</span>(<span class="ident">BuildPlatform</span>, <span class="ident">SourceSpan</span>),
     <span class="ident">Test</span>(<span class="ident">NameMatcher</span>, <span class="ident">SourceSpan</span>),
     <span class="ident">All</span>,
     <span class="prelude-val">None</span>,
@@ -1321,13 +1390,48 @@
     }
 }
 
+<span class="kw">fn</span> <span class="ident">platform_def</span>(<span class="ident">i</span>: <span class="ident">Span</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SetDef</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">tag</span>(<span class="string">&quot;platform&quot;</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
+    <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">expect_char</span>(<span class="string">&#39;(&#39;</span>, <span class="ident">ParseSingleError::ExpectedOpenParenthesis</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">start</span> <span class="op">=</span> <span class="ident">i</span>.<span class="ident">location_offset</span>();
+    <span class="comment">// Try parsing the argument as a string for better error messages.</span>
+    <span class="kw">let</span> (<span class="ident">i</span>, <span class="ident">res</span>) <span class="op">=</span> <span class="ident">ws</span>(<span class="ident">parse_matcher_text</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">end</span> <span class="op">=</span> <span class="ident">i</span>.<span class="ident">location_offset</span>();
+    <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">recover_unexpected_comma</span>(<span class="ident">i</span>)<span class="question-mark">?</span>;
+    <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">expect_char</span>(<span class="string">&#39;)&#39;</span>, <span class="ident">ParseSingleError::ExpectedCloseParenthesis</span>)(<span class="ident">i</span>)<span class="question-mark">?</span>;
+
+    <span class="comment">// The returned string will include leading and trailing whitespace.</span>
+    <span class="kw">let</span> <span class="ident">platform</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">res</span>.<span class="ident">as_deref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">res</span><span class="op">|</span> <span class="ident">res</span>.<span class="ident">trim</span>()) {
+        <span class="prelude-val">Some</span>(<span class="string">&quot;host&quot;</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">BuildPlatform::Host</span>),
+        <span class="prelude-val">Some</span>(<span class="string">&quot;target&quot;</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">BuildPlatform::Target</span>),
+        <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; {
+            <span class="ident">i</span>.<span class="ident">extra</span>
+                .<span class="ident">report_error</span>(<span class="ident">ParseSingleError::InvalidPlatformArgument</span>(
+                    (<span class="ident">start</span>, <span class="ident">end</span> <span class="op">-</span> <span class="ident">start</span>).<span class="ident">into</span>(),
+                ));
+            <span class="prelude-val">None</span>
+        }
+        <span class="prelude-val">None</span> =&gt; {
+            <span class="comment">// This was already reported above.</span>
+            <span class="prelude-val">None</span>
+        }
+    };
+    <span class="prelude-val">Ok</span>((
+        <span class="ident">i</span>,
+        <span class="ident">platform</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">platform</span><span class="op">|</span> <span class="ident">SetDef::Platform</span>(<span class="ident">platform</span>, (<span class="ident">start</span>, <span class="ident">end</span> <span class="op">-</span> <span class="ident">start</span>).<span class="ident">into</span>())),
+    ))
+}
+
 <span class="attribute">#[<span class="ident">tracable_parser</span>]</span>
 <span class="kw">fn</span> <span class="ident">parse_set_def</span>(<span class="ident">input</span>: <span class="ident">Span</span>) -&gt; <span class="ident">IResult</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SetDef</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="ident">ws</span>(<span class="ident">alt</span>((
         <span class="ident">unary_set_def</span>(<span class="string">&quot;package&quot;</span>, <span class="ident">NameMatcher::Equal</span>, <span class="ident">SetDef::Package</span>),
         <span class="ident">unary_set_def</span>(<span class="string">&quot;deps&quot;</span>, <span class="ident">NameMatcher::Equal</span>, <span class="ident">SetDef::Deps</span>),
         <span class="ident">unary_set_def</span>(<span class="string">&quot;rdeps&quot;</span>, <span class="ident">NameMatcher::Equal</span>, <span class="ident">SetDef::Rdeps</span>),
+        <span class="ident">unary_set_def</span>(<span class="string">&quot;kind&quot;</span>, <span class="ident">NameMatcher::Equal</span>, <span class="ident">SetDef::Kind</span>),
+        <span class="ident">unary_set_def</span>(<span class="string">&quot;binary&quot;</span>, <span class="ident">NameMatcher::Equal</span>, <span class="ident">SetDef::Binary</span>),
         <span class="ident">unary_set_def</span>(<span class="string">&quot;test&quot;</span>, <span class="ident">NameMatcher::Contains</span>, <span class="ident">SetDef::Test</span>),
+        <span class="ident">platform_def</span>,
         <span class="ident">nullary_set_def</span>(<span class="string">&quot;all&quot;</span>, <span class="op">|</span><span class="op">|</span> <span class="ident">SetDef::All</span>),
         <span class="ident">nullary_set_def</span>(<span class="string">&quot;none&quot;</span>, <span class="op">|</span><span class="op">|</span> <span class="ident">SetDef::None</span>),
     )))(<span class="ident">input</span>)
@@ -1639,6 +1743,17 @@
             <span class="ident">Test</span>,
             <span class="ident">NameMatcher::Contains</span>(<span class="string">&quot;something&quot;</span>.<span class="ident">to_string</span>())
         );
+        <span class="macro">assert_set_def!</span>(<span class="ident">parse_set</span>(<span class="string">&quot;platform(host)&quot;</span>), <span class="ident">Platform</span>, <span class="ident">BuildPlatform::Host</span>);
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;platform(target)&quot;</span>),
+            <span class="ident">Platform</span>,
+            <span class="ident">BuildPlatform::Target</span>
+        );
+        <span class="macro">assert_set_def!</span>(
+            <span class="ident">parse_set</span>(<span class="string">&quot;platform(    host    )&quot;</span>),
+            <span class="ident">Platform</span>,
+            <span class="ident">BuildPlatform::Host</span>
+        );
     }
 
     <span class="attribute">#[<span class="ident">track_caller</span>]</span>
@@ -1822,6 +1937,21 @@
         };
         <span class="macro">assert_eq!</span>(<span class="ident">span</span>, (<span class="number">12</span>, <span class="number">1</span>).<span class="ident">into</span>(), <span class="string">&quot;span matches&quot;</span>);
         <span class="macro">assert_eq!</span>(<span class="ident">message</span>, <span class="string">&quot;unclosed group&quot;</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_invalid_platform</span>() {
+        <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="string">&quot;platform(foo)&quot;</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">errors</span> <span class="op">=</span> <span class="ident">parse_err</span>(<span class="ident">src</span>);
+        <span class="macro">assert_eq!</span>(<span class="number">1</span>, <span class="ident">errors</span>.<span class="ident">len</span>());
+        <span class="kw">let</span> <span class="ident">error</span> <span class="op">=</span> <span class="ident">errors</span>.<span class="ident">remove</span>(<span class="number">0</span>);
+        <span class="macro">assert_error!</span>(<span class="ident">error</span>, <span class="ident">InvalidPlatformArgument</span>, <span class="number">9</span>, <span class="number">3</span>);
+
+        <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="string">&quot;platform(   bar\\t)&quot;</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">errors</span> <span class="op">=</span> <span class="ident">parse_err</span>(<span class="ident">src</span>);
+        <span class="macro">assert_eq!</span>(<span class="number">1</span>, <span class="ident">errors</span>.<span class="ident">len</span>());
+        <span class="kw">let</span> <span class="ident">error</span> <span class="op">=</span> <span class="ident">errors</span>.<span class="ident">remove</span>(<span class="number">0</span>);
+        <span class="macro">assert_error!</span>(<span class="ident">error</span>, <span class="ident">InvalidPlatformArgument</span>, <span class="number">9</span>, <span class="number">8</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
