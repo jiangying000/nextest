@@ -924,6 +924,9 @@
 <span id="919">919</span>
 <span id="920">920</span>
 <span id="921">921</span>
+<span id="922">922</span>
+<span id="923">923</span>
+<span id="924">924</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -939,7 +942,7 @@
 <span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
 <span class="kw">use</span> <span class="ident">config</span>::{<span class="ident">builder::DefaultState</span>, <span class="ident">Config</span>, <span class="ident">ConfigBuilder</span>, <span class="ident">File</span>, <span class="ident">FileFormat</span>};
 <span class="kw">use</span> <span class="ident">guppy::graph::PackageGraph</span>;
-<span class="kw">use</span> <span class="ident">nextest_filtering</span>::{<span class="ident">FilteringExpr</span>, <span class="ident">FilteringExprQuery</span>};
+<span class="kw">use</span> <span class="ident">nextest_filtering</span>::{<span class="ident">FilteringExpr</span>, <span class="ident">TestQuery</span>};
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de::IntoDeserializer</span>, <span class="ident">Deserialize</span>};
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::HashMap</span>, <span class="ident">fmt</span>, <span class="ident">num::NonZeroUsize</span>, <span class="ident">str::FromStr</span>, <span class="ident">time::Duration</span>};
 
@@ -1166,11 +1169,11 @@
     }
 
     <span class="doccomment">/// Returns override settings for individual tests.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">overrides_for</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">query</span>: <span class="kw-2">&amp;</span><span class="ident">FilteringExprQuery</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">ProfileOverrides</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">overrides_for</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">query</span>: <span class="kw-2">&amp;</span><span class="ident">TestQuery</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">ProfileOverrides</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">retries</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 
         <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">override_</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">overrides</span> {
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">override_</span>.<span class="ident">expr</span>.<span class="ident">matches</span>(<span class="ident">query</span>) {
+            <span class="kw">if</span> <span class="op">!</span><span class="ident">override_</span>.<span class="ident">expr</span>.<span class="ident">matches_test</span>(<span class="ident">query</span>) {
                 <span class="kw">continue</span>;
             }
             <span class="kw">if</span> <span class="ident">retries</span>.<span class="ident">is_none</span>() <span class="op">&amp;&amp;</span> <span class="ident">override_</span>.<span class="ident">data</span>.<span class="ident">retries</span>.<span class="ident">is_some</span>() {
@@ -1572,6 +1575,7 @@
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">guppy</span>::{<span class="ident">graph::cargo::BuildPlatform</span>, <span class="ident">MetadataCommand</span>};
     <span class="kw">use</span> <span class="ident">indoc::indoc</span>;
+    <span class="kw">use</span> <span class="ident">nextest_filtering::BinaryQuery</span>;
     <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">io::Write</span>, <span class="ident">path::PathBuf</span>, <span class="ident">process::Command</span>};
     <span class="kw">use</span> <span class="ident">tempfile::tempdir</span>;
     <span class="kw">use</span> <span class="ident">test_case::test_case</span>;
@@ -1800,11 +1804,13 @@
         <span class="kw">let</span> <span class="ident">package_id</span> <span class="op">=</span> <span class="ident">graph</span>.<span class="ident">workspace</span>().<span class="ident">iter</span>().<span class="ident">next</span>().<span class="ident">unwrap</span>().<span class="ident">id</span>();
 
         <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">NextestConfig::from_sources</span>(<span class="ident">graph</span>.<span class="ident">workspace</span>().<span class="ident">root</span>(), <span class="kw-2">&amp;</span><span class="ident">graph</span>, <span class="prelude-val">None</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">query</span> <span class="op">=</span> <span class="ident">FilteringExprQuery</span> {
-            <span class="ident">package_id</span>,
-            <span class="ident">kind</span>: <span class="string">&quot;lib&quot;</span>,
-            <span class="ident">binary_name</span>: <span class="string">&quot;my-binary&quot;</span>,
-            <span class="ident">platform</span>: <span class="ident">BuildPlatform::Target</span>,
+        <span class="kw">let</span> <span class="ident">query</span> <span class="op">=</span> <span class="ident">TestQuery</span> {
+            <span class="ident">binary_query</span>: <span class="ident">BinaryQuery</span> {
+                <span class="ident">package_id</span>,
+                <span class="ident">kind</span>: <span class="string">&quot;lib&quot;</span>,
+                <span class="ident">binary_name</span>: <span class="string">&quot;my-binary&quot;</span>,
+                <span class="ident">platform</span>: <span class="ident">BuildPlatform::Target</span>,
+            },
             <span class="ident">test_name</span>: <span class="string">&quot;my_test&quot;</span>,
         };
         <span class="kw">let</span> <span class="ident">overrides_for</span> <span class="op">=</span> <span class="ident">config</span>
