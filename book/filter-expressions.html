@@ -231,10 +231,10 @@ get the list of tests within it. This means that a command like:</p>
 <pre><code>cargo nextest list -E 'platform(host)'
 </code></pre>
 <p>will not execute any test binaries built for the target platform. This is generally what you want,
-but if you would like to list predicates anyway, include a <code>test()</code> predicate. For example, to
+but if you would like to list tests anyway, include a <code>test()</code> predicate. For example, to
 list test binaries for the target platform (using, for example, a <a href="target-runners.html">target
 runner</a>), but skip running them:</p>
-<pre><code>cargo nextest list -E 'platform(host) + not test(/.*/)'
+<pre><code>cargo nextest list -E 'platform(host) + not test(/.*/)' --verbose
 </code></pre>
 </blockquote>
 <h3 id="name-matchers"><a class="header" href="#name-matchers">Name matchers</a></h3>
