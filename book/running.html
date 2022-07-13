@@ -253,6 +253,7 @@ RUNNER OPTIONS:
     -j, --test-threads &lt;THREADS&gt;    Number of tests to run simultaneously [possible values: integer
                                     or &quot;num-cpus&quot;] [env: NEXTEST_TEST_THREADS=] [aliases: jobs]
         --retries &lt;RETRIES&gt;         Number of retries for failing tests [default: from profile]
+                                    [env: NEXTEST_RETRIES=]
         --fail-fast                 Cancel test run on the first failure
         --no-fail-fast              Run all tests regardless of failure
         --no-capture                Run tests serially and do not capture output
@@ -289,13 +290,11 @@ CARGO OPTIONS:
                                     for details
 
 FILTER OPTIONS:
-        --run-ignored &lt;WHICH&gt;           Run ignored tests [possible values: default, ignored-only,
-                                        all]
-        --partition &lt;PARTITION&gt;         Test partition, e.g. hash:1/2 or count:2/3
-        --platform-filter &lt;PLATFORM&gt;    Filter test binaries by build platform [default: any]
-                                        [possible values: target, host, any]
-    -E, --filter-expr &lt;EXPRESSION&gt;      Test filter expression (see
-                                        &lt;https://nexte.st/book/filter-expressions&gt;)
+        --run-ignored &lt;WHICH&gt;         Run ignored tests [possible values: default, ignored-only,
+                                      all]
+        --partition &lt;PARTITION&gt;       Test partition, e.g. hash:1/2 or count:2/3
+    -E, --filter-expr &lt;EXPRESSION&gt;    Test filter expression (see
+                                      &lt;https://nexte.st/book/filter-expressions&gt;)
 
 REPORTER OPTIONS:
         --failure-output &lt;WHEN&gt;         Output stdout and stderr on failure [env:
