@@ -1489,6 +1489,18 @@
 <span id="1484">1484</span>
 <span id="1485">1485</span>
 <span id="1486">1486</span>
+<span id="1487">1487</span>
+<span id="1488">1488</span>
+<span id="1489">1489</span>
+<span id="1490">1490</span>
+<span id="1491">1491</span>
+<span id="1492">1492</span>
+<span id="1493">1493</span>
+<span id="1494">1494</span>
+<span id="1495">1495</span>
+<span id="1496">1496</span>
+<span id="1497">1497</span>
+<span id="1498">1498</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1678,6 +1690,10 @@
     <span class="doccomment">/// List tests in workspace</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This command builds test binaries and queries them for the tests they contain.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Use --verbose to get more information about tests, including test binary paths and skipped</span>
+    <span class="doccomment">/// tests.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// Use --message-format json to get machine-readable output.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// For more information, see &lt;https://nexte.st/book/listing&gt;.</span>
@@ -1867,8 +1883,16 @@
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>)]</span>
     <span class="ident">partition</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PartitionerBuilder</span><span class="op">&gt;</span>,
 
-    <span class="doccomment">/// Filter test binaries by build platform</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">arg_enum</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PLATFORM&quot;</span>, <span class="ident">default_value_t</span>)]</span>
+    <span class="doccomment">/// Filter test binaries by build platform (DEPRECATED)</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Instead, use -E with &#39;platform(host)&#39; or &#39;platform(target)&#39;.</span>
+    <span class="attribute">#[<span class="ident">clap</span>(
+        <span class="ident">long</span>,
+        <span class="ident">hide_short_help</span> <span class="op">=</span> <span class="bool-val">true</span>,
+        <span class="ident">arg_enum</span>,
+        <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;PLATFORM&quot;</span>,
+        <span class="ident">default_value_t</span>
+    )]</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">platform_filter</span>: <span class="ident">PlatformFilterOpts</span>,
 
     <span class="doccomment">/// Test filter expression (see {n}&lt;https://nexte.st/book/filter-expressions&gt;)</span>
@@ -2060,7 +2084,7 @@
     <span class="ident">test_threads</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TestThreads</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Number of retries for failing tests [default: from profile]</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_RETRIES&quot;</span>)]</span>
     <span class="ident">retries</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Cancel test run on the first failure</span>

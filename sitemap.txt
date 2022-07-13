@@ -15,6 +15,7 @@ https://nexte.st/book/listing
 https://nexte.st/book/machine-readable
 https://nexte.st/book/other-options
 https://nexte.st/book/partitioning
+https://nexte.st/book/per-test-overrides
 https://nexte.st/book/pre-built-binaries
 https://nexte.st/book/release-urls
 https://nexte.st/book/retries
