@@ -186,6 +186,17 @@
 <p>For sufficiently large numbers of tests, hashed sharding produces roughly the same number of tests per bucket. However, smaller test runs may result in an uneven distribution.</p>
 <h2 id="example-use-in-github-actions"><a class="header" href="#example-use-in-github-actions">Example: Use in GitHub Actions</a></h2>
 <p>See <a href="https://github.com/nextest-rs/reuse-build-partition-example/blob/main/.github/workflows/ci.yml">this working example</a> for how to <a href="reusing-builds.html">reuse builds</a> and partition test runs on GitHub Actions.</p>
+<h2 id="example-use-in-gitlab-ci"><a class="header" href="#example-use-in-gitlab-ci">Example: Use in GitLab CI</a></h2>
+<p>GitLab can <a href="https://docs.gitlab.com/ee/ci/yaml/#parallel">parallelize the job</a> between runners. This ability neatly plays with <code>--partition</code>.</p>
+<pre><code class="language-yaml">test:
+  stage:                           test
+  parallel: 3
+  script:
+    - echo &quot;Node index - ${CI_NODE_INDEX}. Total amount - ${CI_NODE_TOTAL}&quot;
+    - time cargo nextest run --workspace --partition count:${CI_NODE_INDEX}/${CI_NODE_TOTAL}
+</code></pre>
+<p>This creates three jobs in a pipeline: <code>test 1/3</code>, <code>test 2/3</code> and <code>test 3/3</code>.
+It's recommended to use caching or <a href="reusing-builds.html">archiving</a> to avoid having all three jobs building the same code before actual testing.</p>
 
                     </main>
 
