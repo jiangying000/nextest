@@ -1282,11 +1282,11 @@ expression</a> syntax.</p>
 retries = 1
 
 [[profile.ci.overrides]]
-filter = 'test(/\Wtest_network_/)'
+filter = 'test(/\btest_network_/)'
 retries = 4
 </code></pre>
 <p>This configuration will retry all test names that start with <code>test_network_</code> (including test names
-like <code>::test_network_</code>) up to 4 times. Other tests will be retried up to one time.</p>
+like <code>my_module::test_network_</code>) up to 4 times. Other tests will be retried up to one time.</p>
 <h2 id="override-precedence"><a class="header" href="#override-precedence">Override precedence</a></h2>
 <p>Overrides are applied in the following order. For a given test T:</p>
 <ol>
