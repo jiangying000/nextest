@@ -193,7 +193,7 @@ retries = 4
 <p>This configuration will retry all test names that start with <code>test_network_</code> (including test names
 like <code>my_module::test_network_</code>) up to 4 times. Other tests will be retried up to one time.</p>
 <h2 id="override-precedence"><a class="header" href="#override-precedence">Override precedence</a></h2>
-<p>Overrides are applied in the following order. For a given test T:</p>
+<p>Overrides are configured as an ordered list. They're are applied in the following order. For a given test T:</p>
 <ol>
 <li>If nextest is run with <code>--profile my-profile</code>, the first override within <code>profile.my-profile.overrides</code> that matches T.</li>
 <li>The first override within <code>profile.default.overrides</code> that matches T.</li>
