@@ -1140,6 +1140,9 @@
 <span id="1135">1135</span>
 <span id="1136">1136</span>
 <span id="1137">1137</span>
+<span id="1138">1138</span>
+<span id="1139">1139</span>
+<span id="1140">1140</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1148,7 +1151,7 @@
 <span class="doccomment">//! The main structure in this module is [`TestRunner`].</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">config</span>::{<span class="ident">NextestProfile</span>, <span class="ident">TestThreads</span>},
+    <span class="ident">config</span>::{<span class="ident">NextestProfile</span>, <span class="ident">ProfileOverrides</span>, <span class="ident">TestThreads</span>},
     <span class="ident">helpers::convert_build_platform</span>,
     <span class="ident">list</span>::{<span class="ident">TestInstance</span>, <span class="ident">TestList</span>},
     <span class="ident">reporter</span>::{<span class="ident">CancelReason</span>, <span class="ident">FinalStatusLevel</span>, <span class="ident">StatusLevel</span>, <span class="ident">TestEvent</span>},
@@ -1371,7 +1374,7 @@
                         <span class="kw">let</span> <span class="ident">attempt</span> <span class="op">=</span> <span class="ident">run_statuses</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="number">1</span>;
 
                         <span class="kw">let</span> <span class="ident">run_status</span> <span class="op">=</span> <span class="self">self</span>
-                            .<span class="ident">run_test</span>(<span class="ident">test_instance</span>, <span class="ident">attempt</span>, <span class="kw-2">&amp;</span><span class="ident">this_run_sender</span>)
+                            .<span class="ident">run_test</span>(<span class="ident">test_instance</span>, <span class="ident">attempt</span>, <span class="kw-2">&amp;</span><span class="ident">overrides</span>, <span class="kw-2">&amp;</span><span class="ident">this_run_sender</span>)
                             .<span class="ident">into_external</span>(<span class="ident">attempt</span>, <span class="ident">total_attempts</span>);
 
                         <span class="kw">if</span> <span class="ident">run_status</span>.<span class="ident">result</span>.<span class="ident">is_success</span>() {
@@ -1489,11 +1492,12 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">test</span>: <span class="ident">TestInstance</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
         <span class="ident">attempt</span>: <span class="ident">usize</span>,
+        <span class="ident">overrides</span>: <span class="kw-2">&amp;</span><span class="ident">ProfileOverrides</span>,
         <span class="ident">run_sender</span>: <span class="kw-2">&amp;</span><span class="ident">Sender</span><span class="op">&lt;</span><span class="ident">InternalTestEvent</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     ) -&gt; <span class="ident">InternalExecuteStatus</span> {
         <span class="kw">let</span> <span class="ident">stopwatch</span> <span class="op">=</span> <span class="ident">StopwatchStart::now</span>();
 
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">run_test_inner</span>(<span class="ident">test</span>, <span class="ident">attempt</span>, <span class="kw-2">&amp;</span><span class="ident">stopwatch</span>, <span class="ident">run_sender</span>) {
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">run_test_inner</span>(<span class="ident">test</span>, <span class="ident">attempt</span>, <span class="kw-2">&amp;</span><span class="ident">stopwatch</span>, <span class="ident">overrides</span>, <span class="ident">run_sender</span>) {
             <span class="prelude-val">Ok</span>(<span class="ident">run_status</span>) =&gt; <span class="ident">run_status</span>,
             <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="ident">InternalExecuteStatus</span> {
                 <span class="comment">// TODO: can we return more information in stdout/stderr? investigate this</span>
@@ -1511,6 +1515,7 @@
         <span class="ident">test</span>: <span class="ident">TestInstance</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
         <span class="ident">attempt</span>: <span class="ident">usize</span>,
         <span class="ident">stopwatch</span>: <span class="kw-2">&amp;</span><span class="ident">StopwatchStart</span>,
+        <span class="ident">overrides</span>: <span class="kw-2">&amp;</span><span class="ident">ProfileOverrides</span>,
         <span class="ident">run_sender</span>: <span class="kw-2">&amp;</span><span class="ident">Sender</span><span class="op">&lt;</span><span class="ident">InternalTestEvent</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     ) -&gt; <span class="ident">std::io::Result</span><span class="op">&lt;</span><span class="ident">InternalExecuteStatus</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">test</span>
@@ -1529,6 +1534,7 @@
         <span class="kw">let</span> <span class="ident">handle</span> <span class="op">=</span> <span class="ident">cmd</span>.<span class="ident">start</span>()<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">status</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ExecutionResult</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+        <span class="kw">let</span> <span class="ident">slow_timeout</span> <span class="op">=</span> <span class="ident">overrides</span>.<span class="ident">slow_timeout</span>().<span class="ident">unwrap_or</span>(<span class="self">self</span>.<span class="ident">slow_timeout</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">is_slow</span> <span class="op">=</span> <span class="bool-val">false</span>;
 
         <span class="self">self</span>.<span class="ident">wait_pool</span>.<span class="ident">in_place_scope</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> {
@@ -1547,7 +1553,7 @@
 
             <span class="comment">// Continue waiting for the test to finish with a timeout, logging at slow-timeout</span>
             <span class="comment">// intervals</span>
-            <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">error</span>) <span class="op">=</span> <span class="ident">receiver</span>.<span class="ident">recv_timeout</span>(<span class="self">self</span>.<span class="ident">slow_timeout</span>.<span class="ident">period</span>) {
+            <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">error</span>) <span class="op">=</span> <span class="ident">receiver</span>.<span class="ident">recv_timeout</span>(<span class="ident">slow_timeout</span>.<span class="ident">period</span>) {
                 <span class="kw">match</span> <span class="ident">error</span> {
                     <span class="ident">RecvTimeoutError::Timeout</span> =&gt; {
                         <span class="ident">is_slow</span> <span class="op">=</span> <span class="bool-val">true</span>;
@@ -1557,10 +1563,10 @@
                             <span class="ident">test_instance</span>: <span class="ident">test</span>,
                             <span class="comment">// Pass in the slow timeout period times timeout_hit, since stopwatch.elapsed() tends to be</span>
                             <span class="comment">// slightly longer.</span>
-                            <span class="ident">elapsed</span>: <span class="ident">timeout_hit</span> <span class="op">*</span> <span class="self">self</span>.<span class="ident">slow_timeout</span>.<span class="ident">period</span>,
+                            <span class="ident">elapsed</span>: <span class="ident">timeout_hit</span> <span class="op">*</span> <span class="ident">slow_timeout</span>.<span class="ident">period</span>,
                         });
 
-                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">terminate_after</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">slow_timeout</span>.<span class="ident">terminate_after</span> {
+                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">terminate_after</span>) <span class="op">=</span> <span class="ident">slow_timeout</span>.<span class="ident">terminate_after</span> {
                             <span class="kw">if</span> <span class="ident">NonZeroUsize::new</span>(<span class="ident">timeout_hit</span> <span class="kw">as</span> <span class="ident">usize</span>)
                                 .<span class="ident">expect</span>(<span class="string">&quot;timeout_hit cannot be non-zero&quot;</span>)
                                 <span class="op">&gt;</span><span class="op">=</span> <span class="ident">terminate_after</span>
