@@ -175,7 +175,22 @@
 <p><img src="../static/nextest-retry.png" alt="Output of cargo nextest run --retries 2" /></p>
 <p><code>--retries 2</code> means that the test is retried twice, for a total of three attempts. In this case, the test fails on the first try but succeeds on the second try. The <code>TRY 2 PASS</code> text means that the test passed on the second try.</p>
 <p>Flaky tests are treated as ultimately successful. If there are no other tests that failed, the exit code for the test run is 0.</p>
-<p>Retries can also be <a href="configuration.html">configured in <code>.config/nextest.toml</code></a>. The command-line <code>--retries</code> option overrides the configured value.</p>
+<p>Retries can also be:</p>
+<ul>
+<li>passed in via the environment variable <code>NEXTEST_RETRIES</code>.</li>
+<li><a href="configuration.html">configured in <code>.config/nextest.toml</code></a>.</li>
+</ul>
+<p>For the order that configuration parameters are resolved in, see <a href="configuration.html#hierarchical-configuration">Hierarchical configuration</a>.</p>
+<h2 id="per-test-overrides"><a class="header" href="#per-test-overrides">Per-test overrides</a></h2>
+<p>Nextest supports <a href="per-test-overrides.html">per-test overrides</a> for retries, letting you mark a subset of tests as needing retries. For example, to mark test names containing <code>&quot;test_e2e&quot;</code> as requiring retries:</p>
+<pre><code class="language-toml">[[profile.default.overrides]]
+filter = 'test(test_e2e)'
+retries = 2
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> The <code>--retries</code> command-line option and the <code>NEXTEST_RETRIES</code> environment variable both disable overrides.</p>
+</blockquote>
+<h2 id="junit-support"><a class="header" href="#junit-support">JUnit support</a></h2>
 <p>Flaky test detection is integrated with nextest's JUnit support. For more information, see <a href="junit.html">JUnit support</a>.</p>
 
                     </main>
