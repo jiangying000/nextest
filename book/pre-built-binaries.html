@@ -204,15 +204,17 @@ $tmp | Remove-Item
 <pre><code>curl -LsSf https://get.nexte.st/latest/windows-tar | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
 </code></pre>
 <blockquote>
-<p>NOTE: Windows Subsystem for Linux (WSL) users should follow the <a href="#linux-x86_64">Linux x86_64 instructions</a>.</p>
+<p><strong>Note:</strong> Windows Subsystem for Linux (WSL) users should follow the <a href="#linux-x86_64">Linux x86_64 instructions</a>.</p>
 <p>If you're a Windows expert who can come up with a better way to do this, please <a href="https://github.com/nextest-rs/nextest/issues/31">add a suggestion to this issue</a>!</p>
 </blockquote>
 <h3 id="using-cargo-binstall"><a class="header" href="#using-cargo-binstall">Using cargo-binstall</a></h3>
 <p>If you have <a href="https://github.com/ryankurte/cargo-binstall">cargo-binstall</a> available, you can install nextest with:</p>
 <pre><code>cargo binstall cargo-nextest --secure
 </code></pre>
+<h2 id="community-maintained-binaries"><a class="header" href="#community-maintained-binaries">Community-maintained binaries</a></h2>
+<p>These binaries are not supported by the nextest team. They are maintained by the community.</p>
 <h3 id="using-homebrew"><a class="header" href="#using-homebrew">Using Homebrew</a></h3>
-<p>If you have <a href="https://brew.sh/">Homebrew</a> available, you can install nextest with:</p>
+<p>If you have <a href="https://brew.sh/">Homebrew</a> available, install nextest with:</p>
 <pre><code>brew install cargo-nextest
 </code></pre>
 <h2 id="using-pre-built-binaries-in-ci"><a class="header" href="#using-pre-built-binaries-in-ci">Using pre-built binaries in CI</a></h2>
