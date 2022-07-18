@@ -1350,6 +1350,23 @@
 <span id="1345">1345</span>
 <span id="1346">1346</span>
 <span id="1347">1347</span>
+<span id="1348">1348</span>
+<span id="1349">1349</span>
+<span id="1350">1350</span>
+<span id="1351">1351</span>
+<span id="1352">1352</span>
+<span id="1353">1353</span>
+<span id="1354">1354</span>
+<span id="1355">1355</span>
+<span id="1356">1356</span>
+<span id="1357">1357</span>
+<span id="1358">1358</span>
+<span id="1359">1359</span>
+<span id="1360">1360</span>
+<span id="1361">1361</span>
+<span id="1362">1362</span>
+<span id="1363">1363</span>
+<span id="1364">1364</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -2190,14 +2207,20 @@
     <span class="doccomment">/// The total number of tests that finished running.</span>
     <span class="kw">pub</span> <span class="ident">finished_count</span>: <span class="ident">usize</span>,
 
-    <span class="doccomment">/// The number of tests that passed. Includes `flaky` and `leaky`.</span>
+    <span class="doccomment">/// The number of tests that passed. Includes `passed_slow`, `flaky` and `leaky`.</span>
     <span class="kw">pub</span> <span class="ident">passed</span>: <span class="ident">usize</span>,
+
+    <span class="doccomment">/// The number of slow tests that passed.</span>
+    <span class="kw">pub</span> <span class="ident">passed_slow</span>: <span class="ident">usize</span>,
 
     <span class="doccomment">/// The number of tests that passed on retry.</span>
     <span class="kw">pub</span> <span class="ident">flaky</span>: <span class="ident">usize</span>,
 
     <span class="doccomment">/// The number of tests that failed.</span>
     <span class="kw">pub</span> <span class="ident">failed</span>: <span class="ident">usize</span>,
+
+    <span class="doccomment">/// The number of failed tests that were slow.</span>
+    <span class="kw">pub</span> <span class="ident">failed_slow</span>: <span class="ident">usize</span>,
 
     <span class="doccomment">/// The number of tests that timed out.</span>
     <span class="kw">pub</span> <span class="ident">timed_out</span>: <span class="ident">usize</span>,
@@ -2249,6 +2272,9 @@
         <span class="kw">match</span> <span class="ident">last_status</span>.<span class="ident">result</span> {
             <span class="ident">ExecutionResult::Pass</span> =&gt; {
                 <span class="self">self</span>.<span class="ident">passed</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                <span class="kw">if</span> <span class="ident">last_status</span>.<span class="ident">is_slow</span> {
+                    <span class="self">self</span>.<span class="ident">passed_slow</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                }
                 <span class="kw">if</span> <span class="ident">run_statuses</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="number">1</span> {
                     <span class="self">self</span>.<span class="ident">flaky</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                 }
@@ -2256,11 +2282,19 @@
             <span class="ident">ExecutionResult::Leak</span> =&gt; {
                 <span class="self">self</span>.<span class="ident">passed</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                 <span class="self">self</span>.<span class="ident">leaky</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                <span class="kw">if</span> <span class="ident">last_status</span>.<span class="ident">is_slow</span> {
+                    <span class="self">self</span>.<span class="ident">passed_slow</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                }
                 <span class="kw">if</span> <span class="ident">run_statuses</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="number">1</span> {
                     <span class="self">self</span>.<span class="ident">flaky</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                 }
             }
-            <span class="ident">ExecutionResult::Fail</span> { .. } =&gt; <span class="self">self</span>.<span class="ident">failed</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>,
+            <span class="ident">ExecutionResult::Fail</span> { .. } =&gt; {
+                <span class="self">self</span>.<span class="ident">failed</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                <span class="kw">if</span> <span class="ident">last_status</span>.<span class="ident">is_slow</span> {
+                    <span class="self">self</span>.<span class="ident">failed_slow</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                }
+            }
             <span class="ident">ExecutionResult::Timeout</span> =&gt; <span class="self">self</span>.<span class="ident">timed_out</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>,
             <span class="ident">ExecutionResult::ExecFail</span> =&gt; <span class="self">self</span>.<span class="ident">exec_failed</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>,
         }
