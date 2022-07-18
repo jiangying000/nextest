@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["SignalHandler","A receiver that generates signals if ctrl-c is pressed."]]});
+initSidebarItems({"enum":[["SignalHandlerKind","The kind of signal handling to set up for a test run."]]});

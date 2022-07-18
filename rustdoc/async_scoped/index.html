@@ -1,0 +1,126 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Enables controlled spawning of non-`&#x27;static` futures when using the async-std or tokio executors. Note that this idea is similar to `crossbeam::scope`, and `rayon::scope` but asynchronous."><meta name="keywords" content="rust, rustlang, rust-lang, async_scoped"><title>async_scoped - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../dark.css" disabled><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><script defer src="../main.js"></script>
+    <noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../async_scoped/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../async_scoped/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"><a href="#">Crate async_scoped</a></h2><div class="sidebar-elems"><div class="block"><ul><li class="version">Version 0.7.0</li><li><a id="all-types" href="all.html">All Items</a></li></div></ul><section><div class="block"><ul><li><a href="#structs">Structs</a></li><li><a href="#types">Type Definitions</a></li></ul></div></section><div id="sidebar-vars" data-name="async_scoped" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../async_scoped/index.html"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">async_scoped</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../src/async_scoped/lib.rs.html#1-166">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Enables controlled spawning of non-<code>'static</code> futures
+when using the <a href="/async_std">async-std</a> or <a href="/tokio">tokio</a>
+executors. Note that this idea is similar to
+<code>crossbeam::scope</code>, and <code>rayon::scope</code> but asynchronous.</p>
+<h3 id="motivation"><a href="#motivation">Motivation</a></h3>
+<p>Executors like async_std, tokio, etc. support spawning
+<code>'static</code> futures onto a thread-pool. However, it is
+often useful to spawn futures that may not be <code>'static</code>.</p>
+<p>While the future combinators such as
+<a href="../futures_util/stream/stream/trait.StreamExt.html#method.for_each_concurrent"><code>for_each_concurrent</code></a> offer
+concurrency, they are bundled as a single <a href="https://doc.rust-lang.org/1.62.0/std/task/index.html"><code>Task</code></a>
+structure by the executor, and hence are not driven
+parallelly.</p>
+<h3 id="scope-api"><a href="#scope-api">Scope API</a></h3>
+<p>We propose an API similar to
+<a href="crossbeam::scope"><code>crossbeam::scope</code></a> to allow spawning
+futures that are not <code>'static</code>. The key API is approximately:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">scope</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+             <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="ident">Scope</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span>)<span class="op">&gt;</span>(<span class="ident">f</span>: <span class="ident">F</span>)
+             -&gt; <span class="kw">impl</span> <span class="ident">Stream</span> {
+    <span class="comment">// ...</span>
+}</code></pre></div>
+<p>See <a href="struct.Scope.html#method.scope" title="Scope::scope"><code>scope</code></a> for the exact definition, and
+safety guidelines. The simplest and safest API is
+<a href="struct.Scope.html#method.scope_and_block" title="Scope::scope_and_block"><code>scope_and_block</code></a>, used as follows:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="kw">async</span> <span class="kw">fn</span> <span class="ident">scoped_futures</span>() {
+    <span class="kw">let</span> <span class="ident">not_copy</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;hello world!&quot;</span>);
+    <span class="kw">let</span> <span class="ident">not_copy_ref</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">not_copy</span>;
+    <span class="kw">let</span> (<span class="ident">foo</span>, <span class="ident">outputs</span>) <span class="op">=</span> <span class="ident">async_scoped::AsyncScope::scope_and_block</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> {
+        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">10</span> {
+            <span class="kw">let</span> <span class="ident">proc</span> <span class="op">=</span> <span class="op">|</span><span class="op">|</span> <span class="kw">async</span> {
+                <span class="macro">assert_eq!</span>(<span class="ident">not_copy_ref</span>, <span class="string">&quot;hello world!&quot;</span>);
+                <span class="macro">eprintln!</span>(<span class="string">&quot;Hello world!&quot;</span>)
+            };
+            <span class="ident">s</span>.<span class="ident">spawn</span>(<span class="ident">proc</span>());
+        }
+        <span class="number">42</span>
+    });
+    <span class="macro">assert_eq!</span>(<span class="ident">foo</span>, <span class="number">42</span>);
+    <span class="macro">assert_eq!</span>(<span class="ident">outputs</span>.<span class="ident">len</span>(), <span class="number">10</span>);
+}</code></pre></div>
+<p>The <a href="struct.Scope.html#method.scope_and_block" title="Scope::scope_and_block"><code>scope_and_block</code></a> function above
+blocks the current thread until all spawned futures are
+driven in order to guarantee safety.</p>
+<p>We also provide an unsafe
+<a href="struct.Scope.html#method.scope_and_collect" title="Scope::scope_and_collect"><code>scope_and_collect</code></a>, which is
+asynchronous, and does not block the current thread.
+However, the user should ensure that the returned future
+<em>is not forgetten</em> before being driven to completion.</p>
+<h3 id="executor-selection"><a href="#executor-selection">Executor Selection</a></h3>
+<p>Users <strong>must use</strong> either “use-async-std”, or the
+“use-tokio” feature gates, to obtain a usable scope
+type. These gates provide <a href="type.TokioScope.html" title="TokioScope"><code>TokioScope</code></a> and
+[<code>AsyncScope</code>] that support spawning, and blocking. Here
+is a run-down of key differences between the two
+runtimes.</p>
+<ol>
+<li>
+<p>[<code>AsyncScope</code>] may run into a dead-lock if used in
+deep recursions (depth &gt; #num-cores / 2).</p>
+</li>
+<li>
+<p><a href="struct.Scope.html#method.scope_and_block" title="Scope::scope_and_block"><code>TokioScope::scope_and_block</code></a> may only be used
+within a multi-threaded. An incompletely driven
+<code>TokioScope</code> also needs a multi-threaded context to be
+dropped.</p>
+</li>
+</ol>
+<h3 id="cancellation"><a href="#cancellation">Cancellation</a></h3>
+<p>To support cancellation, <code>Scope</code> provides a
+<a href="struct.Scope.html#method.spawn_cancellable" title="Scope::spawn_cancellable"><code>spawn_cancellable</code></a> which wraps a
+future to make it cancellable. When a <code>Scope</code> is
+dropped, (or if <code>cancel</code> method is invoked), all the
+cancellable futures are scheduled for cancellation. In
+the next poll of the futures, they are dropped and a
+default value (provided by a closure during spawn) is
+returned as the output of the future.</p>
+<p><strong>Note:</strong> this is an abrupt, hard cancellation. It also
+requires a reasonable behaviour: futures that do not
+return control to the executor cannot be cancelled once
+it has started.</p>
+<h3 id="safety-considerations"><a href="#safety-considerations">Safety Considerations</a></h3>
+<p>The <a href="struct.Scope.html#method.scope" title="Scope::scope"><code>scope</code></a> API provided in this crate is
+unsafe as it is possible to <code>forget</code> the stream received
+from the API without driving it to completion. The only
+completely (without any additional assumptions) safe API
+is the <a href="struct.Scope.html#method.scope_and_block" title="Scope::scope_and_block"><code>scope_and_block</code></a> function,
+which <em>blocks the current thread</em> until all spawned
+futures complete.</p>
+<p>The <a href="struct.Scope.html#method.scope_and_block" title="Scope::scope_and_block"><code>scope_and_block</code></a> may not be
+convenient in an asynchronous setting. In this case, the
+<a href="struct.Scope.html#method.scope_and_collect" title="Scope::scope_and_collect"><code>scope_and_collect</code></a> API may be
+used. Care must be taken to ensure the returned future
+is not forgotten before being driven to completion.</p>
+<p>Note that dropping this future will lead to it being
+driven to completion, while blocking the current thread
+to ensure safety. However, it is unsafe to forget this
+future before it is fully driven.</p>
+<h3 id="implementation"><a href="#implementation">Implementation</a></h3>
+<p>Our current implementation simply uses <em>unsafe</em> glue to
+<code>transmute</code> the lifetime, to actually spawn the futures
+in the executor. The original lifetime is recorded in
+the <code>Scope</code>. This allows the compiler to enforce the
+necessary lifetime requirements as long as this returned
+stream is not forgotten.</p>
+<p>For soundness, we drive the stream to completion in the
+<a href="https://doc.rust-lang.org/1.62.0/core/ops/drop/trait.Drop.html" title="Drop"><code>Drop</code></a> impl. The current thread is blocked until
+the stream is fully driven.</p>
+<p>Unfortunately, since the <a href="https://doc.rust-lang.org/1.62.0/core/mem/fn.forget.html"><code>std::mem::forget</code></a>
+method is allowed in safe Rust, the purely asynchronous
+API here is <em>inherently unsafe</em>.</p>
+</div></details><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Scope.html" title="async_scoped::Scope struct">Scope</a></div><div class="item-right docblock-short"><p>A scope to allow controlled spawning of non ’static
+futures. Futures can be spawned using <code>spawn</code> or
+<code>spawn_cancellable</code> methods.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Tokio.html" title="async_scoped::Tokio struct">Tokio</a></div><div class="item-right docblock-short"></div></div></div><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.TokioScope.html" title="async_scoped::TokioScope type">TokioScope</a></div><div class="item-right docblock-short"></div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="async_scoped" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.0 (a8314ef7d 2022-06-27)" ></div>
+</body></html>

@@ -566,6 +566,26 @@
 <span id="561">561</span>
 <span id="562">562</span>
 <span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -692,6 +712,11 @@
         <span class="ident">command</span>: <span class="ident">String</span>,
         <span class="ident">exit_code</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>,
     },
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;building test runner failed&quot;</span>)]</span>
+    <span class="ident">TestRunnerBuildError</span> {
+        <span class="attribute">#[<span class="ident">from</span>]</span>
+        <span class="ident">err</span>: <span class="ident">TestRunnerBuildError</span>,
+    },
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;writing test list to output failed&quot;</span>)]</span>
     <span class="ident">WriteTestListError</span> {
         <span class="attribute">#[<span class="ident">from</span>]</span>
@@ -701,6 +726,11 @@
     <span class="ident">WriteEventError</span> {
         <span class="attribute">#[<span class="ident">from</span>]</span>
         <span class="ident">err</span>: <span class="ident">WriteEventError</span>,
+    },
+    <span class="attribute">#[<span class="ident">error</span>(<span class="ident">transparent</span>)]</span>
+    <span class="ident">ConfigureHandleInheritanceError</span> {
+        <span class="attribute">#[<span class="ident">from</span>]</span>
+        <span class="ident">err</span>: <span class="ident">ConfigureHandleInheritanceError</span>,
     },
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;test run failed&quot;</span>)]</span>
     <span class="ident">TestRunFailed</span>,
@@ -857,6 +887,8 @@
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::ArchiveExtractError</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::PathMapperConstructError</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::ArgumentJsonParseError</span> { .. }
+            <span class="op">|</span> <span class="ident"><span class="self">Self</span>::TestRunnerBuildError</span> { .. }
+            <span class="op">|</span> <span class="ident"><span class="self">Self</span>::ConfigureHandleInheritanceError</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::CargoMetadataParseError</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::TestBinaryArgsParseError</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::DialoguerError</span> { .. }
@@ -1060,6 +1092,14 @@
                 );
 
                 <span class="prelude-val">None</span>
+            }
+            <span class="ident"><span class="self">Self</span>::TestRunnerBuildError</span> { <span class="ident">err</span> } =&gt; {
+                <span class="macro">log::error!</span>(<span class="string">&quot;failed to build test runner&quot;</span>);
+                <span class="prelude-val">Some</span>(<span class="ident">err</span> <span class="kw">as</span> <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Error</span>)
+            }
+            <span class="ident"><span class="self">Self</span>::ConfigureHandleInheritanceError</span> { <span class="ident">err</span> } =&gt; {
+                <span class="macro">log::error!</span>(<span class="string">&quot;{err}&quot;</span>);
+                <span class="ident">err</span>.<span class="ident">source</span>()
             }
             <span class="ident"><span class="self">Self</span>::WriteTestListError</span> { <span class="ident">err</span> } =&gt; {
                 <span class="macro">log::error!</span>(<span class="string">&quot;failed to write test list to output&quot;</span>);

@@ -1361,6 +1361,35 @@
 <span id="1356">1356</span>
 <span id="1357">1357</span>
 <span id="1358">1358</span>
+<span id="1359">1359</span>
+<span id="1360">1360</span>
+<span id="1361">1361</span>
+<span id="1362">1362</span>
+<span id="1363">1363</span>
+<span id="1364">1364</span>
+<span id="1365">1365</span>
+<span id="1366">1366</span>
+<span id="1367">1367</span>
+<span id="1368">1368</span>
+<span id="1369">1369</span>
+<span id="1370">1370</span>
+<span id="1371">1371</span>
+<span id="1372">1372</span>
+<span id="1373">1373</span>
+<span id="1374">1374</span>
+<span id="1375">1375</span>
+<span id="1376">1376</span>
+<span id="1377">1377</span>
+<span id="1378">1378</span>
+<span id="1379">1379</span>
+<span id="1380">1380</span>
+<span id="1381">1381</span>
+<span id="1382">1382</span>
+<span id="1383">1383</span>
+<span id="1384">1384</span>
+<span id="1385">1385</span>
+<span id="1386">1386</span>
+<span id="1387">1387</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1485,6 +1514,9 @@
     <span class="doccomment">/// Output information about slow tests, and all variants above.</span>
     <span class="ident">Slow</span>,
 
+    <span class="doccomment">/// Output information about leaky tests, and all variants above.</span>
+    <span class="ident">Leak</span>,
+
     <span class="doccomment">/// Output passing tests in addition to all variants above.</span>
     <span class="ident">Pass</span>,
 
@@ -1498,7 +1530,9 @@
 <span class="kw">impl</span> <span class="ident">StatusLevel</span> {
     <span class="doccomment">/// Returns string representations of all known variants.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">variants</span>() -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>] {
-        <span class="kw-2">&amp;</span>[<span class="string">&quot;none&quot;</span>, <span class="string">&quot;fail&quot;</span>, <span class="string">&quot;retry&quot;</span>, <span class="string">&quot;slow&quot;</span>, <span class="string">&quot;pass&quot;</span>, <span class="string">&quot;skip&quot;</span>, <span class="string">&quot;all&quot;</span>]
+        <span class="kw-2">&amp;</span>[
+            <span class="string">&quot;none&quot;</span>, <span class="string">&quot;fail&quot;</span>, <span class="string">&quot;retry&quot;</span>, <span class="string">&quot;slow&quot;</span>, <span class="string">&quot;leak&quot;</span>, <span class="string">&quot;pass&quot;</span>, <span class="string">&quot;skip&quot;</span>, <span class="string">&quot;all&quot;</span>,
+        ]
     }
 }
 
@@ -1511,6 +1545,7 @@
             <span class="string">&quot;fail&quot;</span> =&gt; <span class="ident">StatusLevel::Fail</span>,
             <span class="string">&quot;retry&quot;</span> =&gt; <span class="ident">StatusLevel::Retry</span>,
             <span class="string">&quot;slow&quot;</span> =&gt; <span class="ident">StatusLevel::Slow</span>,
+            <span class="string">&quot;leak&quot;</span> =&gt; <span class="ident">StatusLevel::Leak</span>,
             <span class="string">&quot;pass&quot;</span> =&gt; <span class="ident">StatusLevel::Pass</span>,
             <span class="string">&quot;skip&quot;</span> =&gt; <span class="ident">StatusLevel::Skip</span>,
             <span class="string">&quot;all&quot;</span> =&gt; <span class="ident">StatusLevel::All</span>,
@@ -1527,6 +1562,7 @@
             <span class="ident">StatusLevel::Fail</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;fail&quot;</span>),
             <span class="ident">StatusLevel::Retry</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;retry&quot;</span>),
             <span class="ident">StatusLevel::Slow</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;slow&quot;</span>),
+            <span class="ident">StatusLevel::Leak</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;leak&quot;</span>),
             <span class="ident">StatusLevel::Pass</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;pass&quot;</span>),
             <span class="ident">StatusLevel::Skip</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;skip&quot;</span>),
             <span class="ident">StatusLevel::All</span> =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;all&quot;</span>),
@@ -1560,6 +1596,9 @@
 
     <span class="doccomment">/// Output skipped tests in addition to all variants above.</span>
     <span class="ident">Skip</span>,
+
+    <span class="doccomment">/// Output leaky tests in addition to all variants above.</span>
+    <span class="ident">Leak</span>,
 
     <span class="doccomment">/// Output passing tests in addition to all variants above.</span>
     <span class="ident">Pass</span>,
@@ -1868,13 +1907,23 @@
 <span class="kw">fn</span> <span class="ident">write_summary_str</span>(<span class="ident">run_stats</span>: <span class="kw-2">&amp;</span><span class="ident">RunStats</span>, <span class="ident">styles</span>: <span class="kw-2">&amp;</span><span class="ident">Styles</span>, <span class="ident">out</span>: <span class="kw-2">&amp;mut</span> <span class="ident">String</span>) -&gt; <span class="ident">fmt::Result</span> {
     <span class="macro">write!</span>(<span class="ident">out</span>, <span class="string">&quot;{} passed&quot;</span>, <span class="ident">run_stats</span>.<span class="ident">passed</span>.<span class="ident">style</span>(<span class="ident">styles</span>.<span class="ident">pass</span>))<span class="question-mark">?</span>;
 
-    <span class="kw">if</span> <span class="ident">run_stats</span>.<span class="ident">flaky</span> <span class="op">&gt;</span> <span class="number">0</span> {
-        <span class="macro">write!</span>(
-            <span class="ident">out</span>,
-            <span class="string">&quot; ({} {})&quot;</span>,
-            <span class="ident">run_stats</span>.<span class="ident">flaky</span>.<span class="ident">style</span>(<span class="ident">styles</span>.<span class="ident">count</span>),
-            <span class="string">&quot;flaky&quot;</span>.<span class="ident">style</span>(<span class="ident">styles</span>.<span class="ident">skip</span>),
-        )<span class="question-mark">?</span>;
+    <span class="kw">if</span> <span class="ident">run_stats</span>.<span class="ident">flaky</span> <span class="op">&gt;</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">run_stats</span>.<span class="ident">leaky</span> <span class="op">&gt;</span> <span class="number">0</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">text</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="number">2</span>);
+        <span class="kw">if</span> <span class="ident">run_stats</span>.<span class="ident">flaky</span> <span class="op">&gt;</span> <span class="number">0</span> {
+            <span class="ident">text</span>.<span class="ident">push</span>(<span class="macro">format!</span>(
+                <span class="string">&quot;{} {}&quot;</span>,
+                <span class="ident">run_stats</span>.<span class="ident">flaky</span>.<span class="ident">style</span>(<span class="ident">styles</span>.<span class="ident">count</span>),
+                <span class="string">&quot;flaky&quot;</span>.<span class="ident">style</span>(<span class="ident">styles</span>.<span class="ident">skip</span>),
+            ));
+        }
+        <span class="kw">if</span> <span class="ident">run_stats</span>.<span class="ident">leaky</span> <span class="op">&gt;</span> <span class="number">0</span> {
+            <span class="ident">text</span>.<span class="ident">push</span>(<span class="macro">format!</span>(
+                <span class="string">&quot;{} {}&quot;</span>,
+                <span class="ident">run_stats</span>.<span class="ident">leaky</span>.<span class="ident">style</span>(<span class="ident">styles</span>.<span class="ident">count</span>),
+                <span class="string">&quot;leaky&quot;</span>.<span class="ident">style</span>(<span class="ident">styles</span>.<span class="ident">skip</span>),
+            ));
+        }
+        <span class="macro">write!</span>(<span class="ident">out</span>, <span class="string">&quot; ({})&quot;</span>, <span class="ident">text</span>.<span class="ident">join</span>(<span class="string">&quot;, &quot;</span>))<span class="question-mark">?</span>;
     }
     <span class="macro">write!</span>(<span class="ident">out</span>, <span class="string">&quot;, &quot;</span>)<span class="question-mark">?</span>;
 
@@ -2201,7 +2250,11 @@
         <span class="kw">let</span> <span class="ident">last_status</span> <span class="op">=</span> <span class="ident">describe</span>.<span class="ident">last_status</span>();
         <span class="kw">match</span> <span class="ident">describe</span> {
             <span class="ident">ExecutionDescription::Success</span> { .. } =&gt; {
-                <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{:&gt;12} &quot;</span>, <span class="string">&quot;PASS&quot;</span>.<span class="ident">style</span>(<span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">pass</span>))<span class="question-mark">?</span>;
+                <span class="kw">if</span> <span class="ident">last_status</span>.<span class="ident">result</span> <span class="op">==</span> <span class="ident">ExecutionResult::Leak</span> {
+                    <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{:&gt;12} &quot;</span>, <span class="string">&quot;LEAK&quot;</span>.<span class="ident">style</span>(<span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">skip</span>))<span class="question-mark">?</span>;
+                } <span class="kw">else</span> {
+                    <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{:&gt;12} &quot;</span>, <span class="string">&quot;PASS&quot;</span>.<span class="ident">style</span>(<span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">pass</span>))<span class="question-mark">?</span>;
+                }
             }
             <span class="ident">ExecutionDescription::Flaky</span> { .. } =&gt; {
                 <span class="comment">// Use the skip color to also represent a flaky test.</span>
@@ -2241,6 +2294,7 @@
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ExecutionResult::Fail</span> {
             <span class="ident">abort_status</span>: <span class="prelude-val">Some</span>(<span class="ident">AbortStatus::WindowsNtStatus</span>(<span class="ident">nt_status</span>)),
+            <span class="ident">leaked</span>: <span class="kw">_</span>,
         } <span class="op">=</span> <span class="ident">last_status</span>.<span class="ident">result</span>
         {
             <span class="self">self</span>.<span class="ident">write_windows_message_line</span>(<span class="ident">nt_status</span>, <span class="ident">writer</span>)<span class="question-mark">?</span>;
@@ -2258,10 +2312,19 @@
         <span class="kw">let</span> <span class="ident">last_status</span> <span class="op">=</span> <span class="ident">describe</span>.<span class="ident">last_status</span>();
         <span class="kw">match</span> <span class="ident">describe</span> {
             <span class="ident">ExecutionDescription::Success</span> { .. } =&gt; {
-                <span class="kw">if</span> <span class="ident">last_status</span>.<span class="ident">is_slow</span> {
-                    <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{:&gt;12} &quot;</span>, <span class="string">&quot;SLOW&quot;</span>.<span class="ident">style</span>(<span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">skip</span>))<span class="question-mark">?</span>;
-                } <span class="kw">else</span> {
-                    <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{:&gt;12} &quot;</span>, <span class="string">&quot;PASS&quot;</span>.<span class="ident">style</span>(<span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">pass</span>))<span class="question-mark">?</span>;
+                <span class="kw">match</span> (<span class="ident">last_status</span>.<span class="ident">is_slow</span>, <span class="ident">last_status</span>.<span class="ident">result</span>) {
+                    (<span class="bool-val">true</span>, <span class="ident">ExecutionResult::Leak</span>) =&gt; {
+                        <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{:&gt;12} &quot;</span>, <span class="string">&quot;SLOW + LEAK&quot;</span>.<span class="ident">style</span>(<span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">skip</span>))<span class="question-mark">?</span>;
+                    }
+                    (<span class="bool-val">true</span>, <span class="kw">_</span>) =&gt; {
+                        <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{:&gt;12} &quot;</span>, <span class="string">&quot;SLOW&quot;</span>.<span class="ident">style</span>(<span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">skip</span>))<span class="question-mark">?</span>;
+                    }
+                    (<span class="bool-val">false</span>, <span class="ident">ExecutionResult::Leak</span>) =&gt; {
+                        <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{:&gt;12} &quot;</span>, <span class="string">&quot;LEAK&quot;</span>.<span class="ident">style</span>(<span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">skip</span>))<span class="question-mark">?</span>;
+                    }
+                    (<span class="bool-val">false</span>, <span class="kw">_</span>) =&gt; {
+                        <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{:&gt;12} &quot;</span>, <span class="string">&quot;PASS&quot;</span>.<span class="ident">style</span>(<span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">pass</span>))<span class="question-mark">?</span>;
+                    }
                 }
             }
             <span class="ident">ExecutionDescription::Flaky</span> { .. } =&gt; {
@@ -2306,6 +2369,7 @@
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ExecutionResult::Fail</span> {
             <span class="ident">abort_status</span>: <span class="prelude-val">Some</span>(<span class="ident">AbortStatus::WindowsNtStatus</span>(<span class="ident">nt_status</span>)),
+            <span class="ident">leaked</span>: <span class="kw">_</span>,
         } <span class="op">=</span> <span class="ident">last_status</span>.<span class="ident">result</span>
         {
             <span class="self">self</span>.<span class="ident">write_windows_message_line</span>(<span class="ident">nt_status</span>, <span class="ident">writer</span>)<span class="question-mark">?</span>;
@@ -2471,21 +2535,31 @@
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
         <span class="ident">ExecutionResult::Fail</span> {
             <span class="ident">abort_status</span>: <span class="prelude-val">Some</span>(<span class="ident">AbortStatus::UnixSignal</span>(<span class="ident">sig</span>)),
-        } =&gt; <span class="kw">match</span> <span class="ident">signal_str</span>(<span class="ident">sig</span>) {
+            <span class="ident">leaked</span>: <span class="kw">_</span>,
+        } =&gt; <span class="kw">match</span> <span class="ident"><span class="kw">crate</span>::helpers::signal_str</span>(<span class="ident">sig</span>) {
             <span class="prelude-val">Some</span>(<span class="ident">s</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;SIG{s}&quot;</span>).<span class="ident">into</span>(),
             <span class="prelude-val">None</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;ABORT SIG {sig}&quot;</span>).<span class="ident">into</span>(),
         },
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
         <span class="ident">ExecutionResult::Fail</span> {
             <span class="ident">abort_status</span>: <span class="prelude-val">Some</span>(<span class="ident">AbortStatus::WindowsNtStatus</span>(<span class="kw">_</span>)),
+            <span class="ident">leaked</span>: <span class="kw">_</span>,
         } =&gt; {
             <span class="comment">// Going to print out the full error message on the following line -- just &quot;ABORT&quot; will</span>
             <span class="comment">// do for now.</span>
             <span class="string">&quot;ABORT&quot;</span>.<span class="ident">into</span>()
         }
-        <span class="ident">ExecutionResult::Fail</span> { <span class="ident">abort_status</span>: <span class="prelude-val">None</span> } =&gt; <span class="string">&quot;FAIL&quot;</span>.<span class="ident">into</span>(),
+        <span class="ident">ExecutionResult::Fail</span> {
+            <span class="ident">abort_status</span>: <span class="prelude-val">None</span>,
+            <span class="ident">leaked</span>: <span class="bool-val">true</span>,
+        } =&gt; <span class="string">&quot;FAIL + LEAK&quot;</span>.<span class="ident">into</span>(),
+        <span class="ident">ExecutionResult::Fail</span> {
+            <span class="ident">abort_status</span>: <span class="prelude-val">None</span>,
+            <span class="ident">leaked</span>: <span class="bool-val">false</span>,
+        } =&gt; <span class="string">&quot;FAIL&quot;</span>.<span class="ident">into</span>(),
         <span class="ident">ExecutionResult::ExecFail</span> =&gt; <span class="string">&quot;XFAIL&quot;</span>.<span class="ident">into</span>(),
         <span class="ident">ExecutionResult::Pass</span> =&gt; <span class="string">&quot;PASS&quot;</span>.<span class="ident">into</span>(),
+        <span class="ident">ExecutionResult::Leak</span> =&gt; <span class="string">&quot;LEAK&quot;</span>.<span class="ident">into</span>(),
         <span class="ident">ExecutionResult::Timeout</span> =&gt; <span class="string">&quot;TIMEOUT&quot;</span>.<span class="ident">into</span>(),
     }
 }
@@ -2496,44 +2570,28 @@
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
         <span class="ident">ExecutionResult::Fail</span> {
             <span class="ident">abort_status</span>: <span class="prelude-val">Some</span>(<span class="ident">AbortStatus::UnixSignal</span>(<span class="ident">sig</span>)),
-        } =&gt; <span class="kw">match</span> <span class="ident">signal_str</span>(<span class="ident">sig</span>) {
+            <span class="ident">leaked</span>: <span class="kw">_</span>,
+        } =&gt; <span class="kw">match</span> <span class="ident"><span class="kw">crate</span>::helpers::signal_str</span>(<span class="ident">sig</span>) {
             <span class="prelude-val">Some</span>(<span class="ident">s</span>) =&gt; <span class="ident">s</span>.<span class="ident">into</span>(),
             <span class="prelude-val">None</span> =&gt; <span class="macro">format!</span>(<span class="string">&quot;SIG {sig}&quot;</span>).<span class="ident">into</span>(),
         },
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
         <span class="ident">ExecutionResult::Fail</span> {
             <span class="ident">abort_status</span>: <span class="prelude-val">Some</span>(<span class="ident">AbortStatus::WindowsNtStatus</span>(<span class="kw">_</span>)),
+            <span class="ident">leaked</span>: <span class="kw">_</span>,
         } =&gt; {
             <span class="comment">// Going to print out the full error message on the following line -- just &quot;ABORT&quot; will</span>
             <span class="comment">// do for now.</span>
             <span class="string">&quot;ABORT&quot;</span>.<span class="ident">into</span>()
         }
-        <span class="ident">ExecutionResult::Fail</span> { <span class="ident">abort_status</span>: <span class="prelude-val">None</span> } =&gt; <span class="string">&quot;FAIL&quot;</span>.<span class="ident">into</span>(),
+        <span class="ident">ExecutionResult::Fail</span> {
+            <span class="ident">abort_status</span>: <span class="prelude-val">None</span>,
+            <span class="ident">leaked</span>: <span class="kw">_</span>,
+        } =&gt; <span class="string">&quot;FAIL&quot;</span>.<span class="ident">into</span>(),
         <span class="ident">ExecutionResult::ExecFail</span> =&gt; <span class="string">&quot;XFAIL&quot;</span>.<span class="ident">into</span>(),
         <span class="ident">ExecutionResult::Pass</span> =&gt; <span class="string">&quot;PASS&quot;</span>.<span class="ident">into</span>(),
+        <span class="ident">ExecutionResult::Leak</span> =&gt; <span class="string">&quot;LEAK&quot;</span>.<span class="ident">into</span>(),
         <span class="ident">ExecutionResult::Timeout</span> =&gt; <span class="string">&quot;TMT&quot;</span>.<span class="ident">into</span>(),
-    }
-}
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
-<span class="kw">fn</span> <span class="ident">signal_str</span>(<span class="ident">signal</span>: <span class="ident">i32</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span> {
-    <span class="comment">// These signal numbers are the same on at least Linux, macOS and FreeBSD.</span>
-    <span class="kw">match</span> <span class="ident">signal</span> {
-        <span class="number">1</span> =&gt; <span class="prelude-val">Some</span>(<span class="string">&quot;HUP&quot;</span>),
-        <span class="number">2</span> =&gt; <span class="prelude-val">Some</span>(<span class="string">&quot;INT&quot;</span>),
-        <span class="number">5</span> =&gt; <span class="prelude-val">Some</span>(<span class="string">&quot;TRAP&quot;</span>),
-        <span class="number">6</span> =&gt; <span class="prelude-val">Some</span>(<span class="string">&quot;ABRT&quot;</span>),
-        <span class="number">8</span> =&gt; <span class="prelude-val">Some</span>(<span class="string">&quot;FPE&quot;</span>),
-        <span class="number">9</span> =&gt; <span class="prelude-val">Some</span>(<span class="string">&quot;KILL&quot;</span>),
-        <span class="number">11</span> =&gt; <span class="prelude-val">Some</span>(<span class="string">&quot;SEGV&quot;</span>),
-        <span class="number">13</span> =&gt; <span class="prelude-val">Some</span>(<span class="string">&quot;PIPE&quot;</span>),
-        <span class="number">14</span> =&gt; <span class="prelude-val">Some</span>(<span class="string">&quot;ALRM&quot;</span>),
-        <span class="number">15</span> =&gt; <span class="prelude-val">Some</span>(<span class="string">&quot;TERM&quot;</span>),
-        <span class="number">24</span> =&gt; <span class="prelude-val">Some</span>(<span class="string">&quot;XCPU&quot;</span>),
-        <span class="number">25</span> =&gt; <span class="prelude-val">Some</span>(<span class="string">&quot;XFSZ&quot;</span>),
-        <span class="number">26</span> =&gt; <span class="prelude-val">Some</span>(<span class="string">&quot;VTALRM&quot;</span>),
-        <span class="number">27</span> =&gt; <span class="prelude-val">Some</span>(<span class="string">&quot;PROF&quot;</span>),
-        <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
     }
 }
 
