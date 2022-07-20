@@ -536,8 +536,8 @@
 
                 <span class="kw">for</span> <span class="ident">rerun</span> <span class="kw">in</span> <span class="ident">reruns</span> {
                     <span class="kw">let</span> (<span class="ident">kind</span>, <span class="ident">ty</span>) <span class="op">=</span> <span class="ident">kind_ty</span>(<span class="ident">rerun</span>);
-                    <span class="kw">let</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">String::from_utf8_lossy</span>(<span class="ident">rerun</span>.<span class="ident">stdout</span>());
-                    <span class="kw">let</span> <span class="ident">stderr</span> <span class="op">=</span> <span class="ident">String::from_utf8_lossy</span>(<span class="ident">rerun</span>.<span class="ident">stderr</span>());
+                    <span class="kw">let</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">String::from_utf8_lossy</span>(<span class="kw-2">&amp;</span><span class="ident">rerun</span>.<span class="ident">stdout</span>);
+                    <span class="kw">let</span> <span class="ident">stderr</span> <span class="op">=</span> <span class="ident">String::from_utf8_lossy</span>(<span class="kw-2">&amp;</span><span class="ident">rerun</span>.<span class="ident">stderr</span>);
                     <span class="kw">let</span> <span class="ident">stack_trace</span> <span class="op">=</span> <span class="ident">heuristic_extract_description</span>(<span class="ident">rerun</span>.<span class="ident">result</span>, <span class="kw-2">&amp;</span><span class="ident">stdout</span>, <span class="kw-2">&amp;</span><span class="ident">stderr</span>);
 
                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">test_rerun</span> <span class="op">=</span> <span class="ident">TestRerun::new</span>(<span class="ident">kind</span>);
@@ -566,8 +566,8 @@
                 <span class="comment">// https://github.com/allure-framework/allure2/blob/master/plugins/junit-xml-plugin/src/main/java/io/qameta/allure/junitxml/JunitXmlPlugin.java#L192-L196</span>
                 <span class="comment">// we may have to update this format to handle that.</span>
                 <span class="kw">if</span> <span class="op">!</span><span class="ident">main_status</span>.<span class="ident">result</span>.<span class="ident">is_success</span>() {
-                    <span class="kw">let</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">String::from_utf8_lossy</span>(<span class="ident">main_status</span>.<span class="ident">stdout</span>());
-                    <span class="kw">let</span> <span class="ident">stderr</span> <span class="op">=</span> <span class="ident">String::from_utf8_lossy</span>(<span class="ident">main_status</span>.<span class="ident">stderr</span>());
+                    <span class="kw">let</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">String::from_utf8_lossy</span>(<span class="kw-2">&amp;</span><span class="ident">main_status</span>.<span class="ident">stdout</span>);
+                    <span class="kw">let</span> <span class="ident">stderr</span> <span class="op">=</span> <span class="ident">String::from_utf8_lossy</span>(<span class="kw-2">&amp;</span><span class="ident">main_status</span>.<span class="ident">stderr</span>);
                     <span class="kw">let</span> <span class="ident">description</span> <span class="op">=</span>
                         <span class="ident">heuristic_extract_description</span>(<span class="ident">main_status</span>.<span class="ident">result</span>, <span class="kw-2">&amp;</span><span class="ident">stdout</span>, <span class="kw-2">&amp;</span><span class="ident">stderr</span>);
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">description</span>) <span class="op">=</span> <span class="ident">description</span> {
@@ -575,8 +575,8 @@
                     }
 
                     <span class="ident">testcase</span>
-                        .<span class="ident">set_system_out_lossy</span>(<span class="ident">main_status</span>.<span class="ident">stdout</span>())
-                        .<span class="ident">set_system_err_lossy</span>(<span class="ident">main_status</span>.<span class="ident">stderr</span>());
+                        .<span class="ident">set_system_out_lossy</span>(<span class="kw-2">&amp;</span><span class="ident">main_status</span>.<span class="ident">stdout</span>)
+                        .<span class="ident">set_system_err_lossy</span>(<span class="kw-2">&amp;</span><span class="ident">main_status</span>.<span class="ident">stderr</span>);
                 }
 
                 <span class="ident">testsuite</span>.<span class="ident">add_test_case</span>(<span class="ident">testcase</span>);

@@ -341,6 +341,9 @@
 <span id="336">336</span>
 <span id="337">337</span>
 <span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -512,9 +515,12 @@
         <span class="kw">for</span> <span class="ident">binary</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">binary_list</span>.<span class="ident">rust_binaries</span> {
             <span class="kw">let</span> <span class="ident">rel_path</span> <span class="op">=</span> <span class="ident">binary</span>
                 .<span class="ident">path</span>
-                .<span class="ident">strip_prefix</span>(<span class="ident">target_dir</span>.<span class="ident">parent</span>().<span class="ident">expect</span>(<span class="string">&quot;target dir cannot be the root&quot;</span>))
+                .<span class="ident">strip_prefix</span>(<span class="ident">target_dir</span>)
                 .<span class="ident">expect</span>(<span class="string">&quot;binary paths must be within target directory&quot;</span>);
-            <span class="kw">let</span> <span class="ident">rel_path</span> <span class="op">=</span> <span class="ident">convert_rel_path_to_forward_slash</span>(<span class="ident">rel_path</span>);
+            <span class="comment">// The target directory might not be called &quot;target&quot;, so strip all of it then add</span>
+            <span class="comment">// &quot;target&quot; to the beginning.</span>
+            <span class="kw">let</span> <span class="ident">rel_path</span> <span class="op">=</span> <span class="ident">Utf8Path::new</span>(<span class="string">&quot;target&quot;</span>).<span class="ident">join</span>(<span class="ident">rel_path</span>);
+            <span class="kw">let</span> <span class="ident">rel_path</span> <span class="op">=</span> <span class="ident">convert_rel_path_to_forward_slash</span>(<span class="kw-2">&amp;</span><span class="ident">rel_path</span>);
 
             <span class="self">self</span>.<span class="ident">append_path</span>(<span class="kw-2">&amp;</span><span class="ident">binary</span>.<span class="ident">path</span>, <span class="kw-2">&amp;</span><span class="ident">rel_path</span>)<span class="question-mark">?</span>;
         }

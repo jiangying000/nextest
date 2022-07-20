@@ -1356,17 +1356,6 @@
 <span id="1351">1351</span>
 <span id="1352">1352</span>
 <span id="1353">1353</span>
-<span id="1354">1354</span>
-<span id="1355">1355</span>
-<span id="1356">1356</span>
-<span id="1357">1357</span>
-<span id="1358">1358</span>
-<span id="1359">1359</span>
-<span id="1360">1360</span>
-<span id="1361">1361</span>
-<span id="1362">1362</span>
-<span id="1363">1363</span>
-<span id="1364">1364</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1385,6 +1374,7 @@
     <span class="ident">target_runner::TargetRunner</span>,
 };
 <span class="kw">use</span> <span class="ident">async_scoped::TokioScope</span>;
+<span class="kw">use</span> <span class="ident">bytes::Bytes</span>;
 <span class="kw">use</span> <span class="ident">futures::prelude</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">nextest_filtering</span>::{<span class="ident">BinaryQuery</span>, <span class="ident">TestQuery</span>};
 <span class="kw">use</span> <span class="ident">nextest_metadata</span>::{<span class="ident">FilterMatch</span>, <span class="ident">MismatchReason</span>};
@@ -1393,10 +1383,7 @@
     <span class="ident">marker::PhantomData</span>,
     <span class="ident">num::NonZeroUsize</span>,
     <span class="ident">process::Stdio</span>,
-    <span class="ident">sync</span>::{
-        <span class="ident">atomic</span>::{<span class="ident">AtomicBool</span>, <span class="ident">Ordering</span>},
-        <span class="ident">Arc</span>,
-    },
+    <span class="ident">sync::atomic</span>::{<span class="ident">AtomicBool</span>, <span class="ident">Ordering</span>},
     <span class="ident">time</span>::{<span class="ident">Duration</span>, <span class="ident">SystemTime</span>},
 };
 <span class="kw">use</span> <span class="ident">tokio</span>::{
@@ -1765,8 +1752,8 @@
             <span class="prelude-val">Ok</span>(<span class="ident">run_status</span>) =&gt; <span class="ident">run_status</span>,
             <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="ident">InternalExecuteStatus</span> {
                 <span class="comment">// TODO: can we return more information in stdout/stderr? investigate this</span>
-                <span class="ident">stdout</span>: <span class="macro">vec!</span>[],
-                <span class="ident">stderr</span>: <span class="macro">vec!</span>[],
+                <span class="ident">stdout</span>: <span class="ident">Bytes::new</span>(),
+                <span class="ident">stderr</span>: <span class="ident">Bytes::new</span>(),
                 <span class="ident">result</span>: <span class="ident">ExecutionResult::ExecFail</span>,
                 <span class="ident">stopwatch_end</span>: <span class="ident">stopwatch</span>.<span class="ident">end</span>(),
                 <span class="ident">is_slow</span>: <span class="bool-val">false</span>,
@@ -1990,8 +1977,8 @@
 
         <span class="prelude-val">Ok</span>(<span class="ident">InternalExecuteStatus</span> {
             <span class="comment">// TODO: replace with Bytes</span>
-            <span class="ident">stdout</span>: <span class="ident">stdout</span>.<span class="ident">to_vec</span>(),
-            <span class="ident">stderr</span>: <span class="ident">stderr</span>.<span class="ident">to_vec</span>(),
+            <span class="ident">stdout</span>: <span class="ident">stdout</span>.<span class="ident">freeze</span>(),
+            <span class="ident">stderr</span>: <span class="ident">stderr</span>.<span class="ident">freeze</span>(),
             <span class="ident">result</span>: <span class="ident">status</span>,
             <span class="ident">stopwatch_end</span>: <span class="ident">stopwatch</span>.<span class="ident">end</span>(),
             <span class="ident">is_slow</span>,
@@ -2150,8 +2137,10 @@
     <span class="kw">pub</span> <span class="ident">attempt</span>: <span class="ident">usize</span>,
     <span class="doccomment">/// The total number of times this test can be run. Equal to `1 + retries`.</span>
     <span class="kw">pub</span> <span class="ident">total_attempts</span>: <span class="ident">usize</span>,
-    <span class="doccomment">/// Standard output and standard error for this test.</span>
-    <span class="kw">pub</span> <span class="ident">stdout_stderr</span>: <span class="ident">Arc</span><span class="op">&lt;</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>)<span class="op">&gt;</span>,
+    <span class="doccomment">/// Standard output for this test.</span>
+    <span class="kw">pub</span> <span class="ident">stdout</span>: <span class="ident">Bytes</span>,
+    <span class="doccomment">/// Standard error for this test.</span>
+    <span class="kw">pub</span> <span class="ident">stderr</span>: <span class="ident">Bytes</span>,
     <span class="doccomment">/// The result of execution this test: pass, fail or execution error.</span>
     <span class="kw">pub</span> <span class="ident">result</span>: <span class="ident">ExecutionResult</span>,
     <span class="doccomment">/// The time at which the test started.</span>
@@ -2162,21 +2151,9 @@
     <span class="kw">pub</span> <span class="ident">is_slow</span>: <span class="ident">bool</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">ExecuteStatus</span> {
-    <span class="doccomment">/// Returns the standard output.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">stdout</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">stdout_stderr</span>.<span class="number">0</span>
-    }
-
-    <span class="doccomment">/// Returns the standard error.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">stderr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">stdout_stderr</span>.<span class="number">1</span>
-    }
-}
-
 <span class="kw">struct</span> <span class="ident">InternalExecuteStatus</span> {
-    <span class="ident">stdout</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    <span class="ident">stderr</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+    <span class="ident">stdout</span>: <span class="ident">Bytes</span>,
+    <span class="ident">stderr</span>: <span class="ident">Bytes</span>,
     <span class="ident">result</span>: <span class="ident">ExecutionResult</span>,
     <span class="ident">stopwatch_end</span>: <span class="ident">StopwatchEnd</span>,
     <span class="ident">is_slow</span>: <span class="ident">bool</span>,
@@ -2187,7 +2164,8 @@
         <span class="ident">ExecuteStatus</span> {
             <span class="ident">attempt</span>,
             <span class="ident">total_attempts</span>,
-            <span class="ident">stdout_stderr</span>: <span class="ident">std::sync::Arc::new</span>((<span class="self">self</span>.<span class="ident">stdout</span>, <span class="self">self</span>.<span class="ident">stderr</span>)),
+            <span class="ident">stdout</span>: <span class="self">self</span>.<span class="ident">stdout</span>,
+            <span class="ident">stderr</span>: <span class="self">self</span>.<span class="ident">stderr</span>,
             <span class="ident">result</span>: <span class="self">self</span>.<span class="ident">result</span>,
             <span class="ident">start_time</span>: <span class="self">self</span>.<span class="ident">stopwatch_end</span>.<span class="ident">start_time</span>,
             <span class="ident">time_taken</span>: <span class="self">self</span>.<span class="ident">stopwatch_end</span>.<span class="ident">duration</span>,
