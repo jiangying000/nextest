@@ -14,7 +14,7 @@ executors. Note that this idea is similar to
 often useful to spawn futures that may not be <code>'static</code>.</p>
 <p>While the future combinators such as
 <a href="../futures_util/stream/stream/trait.StreamExt.html#method.for_each_concurrent"><code>for_each_concurrent</code></a> offer
-concurrency, they are bundled as a single <a href="https://doc.rust-lang.org/1.62.0/std/task/index.html"><code>Task</code></a>
+concurrency, they are bundled as a single <a href="https://doc.rust-lang.org/1.62.1/std/task/index.html"><code>Task</code></a>
 structure by the executor, and hence are not driven
 parallelly.</p>
 <h3 id="scope-api"><a href="#scope-api">Scope API</a></h3>
@@ -112,9 +112,9 @@ the <code>Scope</code>. This allows the compiler to enforce the
 necessary lifetime requirements as long as this returned
 stream is not forgotten.</p>
 <p>For soundness, we drive the stream to completion in the
-<a href="https://doc.rust-lang.org/1.62.0/core/ops/drop/trait.Drop.html" title="Drop"><code>Drop</code></a> impl. The current thread is blocked until
+<a href="https://doc.rust-lang.org/1.62.1/core/ops/drop/trait.Drop.html" title="Drop"><code>Drop</code></a> impl. The current thread is blocked until
 the stream is fully driven.</p>
-<p>Unfortunately, since the <a href="https://doc.rust-lang.org/1.62.0/core/mem/fn.forget.html"><code>std::mem::forget</code></a>
+<p>Unfortunately, since the <a href="https://doc.rust-lang.org/1.62.1/core/mem/fn.forget.html"><code>std::mem::forget</code></a>
 method is allowed in safe Rust, the purely asynchronous
 API here is <em>inherently unsafe</em>.</p>
 </div></details><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2>
@@ -122,5 +122,5 @@ API here is <em>inherently unsafe</em>.</p>
 futures. Futures can be spawned using <code>spawn</code> or
 <code>spawn_cancellable</code> methods.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Tokio.html" title="async_scoped::Tokio struct">Tokio</a></div><div class="item-right docblock-short"></div></div></div><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.TokioScope.html" title="async_scoped::TokioScope type">TokioScope</a></div><div class="item-right docblock-short"></div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="async_scoped" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.0 (a8314ef7d 2022-06-27)" ></div>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.TokioScope.html" title="async_scoped::TokioScope type">TokioScope</a></div><div class="item-right docblock-short"></div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="async_scoped" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.1 (e092d0b6b 2022-07-16)" ></div>
 </body></html>

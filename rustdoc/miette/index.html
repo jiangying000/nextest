@@ -56,7 +56,7 @@ libraries and such might not want.</p>
 <h3 id="features"><a href="#features">Features</a></h3>
 <ul>
 <li>Generic <a href="trait.Diagnostic.html" title="Diagnostic"><code>Diagnostic</code></a> protocol, compatible (and dependent on)
-<a href="https://doc.rust-lang.org/1.62.0/std/error/trait.Error.html" title="std::error::Error"><code>std::error::Error</code></a>.</li>
+<a href="https://doc.rust-lang.org/1.62.1/std/error/trait.Error.html" title="std::error::Error"><code>std::error::Error</code></a>.</li>
 <li>Unique error codes on every <a href="trait.Diagnostic.html" title="Diagnostic"><code>Diagnostic</code></a>.</li>
 <li>Custom links to get more details on error codes.</li>
 <li>Super handy derive macro for defining diagnostic metadata.</li>
@@ -161,7 +161,7 @@ For more details, see https://docs.rs/nu-parser/0.1.0/nu-parser/enum.ParseError.
 <h3 id="using"><a href="#using">Using</a></h3><h4 id="-in-libraries"><a href="#-in-libraries">… in libraries</a></h4>
 <p><code>miette</code> is <em>fully compatible</em> with library usage. Consumers who don’t know
 about, or don’t want, <code>miette</code> features can safely use its error types as
-regular <a href="https://doc.rust-lang.org/1.62.0/std/error/trait.Error.html" title="std::error::Error"><code>std::error::Error</code></a>.</p>
+regular <a href="https://doc.rust-lang.org/1.62.1/std/error/trait.Error.html" title="std::error::Error"><code>std::error::Error</code></a>.</p>
 <p>We highly recommend using something like <a href="https://docs.rs/thiserror"><code>thiserror</code></a>
 to define unique error types and error wrappers for your library.</p>
 <p>While <code>miette</code> integrates smoothly with <code>thiserror</code>, it is <em>not required</em>.
@@ -449,7 +449,7 @@ emitted at the same time:</p>
 <h4 id="-diagnostic-based-error-sources"><a href="#-diagnostic-based-error-sources">… Diagnostic-based error sources.</a></h4>
 <p>When one uses the <code>#[source]</code> attribute on a field, that usually comes
 from <code>thiserror</code>, and implements a method for
-<a href="https://doc.rust-lang.org/1.62.0/std/error/trait.Error.html#method.source" title="std::error::Error::source"><code>std::error::Error::source</code></a>. This works in many cases, but it’s lossy:
+<a href="https://doc.rust-lang.org/1.62.1/std/error/trait.Error.html#method.source" title="std::error::Error::source"><code>std::error::Error::source</code></a>. This works in many cases, but it’s lossy:
 if the source of the diagnostic is a diagnostic itself, the source will
 simply be treated as an <code>std::error::Error</code>.</p>
 <p>While this has no effect on the existing <em>reporters</em>, since they don’t use
@@ -541,7 +541,7 @@ other such things.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.MietteHandlerOpts.html" title="miette::MietteHandlerOpts struct">MietteHandlerOpts</a></div><div class="item-right docblock-short"><p>Create a custom <a href="struct.MietteHandler.html" title="MietteHandler"><code>MietteHandler</code></a> from options.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.MietteSpanContents.html" title="miette::MietteSpanContents struct">MietteSpanContents</a></div><div class="item-right docblock-short"><p>Basic implementation of the <a href="trait.SpanContents.html" title="SpanContents"><code>SpanContents</code></a> trait, for convenience.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.NamedSource.html" title="miette::NamedSource struct">NamedSource</a></div><div class="item-right docblock-short"><p>Utility struct for when you have a regular <a href="trait.SourceCode.html" title="SourceCode"><code>SourceCode</code></a> type that doesn’t
-implement <code>name</code>. For example <a href="https://doc.rust-lang.org/1.62.0/alloc/string/struct.String.html" title="String"><code>String</code></a>. Or if you want to override the
+implement <code>name</code>. For example <a href="https://doc.rust-lang.org/1.62.1/alloc/string/struct.String.html" title="String"><code>String</code></a>. Or if you want to override the
 <code>name</code> returned by the <code>SourceCode</code>.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.NarratableReportHandler.html" title="miette::NarratableReportHandler struct">NarratableReportHandler</a></div><div class="item-right docblock-short"><p><a href="trait.ReportHandler.html" title="ReportHandler"><code>ReportHandler</code></a> that renders plain text and avoids extraneous graphics.
 It’s optimized for screen readers and braille users, but is also used in any
@@ -564,7 +564,7 @@ non-graphical environments, such as non-TTY output.</p>
 <a href="struct.Error.html"><code>Report</code></a> to print really nice and human-friendly error
 messages.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.IntoDiagnostic.html" title="miette::IntoDiagnostic trait">IntoDiagnostic</a></div><div class="item-right docblock-short"><p>Convenience trait that adds a <a href="trait.IntoDiagnostic.html#tymethod.into_diagnostic"><code>.into_diagnostic()</code></a> method that converts a type implementing
-<a href="https://doc.rust-lang.org/1.62.0/std/error/trait.Error.html" title="std::error::Error"><code>std::error::Error</code></a> to a <a href="https://doc.rust-lang.org/1.62.0/core/result/enum.Result.html" title="Result&lt;T, Report&gt;"><code>Result&lt;T, Report&gt;</code></a>.</p>
+<a href="https://doc.rust-lang.org/1.62.1/std/error/trait.Error.html" title="std::error::Error"><code>std::error::Error</code></a> to a <a href="https://doc.rust-lang.org/1.62.1/core/result/enum.Result.html" title="Result&lt;T, Report&gt;"><code>Result&lt;T, Report&gt;</code></a>.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.ReportHandler.html" title="miette::ReportHandler trait">ReportHandler</a></div><div class="item-right docblock-short"><p>Error Report Handler trait for customizing <code>miette::Report</code></p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.SourceCode.html" title="miette::SourceCode trait">SourceCode</a></div><div class="item-right docblock-short"><p>Represents readable source code of some sort.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.SpanContents.html" title="miette::SpanContents trait">SpanContents</a></div><div class="item-right docblock-short"><p>Contents of a <a href="trait.SourceCode.html" title="SourceCode"><code>SourceCode</code></a> covered by <a href="struct.SourceSpan.html" title="SourceSpan"><code>SourceSpan</code></a>.</p>
@@ -576,5 +576,5 @@ messages.</p>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.ByteOffset.html" title="miette::ByteOffset type">ByteOffset</a></div><div class="item-right docblock-short"><p>“Raw” type for the byte offset from the beginning of a <a href="trait.SourceCode.html" title="SourceCode"><code>SourceCode</code></a>.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.ErrorHook.html" title="miette::ErrorHook type">ErrorHook</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Result.html" title="miette::Result type">Result</a></div><div class="item-right docblock-short"><p>type alias for <code>Result&lt;T, Report&gt;</code></p>
 </div></div></div><h2 id="derives" class="small-section-header"><a href="#derives">Derive Macros</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="derive" href="derive.Diagnostic.html" title="miette::Diagnostic derive">Diagnostic</a></div><div class="item-right docblock-short"></div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="miette" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.0 (a8314ef7d 2022-06-27)" ></div>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="derive" href="derive.Diagnostic.html" title="miette::Diagnostic derive">Diagnostic</a></div><div class="item-right docblock-short"></div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="miette" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.1 (e092d0b6b 2022-07-16)" ></div>
 </body></html>
