@@ -968,6 +968,9 @@
 <span id="963">963</span>
 <span id="964">964</span>
 <span id="965">965</span>
+<span id="966">966</span>
+<span id="967">967</span>
+<span id="968">968</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1017,6 +1020,9 @@
 
     <span class="doccomment">/// The name of the default profile.</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">DEFAULT_PROFILE</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;default&quot;</span>;
+
+    <span class="doccomment">/// The name of the default profile used for miri.</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">DEFAULT_MIRI_PROFILE</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;default-miri&quot;</span>;
 
     <span class="doccomment">/// Reads the nextest config from the given file, or if not specified from `.config/nextest.toml`</span>
     <span class="doccomment">/// in the workspace root.</span>

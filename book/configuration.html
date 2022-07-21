@@ -259,6 +259,11 @@ leak-timeout = &quot;100ms&quot;
 # reports across different test runs, it may be useful to provide separate names
 # for each report.
 report-name = &quot;nextest-run&quot;
+
+# This profile is activated if MIRI_SYSROOT is set.
+[profile.default-miri]
+# Miri tests take up a lot of memory, so only run 1 test at a time by default.
+test-threads = 1
 </code></pre>
 <h2 id="profiles"><a class="header" href="#profiles">Profiles</a></h2>
 <p>With cargo-nextest, local and CI runs often need to use different settings. For example, CI test runs should not be cancelled as soon as the first test failure is seen.</p>
