@@ -1816,6 +1816,9 @@ my-test-2: test
 <div style="break-before: page; page-break-before: always;"></div><h1 id="changelog"><a class="header" href="#changelog">Changelog</a></h1>
 <p>This page documents new features and bugfixes for cargo-nextest. Please see the <a href="book/stability.html">stability
 policy</a> for how versioning works with cargo-nextest.</p>
+<h2 id="0928---2022-07-22"><a class="header" href="#0928---2022-07-22"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.28">0.9.28</a> - 2022-07-22</a></h2>
+<p>This is a quick hotfix release to ensure that the right <code>tokio</code> features are enabled under
+<code>default-no-update</code>.</p>
 <h2 id="0927---2022-07-22"><a class="header" href="#0927---2022-07-22"><a href="https://github.com/nextest-rs/nextest/releases/tag/cargo-nextest-0.9.27">0.9.27</a> - 2022-07-22</a></h2>
 <p>This is a major architectural rework of nextest. We've tested it thoroughly to the best of our ability, but if you see regressions please <a href="https://github.com/nextest-rs/nextest/issues/new">report them</a>!</p>
 <p>If you encounter a regression, you can temporarily pin nextest to the previous version in CI. If you're on GitHub Actions and are using <code>taiki-e/install-action</code>, use this instead:</p>
