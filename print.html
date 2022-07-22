@@ -1346,7 +1346,7 @@ fail-fast = false
 </code></pre>
 <p>After checking the profile into <code>.config/nextest.toml</code>, use <code>cargo nextest --profile ci</code> in your CI runs.</p>
 <blockquote>
-<p><strong>Note:</strong> Nextest's embedded configuration may define new profiles whose names start with <code>default</code> in the future. To avoid backwards compatibility issues, do not name custom profiles starting with <code>default</code>.</p>
+<p><strong>Note:</strong> Nextest's embedded configuration may define new profiles whose names start with <code>default-</code> in the future. To avoid backwards compatibility issues, do not name custom profiles starting with <code>default-</code>.</p>
 </blockquote>
 <h2 id="hierarchical-configuration"><a class="header" href="#hierarchical-configuration">Hierarchical configuration</a></h2>
 <p>For this example:</p>
