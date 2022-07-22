@@ -1678,7 +1678,7 @@ cargo llvm-cov nextest
 </code></pre>
 <p>You may need to specify the toolchain to run as, using <code>cargo +nightly-YYYY-MM-DD miri nextest run</code>.</p>
 <h2 id="configuring-nextest-running-under-miri"><a class="header" href="#configuring-nextest-running-under-miri">Configuring nextest running under Miri</a></h2>
-<p>If nextest detects a Miri environment, it uses the <code>default-miri</code> profile by default. Add miri-specific configuration, add it to this profile. For example, to <a href="book/slow-tests.html#terminating-tests-after-a-timeout">terminate tests</a> after 2 minutes, add this to <code>.config/nextest.toml</code>:</p>
+<p>If nextest detects a Miri environment, it uses the <code>default-miri</code> profile by default. For miri-specific configuration, add it to this profile. For example, to <a href="book/slow-tests.html#terminating-tests-after-a-timeout">terminate tests</a> after 2 minutes, add this to <code>.config/nextest.toml</code>:</p>
 <pre><code class="language-toml">[profile.default-miri]
 slow-timeout = { period = &quot;60s&quot;, terminate-after = 2 }
 </code></pre>
