@@ -10,9 +10,12 @@ https://nexte.st/book/filter-expressions
 https://nexte.st/book/how-it-works
 https://nexte.st/book/installation
 https://nexte.st/book/installing-from-source
+https://nexte.st/book/integrations
 https://nexte.st/book/junit
+https://nexte.st/book/leaky-tests
 https://nexte.st/book/listing
 https://nexte.st/book/machine-readable
+https://nexte.st/book/miri
 https://nexte.st/book/other-options
 https://nexte.st/book/partitioning
 https://nexte.st/book/per-test-overrides
@@ -21,6 +24,7 @@ https://nexte.st/book/release-urls
 https://nexte.st/book/retries
 https://nexte.st/book/reusing-builds
 https://nexte.st/book/running
+https://nexte.st/book/slow-tests
 https://nexte.st/book/stability
 https://nexte.st/book/target-runners
 https://nexte.st/book/test-coverage
