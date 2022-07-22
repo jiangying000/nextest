@@ -499,7 +499,6 @@ OPTIONS:
     -v, --verbose                 Verbose output [env: NEXTEST_VERBOSE=]
         --color &lt;WHEN&gt;            Produce color output: auto, always, never [env: CARGO_TERM_COLOR=]
                                   [default: auto]
-        --config-file &lt;PATH&gt;      Config file [default: workspace-root/.config/nextest.toml]
     -h, --help                    Print help information
 
 RUNNER OPTIONS:
@@ -557,7 +556,8 @@ REPORTER OPTIONS:
                                         NEXTEST_SUCCESS_OUTPUT=] [possible values: immediate,
                                         immediate-final, final, never]
         --status-level &lt;LEVEL&gt;          Test statuses to output [env: NEXTEST_STATUS_LEVEL=]
-                                        [possible values: none, fail, retry, slow, pass, skip, all]
+                                        [possible values: none, fail, retry, slow, leak, pass, skip,
+                                        all]
         --final-status-level &lt;LEVEL&gt;    Test statuses to output at the end of the run [env:
                                         NEXTEST_FINAL_STATUS_LEVEL=] [possible values: none, fail,
                                         flaky, slow, skip, pass, all]
@@ -575,6 +575,13 @@ REUSE BUILD OPTIONS:
         --workspace-remap &lt;PATH&gt;      Remapping for the workspace root
         --binaries-metadata &lt;PATH&gt;    Path to binaries-metadata JSON
         --target-dir-remap &lt;PATH&gt;     Remapping for the target directory
+
+CONFIG OPTIONS:
+        --config-file &lt;PATH&gt;
+            Config file [default: workspace-root/.config/nextest.toml]
+
+        --tool-config-file &lt;TOOL:ABS_PATH&gt;
+            Tool-specific config files
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="listing-tests"><a class="header" href="#listing-tests">Listing tests</a></h1>
 <p>To build and list all tests in a workspace<sup class="footnote-reference"><a href="#doctest">1</a></sup>, cd into the workspace and run:</p>
@@ -601,7 +608,6 @@ OPTIONS:
     -v, --verbose                 Verbose output [env: NEXTEST_VERBOSE=]
         --color &lt;WHEN&gt;            Produce color output: auto, always, never [env: CARGO_TERM_COLOR=]
                                   [default: auto]
-        --config-file &lt;PATH&gt;      Config file [default: workspace-root/.config/nextest.toml]
     -h, --help                    Print help information
 
 CARGO OPTIONS:
@@ -661,6 +667,13 @@ REUSE BUILD OPTIONS:
         --workspace-remap &lt;PATH&gt;      Remapping for the workspace root
         --binaries-metadata &lt;PATH&gt;    Path to binaries-metadata JSON
         --target-dir-remap &lt;PATH&gt;     Remapping for the target directory
+
+CONFIG OPTIONS:
+        --config-file &lt;PATH&gt;
+            Config file [default: workspace-root/.config/nextest.toml]
+
+        --tool-config-file &lt;TOOL:ABS_PATH&gt;
+            Tool-specific config files
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="retries-and-flaky-tests"><a class="header" href="#retries-and-flaky-tests">Retries and flaky tests</a></h1>
 <p>Sometimes, tests fail nondeterministically, which can be quite annoying to developers locally and in CI. cargo-nextest supports <em>retrying</em> failed tests with the <code>--retries</code> option. If a test succeeds during a retry, the test is marked <em>flaky</em>. Here's an example:</p>
@@ -1043,7 +1056,6 @@ OPTIONS:
     -v, --verbose                 Verbose output [env: NEXTEST_VERBOSE=]
         --color &lt;WHEN&gt;            Produce color output: auto, always, never [env: CARGO_TERM_COLOR=]
                                   [default: auto]
-        --config-file &lt;PATH&gt;      Config file [default: workspace-root/.config/nextest.toml]
     -h, --help                    Print help information
 
 CARGO OPTIONS:
@@ -1082,6 +1094,13 @@ ARCHIVE OPTIONS:
         --archive-format &lt;FORMAT&gt;    Archive format [default: auto] [possible values: auto, tar-zst]
         --zstd-level &lt;LEVEL&gt;         Zstandard compression level (-7 to 22, higher is more
                                      compressed + slower) [default: 0]
+
+CONFIG OPTIONS:
+        --config-file &lt;PATH&gt;
+            Config file [default: workspace-root/.config/nextest.toml]
+
+        --tool-config-file &lt;TOOL:ABS_PATH&gt;
+            Tool-specific config files
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="partitioning-test-runs-in-ci"><a class="header" href="#partitioning-test-runs-in-ci">Partitioning test runs in CI</a></h1>
 <p>For CI scenarios where test runs take too long on a single machine, nextest supports automatically <em>partitioning</em> or <em>sharding</em> tests into buckets, using the <code>--partition</code> option.</p>

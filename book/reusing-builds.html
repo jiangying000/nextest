@@ -289,7 +289,6 @@ OPTIONS:
     -v, --verbose                 Verbose output [env: NEXTEST_VERBOSE=]
         --color &lt;WHEN&gt;            Produce color output: auto, always, never [env: CARGO_TERM_COLOR=]
                                   [default: auto]
-        --config-file &lt;PATH&gt;      Config file [default: workspace-root/.config/nextest.toml]
     -h, --help                    Print help information
 
 CARGO OPTIONS:
@@ -328,6 +327,13 @@ ARCHIVE OPTIONS:
         --archive-format &lt;FORMAT&gt;    Archive format [default: auto] [possible values: auto, tar-zst]
         --zstd-level &lt;LEVEL&gt;         Zstandard compression level (-7 to 22, higher is more
                                      compressed + slower) [default: 0]
+
+CONFIG OPTIONS:
+        --config-file &lt;PATH&gt;
+            Config file [default: workspace-root/.config/nextest.toml]
+
+        --tool-config-file &lt;TOOL:ABS_PATH&gt;
+            Tool-specific config files
 </code></pre>
 
                     </main>
