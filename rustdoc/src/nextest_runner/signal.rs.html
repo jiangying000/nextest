@@ -175,6 +175,10 @@
 <span id="170">170</span>
 <span id="171">171</span>
 <span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -265,19 +269,19 @@
                 <span class="macro">tokio::select!</span> {
                     <span class="ident">recv</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">sigint</span>.<span class="ident">signal</span>.<span class="ident">recv</span>(), <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">sigint</span>.<span class="ident">done</span> =&gt; {
                         <span class="kw">match</span> <span class="ident">recv</span> {
-                            <span class="prelude-val">Some</span>(()) =&gt; <span class="kw">break</span> <span class="prelude-val">Some</span>(<span class="ident">SignalEvent::Interrupted</span>),
+                            <span class="prelude-val">Some</span>(()) =&gt; <span class="kw">break</span> <span class="prelude-val">Some</span>(<span class="ident">SignalEvent::Interrupt</span>),
                             <span class="prelude-val">None</span> =&gt; <span class="self">self</span>.<span class="ident">sigint</span>.<span class="ident">done</span> <span class="op">=</span> <span class="bool-val">true</span>,
                         }
                     }
                     <span class="ident">recv</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">sighup</span>.<span class="ident">signal</span>.<span class="ident">recv</span>(), <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">sighup</span>.<span class="ident">done</span> =&gt; {
                         <span class="kw">match</span> <span class="ident">recv</span> {
-                            <span class="prelude-val">Some</span>(()) =&gt; <span class="kw">break</span> <span class="prelude-val">Some</span>(<span class="ident">SignalEvent::Interrupted</span>),
+                            <span class="prelude-val">Some</span>(()) =&gt; <span class="kw">break</span> <span class="prelude-val">Some</span>(<span class="ident">SignalEvent::Hangup</span>),
                             <span class="prelude-val">None</span> =&gt; <span class="self">self</span>.<span class="ident">sighup</span>.<span class="ident">done</span> <span class="op">=</span> <span class="bool-val">true</span>,
                         }
                     }
                     <span class="ident">recv</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">sigterm</span>.<span class="ident">signal</span>.<span class="ident">recv</span>(), <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">sigterm</span>.<span class="ident">done</span> =&gt; {
                         <span class="kw">match</span> <span class="ident">recv</span> {
-                            <span class="prelude-val">Some</span>(()) =&gt; <span class="kw">break</span> <span class="prelude-val">Some</span>(<span class="ident">SignalEvent::Interrupted</span>),
+                            <span class="prelude-val">Some</span>(()) =&gt; <span class="kw">break</span> <span class="prelude-val">Some</span>(<span class="ident">SignalEvent::Term</span>),
                             <span class="prelude-val">None</span> =&gt; <span class="self">self</span>.<span class="ident">sigterm</span>.<span class="ident">done</span> <span class="op">=</span> <span class="bool-val">true</span>,
                         }
                     }
@@ -332,7 +336,7 @@
             }
 
             <span class="kw">match</span> <span class="self">self</span>.<span class="ident">ctrl_c</span>.<span class="ident">recv</span>().<span class="kw">await</span> {
-                <span class="prelude-val">Some</span>(()) =&gt; <span class="prelude-val">Some</span>(<span class="ident">SignalEvent::Interrupted</span>),
+                <span class="prelude-val">Some</span>(()) =&gt; <span class="prelude-val">Some</span>(<span class="ident">SignalEvent::Interrupt</span>),
                 <span class="prelude-val">None</span> =&gt; {
                     <span class="self">self</span>.<span class="ident">ctrl_c_done</span> <span class="op">=</span> <span class="bool-val">true</span>;
                     <span class="prelude-val">None</span>
@@ -343,9 +347,13 @@
 }
 
 <span class="comment">// Just a single-valued enum for now, might have more information in the future.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">SignalEvent</span> {
-    <span class="ident">Interrupted</span>,
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
+    <span class="ident">Hangup</span>,
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
+    <span class="ident">Term</span>,
+    <span class="ident">Interrupt</span>,
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="nextest_runner" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.1 (e092d0b6b 2022-07-16)" ></div>
