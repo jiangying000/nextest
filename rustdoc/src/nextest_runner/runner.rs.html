@@ -1500,6 +1500,99 @@
 <span id="1495">1495</span>
 <span id="1496">1496</span>
 <span id="1497">1497</span>
+<span id="1498">1498</span>
+<span id="1499">1499</span>
+<span id="1500">1500</span>
+<span id="1501">1501</span>
+<span id="1502">1502</span>
+<span id="1503">1503</span>
+<span id="1504">1504</span>
+<span id="1505">1505</span>
+<span id="1506">1506</span>
+<span id="1507">1507</span>
+<span id="1508">1508</span>
+<span id="1509">1509</span>
+<span id="1510">1510</span>
+<span id="1511">1511</span>
+<span id="1512">1512</span>
+<span id="1513">1513</span>
+<span id="1514">1514</span>
+<span id="1515">1515</span>
+<span id="1516">1516</span>
+<span id="1517">1517</span>
+<span id="1518">1518</span>
+<span id="1519">1519</span>
+<span id="1520">1520</span>
+<span id="1521">1521</span>
+<span id="1522">1522</span>
+<span id="1523">1523</span>
+<span id="1524">1524</span>
+<span id="1525">1525</span>
+<span id="1526">1526</span>
+<span id="1527">1527</span>
+<span id="1528">1528</span>
+<span id="1529">1529</span>
+<span id="1530">1530</span>
+<span id="1531">1531</span>
+<span id="1532">1532</span>
+<span id="1533">1533</span>
+<span id="1534">1534</span>
+<span id="1535">1535</span>
+<span id="1536">1536</span>
+<span id="1537">1537</span>
+<span id="1538">1538</span>
+<span id="1539">1539</span>
+<span id="1540">1540</span>
+<span id="1541">1541</span>
+<span id="1542">1542</span>
+<span id="1543">1543</span>
+<span id="1544">1544</span>
+<span id="1545">1545</span>
+<span id="1546">1546</span>
+<span id="1547">1547</span>
+<span id="1548">1548</span>
+<span id="1549">1549</span>
+<span id="1550">1550</span>
+<span id="1551">1551</span>
+<span id="1552">1552</span>
+<span id="1553">1553</span>
+<span id="1554">1554</span>
+<span id="1555">1555</span>
+<span id="1556">1556</span>
+<span id="1557">1557</span>
+<span id="1558">1558</span>
+<span id="1559">1559</span>
+<span id="1560">1560</span>
+<span id="1561">1561</span>
+<span id="1562">1562</span>
+<span id="1563">1563</span>
+<span id="1564">1564</span>
+<span id="1565">1565</span>
+<span id="1566">1566</span>
+<span id="1567">1567</span>
+<span id="1568">1568</span>
+<span id="1569">1569</span>
+<span id="1570">1570</span>
+<span id="1571">1571</span>
+<span id="1572">1572</span>
+<span id="1573">1573</span>
+<span id="1574">1574</span>
+<span id="1575">1575</span>
+<span id="1576">1576</span>
+<span id="1577">1577</span>
+<span id="1578">1578</span>
+<span id="1579">1579</span>
+<span id="1580">1580</span>
+<span id="1581">1581</span>
+<span id="1582">1582</span>
+<span id="1583">1583</span>
+<span id="1584">1584</span>
+<span id="1585">1585</span>
+<span id="1586">1586</span>
+<span id="1587">1587</span>
+<span id="1588">1588</span>
+<span id="1589">1589</span>
+<span id="1590">1590</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1955,8 +2048,11 @@
         <span class="comment">// Debug environment variable for testing.</span>
         <span class="ident">cmd</span>.<span class="ident">env</span>(<span class="string">&quot;__NEXTEST_ATTEMPT&quot;</span>, <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">attempt</span>));
         <span class="ident">cmd</span>.<span class="ident">stdin</span>(<span class="ident">Stdio::null</span>());
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
-        <span class="ident">cmd_pre_exec</span>(<span class="kw-2">&amp;mut</span> <span class="ident">cmd</span>);
+        <span class="ident">imp::cmd_pre_exec</span>(<span class="kw-2">&amp;mut</span> <span class="ident">cmd</span>);
+
+        <span class="comment">// If creating a job fails, we might be on an old system. Ignore this -- job objects are a</span>
+        <span class="comment">// best-effort thing.</span>
+        <span class="kw">let</span> <span class="ident">job</span> <span class="op">=</span> <span class="ident">imp::Job::new</span>().<span class="ident">ok</span>();
 
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">no_capture</span> {
             <span class="comment">// Capture stdout and stderr.</span>
@@ -1965,6 +2061,10 @@
         };
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">child</span> <span class="op">=</span> <span class="ident">cmd</span>.<span class="ident">spawn</span>()<span class="question-mark">?</span>;
+
+        <span class="comment">// If assigning the child to the job fails, ignore this. This can happen if the process has</span>
+        <span class="comment">// exited.</span>
+        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">imp::assign_process_to_job</span>(<span class="kw-2">&amp;</span><span class="ident">child</span>, <span class="ident">job</span>.<span class="ident">as_ref</span>());
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">status</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ExecutionResult</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
         <span class="kw">let</span> <span class="ident">slow_timeout</span> <span class="op">=</span> <span class="ident">overrides</span>.<span class="ident">slow_timeout</span>().<span class="ident">unwrap_or</span>(<span class="self">self</span>.<span class="ident">slow_timeout</span>);
@@ -2047,7 +2147,7 @@
                                 <span class="comment">// attempt to terminate the slow test.</span>
                                 <span class="comment">// as there is a race between shutting down a slow test and its own completion</span>
                                 <span class="comment">// we silently ignore errors to avoid printing false warnings.</span>
-                                <span class="ident">terminate_child</span>(<span class="kw-2">&amp;mut</span> <span class="ident">child</span>, <span class="ident">TerminateMode::Timeout</span>, <span class="ident">forward_receiver</span>).<span class="kw">await</span>;
+                                <span class="ident">imp::terminate_child</span>(<span class="kw-2">&amp;mut</span> <span class="ident">child</span>, <span class="ident">TerminateMode::Timeout</span>, <span class="ident">forward_receiver</span>, <span class="ident">job</span>.<span class="ident">as_ref</span>()).<span class="kw">await</span>;
                                 <span class="ident">status</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">ExecutionResult::Timeout</span>);
                                 <span class="comment">// Don&#39;t break here to give the wait task a chance to finish.</span>
                             }
@@ -2059,7 +2159,7 @@
                         <span class="comment">// should never happen.</span>
                         <span class="kw">let</span> <span class="ident">forward_event</span> <span class="op">=</span> <span class="ident">recv</span>.<span class="ident">expect</span>(<span class="string">&quot;a RecvError should never happen here&quot;</span>);
 
-                        <span class="ident">terminate_child</span>(<span class="kw-2">&amp;mut</span> <span class="ident">child</span>, <span class="ident">TerminateMode::Signal</span>(<span class="ident">forward_event</span>), <span class="ident">forward_receiver</span>).<span class="kw">await</span>;
+                        <span class="ident">imp::terminate_child</span>(<span class="kw-2">&amp;mut</span> <span class="ident">child</span>, <span class="ident">TerminateMode::Signal</span>(<span class="ident">forward_event</span>), <span class="ident">forward_receiver</span>, <span class="ident">job</span>.<span class="ident">as_ref</span>()).<span class="kw">await</span>;
                     }
                 };
             };
@@ -2710,148 +2810,234 @@
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">configure_handle_inheritance</span>(
     <span class="ident">no_capture</span>: <span class="ident">bool</span>,
 ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ConfigureHandleInheritanceError</span><span class="op">&gt;</span> {
-    <span class="ident">configure_handle_inheritance_impl</span>(<span class="ident">no_capture</span>)
+    <span class="ident">imp::configure_handle_inheritance_impl</span>(<span class="ident">no_capture</span>)
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-<span class="kw">fn</span> <span class="ident">configure_handle_inheritance_impl</span>(
-    <span class="ident">no_capture</span>: <span class="ident">bool</span>,
-) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ConfigureHandleInheritanceError</span><span class="op">&gt;</span> {
+<span class="kw">mod</span> <span class="ident">imp</span> {
+    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">win32job::JobError</span>;
     <span class="kw">use</span> <span class="ident">windows::Win32</span>::{
         <span class="ident">Foundation</span>::{<span class="ident">SetHandleInformation</span>, <span class="ident">HANDLE</span>, <span class="ident">HANDLE_FLAGS</span>, <span class="ident">HANDLE_FLAG_INHERIT</span>},
-        <span class="ident">System::Console</span>::{<span class="ident">GetStdHandle</span>, <span class="ident">STD_ERROR_HANDLE</span>, <span class="ident">STD_INPUT_HANDLE</span>, <span class="ident">STD_OUTPUT_HANDLE</span>},
+        <span class="ident">System</span>::{
+            <span class="ident">Console</span>::{<span class="ident">GetStdHandle</span>, <span class="ident">STD_ERROR_HANDLE</span>, <span class="ident">STD_INPUT_HANDLE</span>, <span class="ident">STD_OUTPUT_HANDLE</span>},
+            <span class="ident">JobObjects::TerminateJobObject</span>,
+        },
     };
 
-    <span class="kw">fn</span> <span class="ident">set_handle_inherit</span>(<span class="ident">handle</span>: <span class="ident">HANDLE</span>, <span class="ident">inherit</span>: <span class="ident">bool</span>) -&gt; <span class="ident">windows::core::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">inherit</span> { <span class="ident">HANDLE_FLAG_INHERIT</span>.<span class="number">0</span> } <span class="kw">else</span> { <span class="number">0</span> };
-        <span class="kw">unsafe</span> {
-            <span class="kw">if</span> <span class="ident">SetHandleInformation</span>(<span class="ident">handle</span>, <span class="ident">HANDLE_FLAG_INHERIT</span>.<span class="number">0</span>, <span class="ident">HANDLE_FLAGS</span>(<span class="ident">flags</span>)).<span class="ident">as_bool</span>() {
-                <span class="prelude-val">Ok</span>(())
-            } <span class="kw">else</span> {
-                <span class="prelude-val">Err</span>(<span class="ident">windows::core::Error::from_win32</span>())
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">configure_handle_inheritance_impl</span>(
+        <span class="ident">no_capture</span>: <span class="ident">bool</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ConfigureHandleInheritanceError</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">set_handle_inherit</span>(<span class="ident">handle</span>: <span class="ident">HANDLE</span>, <span class="ident">inherit</span>: <span class="ident">bool</span>) -&gt; <span class="ident">windows::core::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">inherit</span> { <span class="ident">HANDLE_FLAG_INHERIT</span>.<span class="number">0</span> } <span class="kw">else</span> { <span class="number">0</span> };
+            <span class="kw">unsafe</span> {
+                <span class="kw">if</span> <span class="ident">SetHandleInformation</span>(<span class="ident">handle</span>, <span class="ident">HANDLE_FLAG_INHERIT</span>.<span class="number">0</span>, <span class="ident">HANDLE_FLAGS</span>(<span class="ident">flags</span>))
+                    .<span class="ident">as_bool</span>()
+                {
+                    <span class="prelude-val">Ok</span>(())
+                } <span class="kw">else</span> {
+                    <span class="prelude-val">Err</span>(<span class="ident">windows::core::Error::from_win32</span>())
+                }
             }
+        }
+
+        <span class="kw">unsafe</span> {
+            <span class="kw">let</span> <span class="ident">stdin</span> <span class="op">=</span> <span class="ident">GetStdHandle</span>(<span class="ident">STD_INPUT_HANDLE</span>)<span class="question-mark">?</span>;
+            <span class="comment">// Never inherit stdin.</span>
+            <span class="ident">set_handle_inherit</span>(<span class="ident">stdin</span>, <span class="bool-val">false</span>)<span class="question-mark">?</span>;
+
+            <span class="comment">// Inherit stdout and stderr if and only if no_capture is true.</span>
+
+            <span class="kw">let</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">GetStdHandle</span>(<span class="ident">STD_OUTPUT_HANDLE</span>)<span class="question-mark">?</span>;
+            <span class="ident">set_handle_inherit</span>(<span class="ident">stdout</span>, <span class="ident">no_capture</span>)<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">stderr</span> <span class="op">=</span> <span class="ident">GetStdHandle</span>(<span class="ident">STD_ERROR_HANDLE</span>)<span class="question-mark">?</span>;
+            <span class="ident">set_handle_inherit</span>(<span class="ident">stderr</span>, <span class="ident">no_capture</span>)<span class="question-mark">?</span>;
+        }
+
+        <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">cmd_pre_exec</span>(<span class="ident">_cmd</span>: <span class="kw-2">&amp;mut</span> <span class="ident">tokio::process::Command</span>) {
+        <span class="comment">// TODO: set process group on Windows for better ctrl-C handling.</span>
+    }
+
+    <span class="doccomment">/// Wrapper around a Job that implements Send and Sync.</span>
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct</span> <span class="ident">Job</span> {
+        <span class="ident">inner</span>: <span class="ident">win32job::Job</span>,
+    }
+
+    <span class="kw">impl</span> <span class="ident">Job</span> {
+        <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">JobError</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
+                <span class="ident">inner</span>: <span class="ident">win32job::Job::create</span>()<span class="question-mark">?</span>,
+            })
         }
     }
 
-    <span class="kw">unsafe</span> {
-        <span class="kw">let</span> <span class="ident">stdin</span> <span class="op">=</span> <span class="ident">GetStdHandle</span>(<span class="ident">STD_INPUT_HANDLE</span>)<span class="question-mark">?</span>;
-        <span class="comment">// Never inherit stdin.</span>
-        <span class="ident">set_handle_inherit</span>(<span class="ident">stdin</span>, <span class="bool-val">false</span>)<span class="question-mark">?</span>;
+    <span class="comment">// https://github.com/ohadravid/win32job-rs/issues/1</span>
+    <span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Send</span> <span class="kw">for</span> <span class="ident">Job</span> {}
+    <span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Sync</span> <span class="kw">for</span> <span class="ident">Job</span> {}
 
-        <span class="comment">// Inherit stdout and stderr if and only if no_capture is true.</span>
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">assign_process_to_job</span>(
+        <span class="ident">child</span>: <span class="kw-2">&amp;</span><span class="ident">tokio::process::Child</span>,
+        <span class="ident">job</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Job</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">JobError</span><span class="op">&gt;</span> {
+        <span class="comment">// NOTE: Ideally we&#39;d suspend the process before using ResumeThread for this, but that&#39;s currently</span>
+        <span class="comment">// not possible due to https://github.com/rust-lang/rust/issues/96723 not being stable.</span>
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">job</span>) <span class="op">=</span> <span class="ident">job</span> {
+            <span class="kw">let</span> <span class="ident">handle</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">child</span>.<span class="ident">raw_handle</span>() {
+                <span class="prelude-val">Some</span>(<span class="ident">handle</span>) =&gt; <span class="ident">handle</span>,
+                <span class="prelude-val">None</span> =&gt; {
+                    <span class="comment">// If the handle is missing, the child has exited. Ignore this.</span>
+                    <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+                }
+            };
 
-        <span class="kw">let</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">GetStdHandle</span>(<span class="ident">STD_OUTPUT_HANDLE</span>)<span class="question-mark">?</span>;
-        <span class="ident">set_handle_inherit</span>(<span class="ident">stdout</span>, <span class="ident">no_capture</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">stderr</span> <span class="op">=</span> <span class="ident">GetStdHandle</span>(<span class="ident">STD_ERROR_HANDLE</span>)<span class="question-mark">?</span>;
-        <span class="ident">set_handle_inherit</span>(<span class="ident">stderr</span>, <span class="ident">no_capture</span>)<span class="question-mark">?</span>;
+            <span class="ident">job</span>.<span class="ident">inner</span>.<span class="ident">assign_process</span>(<span class="ident">handle</span>)<span class="question-mark">?</span>;
+        }
+
+        <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="prelude-val">Ok</span>(())
-}
-
-<span class="comment">// This is a no-op on other platforms.</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">windows</span>))]</span>
-<span class="kw">fn</span> <span class="ident">configure_handle_inheritance_impl</span>(
-    <span class="ident">_no_capture</span>: <span class="ident">bool</span>,
-) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ConfigureHandleInheritanceError</span><span class="op">&gt;</span> {
-    <span class="prelude-val">Ok</span>(())
-}
-
-<span class="doccomment">/// Pre-execution configuration on Unix.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This sets up the process group ID for now.</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
-<span class="kw">fn</span> <span class="ident">cmd_pre_exec</span>(<span class="ident">cmd</span>: <span class="kw-2">&amp;mut</span> <span class="ident">tokio::process::Command</span>) {
-    <span class="kw">unsafe</span> {
-        <span class="ident">cmd</span>.<span class="ident">pre_exec</span>(<span class="op">|</span><span class="op">|</span> {
-            <span class="kw">let</span> <span class="ident">pid</span> <span class="op">=</span> <span class="ident">libc::getpid</span>();
-            <span class="kw">if</span> <span class="ident">libc::setpgid</span>(<span class="ident">pid</span>, <span class="ident">pid</span>) <span class="op">==</span> <span class="number">0</span> {
-                <span class="prelude-val">Ok</span>(())
-            } <span class="kw">else</span> {
-                <span class="comment">// This is an error.</span>
-                <span class="prelude-val">Err</span>(<span class="ident">std::io::Error::last_os_error</span>())
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">terminate_child</span>(
+        <span class="ident">child</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Child</span>,
+        <span class="ident">mode</span>: <span class="ident">TerminateMode</span>,
+        <span class="ident">_forward_receiver</span>: <span class="kw-2">&amp;mut</span> <span class="ident">tokio::sync::broadcast::Receiver</span><span class="op">&lt;</span><span class="ident">SignalForwardEvent</span><span class="op">&gt;</span>,
+        <span class="ident">job</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Job</span><span class="op">&gt;</span>,
+    ) {
+        <span class="comment">// Ignore signal events since Windows propagates them to child processes (this may change if</span>
+        <span class="comment">// we start assigning processes to groups on Windows).</span>
+        <span class="kw">if</span> <span class="ident">mode</span> <span class="op">!</span><span class="op">=</span> <span class="ident">TerminateMode::Timeout</span> {
+            <span class="kw">return</span>;
+        }
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">job</span>) <span class="op">=</span> <span class="ident">job</span> {
+            <span class="kw">let</span> <span class="ident">handle</span> <span class="op">=</span> <span class="ident">job</span>.<span class="ident">inner</span>.<span class="ident">handle</span>();
+            <span class="kw">unsafe</span> {
+                <span class="comment">// Ignore the error here -- it&#39;s likely due to the process exiting.</span>
+                <span class="comment">// Note: 1 is the exit code returned by Windows.</span>
+                <span class="ident">TerminateJobObject</span>(<span class="ident">HANDLE</span>(<span class="ident">handle</span> <span class="kw">as</span> <span class="ident">isize</span>), <span class="number">1</span>);
             }
-        })
-    };
+        }
+        <span class="comment">// Start killing the process directly for good measure.</span>
+        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">child</span>.<span class="ident">start_kill</span>();
+    }
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
+<span class="kw">mod</span> <span class="ident">imp</span> {
+    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">SIGHUP</span>, <span class="ident">SIGINT</span>, <span class="ident">SIGKILL</span>, <span class="ident">SIGTERM</span>};
+
+    <span class="comment">// This is a no-op on non-windows platforms.</span>
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">configure_handle_inheritance_impl</span>(
+        <span class="ident">_no_capture</span>: <span class="ident">bool</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ConfigureHandleInheritanceError</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="doccomment">/// Pre-execution configuration on Unix.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This sets up the process group ID for now.</span>
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">cmd_pre_exec</span>(<span class="ident">cmd</span>: <span class="kw-2">&amp;mut</span> <span class="ident">tokio::process::Command</span>) {
+        <span class="kw">unsafe</span> {
+            <span class="ident">cmd</span>.<span class="ident">pre_exec</span>(<span class="op">|</span><span class="op">|</span> {
+                <span class="kw">let</span> <span class="ident">pid</span> <span class="op">=</span> <span class="ident">libc::getpid</span>();
+                <span class="kw">if</span> <span class="ident">libc::setpgid</span>(<span class="ident">pid</span>, <span class="ident">pid</span>) <span class="op">==</span> <span class="number">0</span> {
+                    <span class="prelude-val">Ok</span>(())
+                } <span class="kw">else</span> {
+                    <span class="comment">// This is an error.</span>
+                    <span class="prelude-val">Err</span>(<span class="ident">std::io::Error::last_os_error</span>())
+                }
+            })
+        };
+    }
+
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct</span> <span class="ident">Job</span>(());
+
+    <span class="kw">impl</span> <span class="ident">Job</span> {
+        <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Infallible</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(<span class="self">Self</span>(()))
+        }
+    }
+
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">assign_process_to_job</span>(
+        <span class="ident">_child</span>: <span class="kw-2">&amp;</span><span class="ident">tokio::process::Child</span>,
+        <span class="ident">_job</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Job</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Infallible</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">terminate_child</span>(
+        <span class="ident">child</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Child</span>,
+        <span class="ident">mode</span>: <span class="ident">TerminateMode</span>,
+        <span class="ident">forward_receiver</span>: <span class="kw-2">&amp;mut</span> <span class="ident">tokio::sync::broadcast::Receiver</span><span class="op">&lt;</span><span class="ident">SignalForwardEvent</span><span class="op">&gt;</span>,
+        <span class="ident">_job</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Job</span><span class="op">&gt;</span>,
+    ) {
+        <span class="kw">match</span> <span class="ident">child</span>.<span class="ident">id</span>() {
+            <span class="prelude-val">Some</span>(<span class="ident">pid</span>) =&gt; {
+                <span class="kw">let</span> <span class="ident">pid</span> <span class="op">=</span> <span class="ident">pid</span> <span class="kw">as</span> <span class="ident">i32</span>;
+                <span class="kw">let</span> <span class="ident">term_signal</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">mode</span> {
+                    <span class="ident">TerminateMode::Timeout</span> =&gt; <span class="ident">SIGTERM</span>,
+                    <span class="ident">TerminateMode::Signal</span>(<span class="ident">SignalForwardEvent::Once</span>(<span class="ident">SignalEvent::Hangup</span>)) =&gt; <span class="ident">SIGHUP</span>,
+                    <span class="ident">TerminateMode::Signal</span>(<span class="ident">SignalForwardEvent::Once</span>(<span class="ident">SignalEvent::Term</span>)) =&gt; <span class="ident">SIGTERM</span>,
+                    <span class="ident">TerminateMode::Signal</span>(<span class="ident">SignalForwardEvent::Once</span>(<span class="ident">SignalEvent::Interrupt</span>)) =&gt; {
+                        <span class="ident">SIGINT</span>
+                    }
+                    <span class="ident">TerminateMode::Signal</span>(<span class="ident">SignalForwardEvent::Twice</span>) =&gt; <span class="ident">SIGKILL</span>,
+                };
+                <span class="kw">unsafe</span> {
+                    <span class="comment">// We set up a process group in cmd_pre_exec -- now</span>
+                    <span class="comment">// send a signal to that group.</span>
+                    <span class="ident">libc::kill</span>(<span class="op">-</span><span class="ident">pid</span>, <span class="ident">term_signal</span>)
+                };
+
+                <span class="kw">if</span> <span class="ident">term_signal</span> <span class="op">==</span> <span class="ident">SIGKILL</span> {
+                    <span class="comment">// SIGKILL guarantees the process group is dead.</span>
+                    <span class="kw">return</span>;
+                }
+
+                <span class="comment">// give the process a grace period of 10s</span>
+                <span class="kw">let</span> <span class="ident">sleep</span> <span class="op">=</span> <span class="ident">tokio::time::sleep</span>(<span class="ident">Duration::from_secs</span>(<span class="number">10</span>));
+                <span class="macro">tokio::select!</span> {
+                    <span class="ident">biased</span>;
+
+                    <span class="kw">_</span> <span class="op">=</span> <span class="ident">child</span>.<span class="ident">wait</span>() =&gt; {
+                        <span class="comment">// The process exited.</span>
+                    }
+                    <span class="ident">recv</span> <span class="op">=</span> <span class="ident">forward_receiver</span>.<span class="ident">recv</span>() =&gt; {
+                        <span class="comment">// The sender stays open longer than the whole loop, and the buffer is big</span>
+                        <span class="comment">// enough for all messages ever sent through this channel, so a RecvError</span>
+                        <span class="comment">// should never happen.</span>
+                        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">recv</span>.<span class="ident">expect</span>(<span class="string">&quot;a RecvError should never happen here&quot;</span>);
+
+                        <span class="comment">// Receiving a signal while in this state always means kill immediately.</span>
+                        <span class="kw">unsafe</span> {
+                            <span class="comment">// Send SIGKILL to the entire process group.</span>
+                            <span class="ident">libc::kill</span>(<span class="op">-</span><span class="ident">pid</span>, <span class="ident">SIGKILL</span>);
+                        }
+                    }
+                    <span class="kw">_</span> <span class="op">=</span> <span class="ident">sleep</span> =&gt; {
+                        <span class="comment">// The process didn&#39;t exit -- need to do a hard shutdown.</span>
+                        <span class="kw">unsafe</span> {
+                            <span class="comment">// Send SIGKILL to the entire process group.</span>
+                            <span class="ident">libc::kill</span>(<span class="op">-</span><span class="ident">pid</span>, <span class="ident">SIGKILL</span>);
+                        }
+                    }
+                }
+            }
+            <span class="prelude-val">None</span> =&gt; {
+                <span class="comment">// This means that the process has already exited.</span>
+            }
+        }
+    }
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">enum</span> <span class="ident">TerminateMode</span> {
     <span class="ident">Timeout</span>,
     <span class="ident">Signal</span>(<span class="ident">SignalForwardEvent</span>),
-}
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">terminate_child</span>(
-    <span class="ident">child</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Child</span>,
-    <span class="ident">mode</span>: <span class="ident">TerminateMode</span>,
-    <span class="ident">forward_receiver</span>: <span class="kw-2">&amp;mut</span> <span class="ident">tokio::sync::broadcast::Receiver</span><span class="op">&lt;</span><span class="ident">SignalForwardEvent</span><span class="op">&gt;</span>,
-) {
-    <span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">SIGHUP</span>, <span class="ident">SIGINT</span>, <span class="ident">SIGKILL</span>, <span class="ident">SIGTERM</span>};
-
-    <span class="kw">match</span> <span class="ident">child</span>.<span class="ident">id</span>() {
-        <span class="prelude-val">Some</span>(<span class="ident">pid</span>) =&gt; {
-            <span class="kw">let</span> <span class="ident">pid</span> <span class="op">=</span> <span class="ident">pid</span> <span class="kw">as</span> <span class="ident">i32</span>;
-            <span class="kw">let</span> <span class="ident">term_signal</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">mode</span> {
-                <span class="ident">TerminateMode::Timeout</span> =&gt; <span class="ident">SIGTERM</span>,
-                <span class="ident">TerminateMode::Signal</span>(<span class="ident">SignalForwardEvent::Once</span>(<span class="ident">SignalEvent::Hangup</span>)) =&gt; <span class="ident">SIGHUP</span>,
-                <span class="ident">TerminateMode::Signal</span>(<span class="ident">SignalForwardEvent::Once</span>(<span class="ident">SignalEvent::Term</span>)) =&gt; <span class="ident">SIGTERM</span>,
-                <span class="ident">TerminateMode::Signal</span>(<span class="ident">SignalForwardEvent::Once</span>(<span class="ident">SignalEvent::Interrupt</span>)) =&gt; <span class="ident">SIGINT</span>,
-                <span class="ident">TerminateMode::Signal</span>(<span class="ident">SignalForwardEvent::Twice</span>) =&gt; <span class="ident">SIGKILL</span>,
-            };
-            <span class="kw">unsafe</span> {
-                <span class="comment">// We set up a process group in cmd_pre_exec -- now</span>
-                <span class="comment">// send a signal to that group.</span>
-                <span class="ident">libc::kill</span>(<span class="op">-</span><span class="ident">pid</span>, <span class="ident">term_signal</span>)
-            };
-
-            <span class="kw">if</span> <span class="ident">term_signal</span> <span class="op">==</span> <span class="ident">SIGKILL</span> {
-                <span class="comment">// SIGKILL guarantees the process group is dead.</span>
-                <span class="kw">return</span>;
-            }
-
-            <span class="comment">// give the process a grace period of 10s</span>
-            <span class="kw">let</span> <span class="ident">sleep</span> <span class="op">=</span> <span class="ident">tokio::time::sleep</span>(<span class="ident">Duration::from_secs</span>(<span class="number">10</span>));
-            <span class="macro">tokio::select!</span> {
-                <span class="ident">biased</span>;
-
-                <span class="kw">_</span> <span class="op">=</span> <span class="ident">child</span>.<span class="ident">wait</span>() =&gt; {
-                    <span class="comment">// The process exited.</span>
-                }
-                <span class="ident">recv</span> <span class="op">=</span> <span class="ident">forward_receiver</span>.<span class="ident">recv</span>() =&gt; {
-                    <span class="comment">// The sender stays open longer than the whole loop, and the buffer is big</span>
-                    <span class="comment">// enough for all messages ever sent through this channel, so a RecvError</span>
-                    <span class="comment">// should never happen.</span>
-                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">recv</span>.<span class="ident">expect</span>(<span class="string">&quot;a RecvError should never happen here&quot;</span>);
-
-                    <span class="comment">// Receiving a signal while in this state always means kill immediately.</span>
-                    <span class="kw">unsafe</span> {
-                        <span class="comment">// Send SIGKILL to the entire process group.</span>
-                        <span class="ident">libc::kill</span>(<span class="op">-</span><span class="ident">pid</span>, <span class="ident">SIGKILL</span>);
-                    }
-                }
-                <span class="kw">_</span> <span class="op">=</span> <span class="ident">sleep</span> =&gt; {
-                    <span class="comment">// The process didn&#39;t exit -- need to do a hard shutdown.</span>
-                    <span class="kw">unsafe</span> {
-                        <span class="comment">// Send SIGKILL to the entire process group.</span>
-                        <span class="ident">libc::kill</span>(<span class="op">-</span><span class="ident">pid</span>, <span class="ident">SIGKILL</span>);
-                    }
-                }
-            }
-        }
-        <span class="prelude-val">None</span> =&gt; {
-            <span class="comment">// This means that the process has already exited.</span>
-        }
-    }
-}
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">unix</span>))]</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">terminate_child</span>(
-    <span class="ident">child</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Child</span>,
-    <span class="ident">_mode</span>: <span class="ident">TerminateMode</span>,
-    <span class="ident">_forward_receiver</span>: <span class="kw-2">&amp;mut</span> <span class="ident">tokio::sync::broadcast::Receiver</span><span class="op">&lt;</span><span class="ident">SignalForwardEvent</span><span class="op">&gt;</span>,
-) {
-    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">child</span>.<span class="ident">start_kill</span>();
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
