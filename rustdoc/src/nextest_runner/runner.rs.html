@@ -1593,6 +1593,8 @@
 <span id="1588">1588</span>
 <span id="1589">1589</span>
 <span id="1590">1590</span>
+<span id="1591">1591</span>
+<span id="1592">1592</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -2941,6 +2943,8 @@
     <span class="doccomment">/// This sets up the process group ID for now.</span>
     <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">cmd_pre_exec</span>(<span class="ident">cmd</span>: <span class="kw-2">&amp;mut</span> <span class="ident">tokio::process::Command</span>) {
         <span class="kw">unsafe</span> {
+            <span class="comment">// TODO: replace with process_group once Rust 1.64 is out -- that will let this use the</span>
+            <span class="comment">// posix_spawn fast path, which is significantly faster (0.5 seconds vs 1.5 on clap).</span>
             <span class="ident">cmd</span>.<span class="ident">pre_exec</span>(<span class="op">|</span><span class="op">|</span> {
                 <span class="kw">let</span> <span class="ident">pid</span> <span class="op">=</span> <span class="ident">libc::getpid</span>();
                 <span class="kw">if</span> <span class="ident">libc::setpgid</span>(<span class="ident">pid</span>, <span class="ident">pid</span>) <span class="op">==</span> <span class="number">0</span> {
