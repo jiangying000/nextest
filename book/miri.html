@@ -173,12 +173,12 @@
                         <h1 id="miri-and-nextest"><a class="header" href="#miri-and-nextest">Miri and nextest</a></h1>
 <p>Nextest works with the <a href="https://github.com/rust-lang/miri">Miri interpreter</a> for Rust. This interpreter can check for certain classes of undefined behavior.</p>
 <h2 id="benefits"><a class="header" href="#benefits">Benefits</a></h2>
-<p>The main benefit of using nextest with Miri is that each test runs in its own process. This means that it's easier to <a href="https://github.com/rust-lang/miri/issues/1481">identify memory leaks</a>.</p>
+<p>The main benefit of using nextest with Miri is that each test runs in its own process. This means that it's easier to <a href="https://github.com/rust-lang/miri/issues/1481">identify memory leaks</a>, for example.</p>
 <p>Miri can be very taxing on most computers. If nextest is run under Miri, it configures itself to use 1 thread by default. This mirrors <code>cargo miri test</code>. You can customize this with the <code>--test-threads</code>/<code>-j</code> option.</p>
 <h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
 <ul>
-<li>cargo-nextest 0.9.28 or above</li>
-<li>Miri from <a href="https://github.com/rust-lang/miri">master</a> (a new Rust nightly with support for miri + nextest should come out soon)</li>
+<li>cargo-nextest 0.9.29 or above</li>
+<li>Miri from Rust nightly 2022-07-24 or after</li>
 </ul>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
 <p>After <a href="https://github.com/rust-lang/miri#using-miri">installing Miri</a>, run:</p>

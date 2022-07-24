@@ -221,8 +221,8 @@ running 1 test
 </pre>
 <hr />
 <h3 id="how-nextest-terminates-tests"><a class="header" href="#how-nextest-terminates-tests">How nextest terminates tests</a></h3>
-<p>On Unix platforms, nextest attempts a graceful shutdown: it first sends the <a href="https://www.gnu.org/software/libc/manual/html_node/Termination-Signals.html">SIGTERM</a> signal to the test, then waits 10 seconds for it to shut down. If the test doesn't shut itself down within that time, nextest sends SIGKILL (<code>kill -9</code>) to the test to terminate it immediately.</p>
-<p>On other platforms including Windows, nextest terminates the test immediately in a manner akin to SIGKILL.</p>
+<p>On Unix platforms, nextest creates a <a href="https://en.wikipedia.org/wiki/Process_group">process group</a> for each test. On timing out, nextest attempts a graceful shutdown: it first sends the <a href="https://www.gnu.org/software/libc/manual/html_node/Termination-Signals.html">SIGTERM</a> signal to the process group, then waits 10 seconds for it to shut down. If the test doesn't shut itself down within that time, nextest sends SIGKILL (<code>kill -9</code>) to the process group to terminate it immediately.</p>
+<p>On other platforms including Windows, nextest terminates the test immediately in a manner akin to SIGKILL. (On Windows, nextest uses <a href="https://docs.microsoft.com/en-us/windows/win32/procthread/job-objects">job objects</a> to kill the test process and all its descendants.)</p>
 <blockquote>
 <p><strong>Note:</strong> The behavior described in this subsection is not part of the <a href="stability.html">stability guarantees</a>, and is subject to change.</p>
 </blockquote>

@@ -283,6 +283,12 @@ fail-fast = false
 <blockquote>
 <p><strong>Note:</strong> Nextest's embedded configuration may define new profiles whose names start with <code>default-</code> in the future. To avoid backwards compatibility issues, do not name custom profiles starting with <code>default-</code>.</p>
 </blockquote>
+<h2 id="tool-specific-configuration"><a class="header" href="#tool-specific-configuration">Tool-specific configuration</a></h2>
+<p>Some tools that <a href="integrations.html">integrate with nextest</a> may wish to customize nextest's defaults. However, in most cases, command-line arguments and repository-specific configuration should still override those defaults.</p>
+<p>To support these tools, nextest supports the <code>--tool-config-file</code> argument. Values to this argument are specified in the form <code>tool:/path/to/config.toml</code>. For example, if your tool <code>my-tool</code> needs to call nextest with customized defaults, it should run:</p>
+<pre><code>cargo nextest run --tool-config-file my-tool:/path/to/my/config.toml
+</code></pre>
+<p>The <code>--tool-config-file</code> argument may be specified multiple times. Config files specified earlier are higher priority than those that come later.</p>
 <h2 id="hierarchical-configuration"><a class="header" href="#hierarchical-configuration">Hierarchical configuration</a></h2>
 <p>For this example:</p>
 <p>Configuration is resolved in the following order:</p>
@@ -297,11 +303,14 @@ fail-fast = false
 <p><a href="per-test-overrides.html">Per-test overrides</a>, if they're supported for this configuration variable.</p>
 </li>
 <li>
-<p>Profile-specific configuration. For example, if the repository-specific configuration looks like:</p>
+<p>If a profile is specified, profile-specific configuration in <code>.config/nextest.toml</code>. For example, if the repository-specific configuration looks like:</p>
 <pre><code class="language-toml">[profile.ci]
 retries = 2
 </code></pre>
 <p>then, if <code>--profile ci</code> is selected, failing tests are retried up to 2 times.</p>
+</li>
+<li>
+<p>If a profile is specified, tool-specific configuration for the given profile.</p>
 </li>
 <li>
 <p>Repository-specific configuration for the <code>default</code> profile. For example, if the repository-specific configuration looks like:</p>
@@ -309,6 +318,9 @@ retries = 2
 retries = 5
 </code></pre>
 <p>then failing tests are retried up to 5 times.</p>
+</li>
+<li>
+<p>Tool-specific configuration for the <code>default</code> profile.</p>
 </li>
 <li>
 <p>The default configuration listed above, which is that tests are never retried.</p>
