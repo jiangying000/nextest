@@ -1536,6 +1536,9 @@
 <span id="1531">1531</span>
 <span id="1532">1532</span>
 <span id="1533">1533</span>
+<span id="1534">1534</span>
+<span id="1535">1535</span>
+<span id="1536">1536</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -2452,11 +2455,13 @@
     <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">base</span>: <span class="ident">BaseApp</span>, <span class="ident">build_filter</span>: <span class="ident">TestBuildFilter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="ident">check_experimental_filtering</span>(<span class="ident">base</span>.<span class="ident">output</span>);
 
+        <span class="kw">let</span> <span class="ident">cargo_configs</span> <span class="op">=</span> <span class="ident">CargoConfigs::new</span>(<span class="kw-2">&amp;</span><span class="ident">base</span>.<span class="ident">cargo_opts</span>.<span class="ident">config</span>)
+            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">ExpectedError::CargoConfigsConstructError</span> { <span class="ident">err</span> })<span class="question-mark">?</span>;
+
         <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
             <span class="ident">base</span>,
             <span class="ident">build_filter</span>,
-            <span class="ident">cargo_configs</span>: <span class="ident">CargoConfigs::new</span>()
-                .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">ExpectedError::CargoConfigsConstructError</span> { <span class="ident">err</span> })<span class="question-mark">?</span>,
+            <span class="ident">cargo_configs</span>,
             <span class="ident">target_triple</span>: <span class="ident">OnceCell::new</span>(),
             <span class="ident">target_runner</span>: <span class="ident">OnceCell::new</span>(),
         })
@@ -2859,6 +2864,7 @@
             <span class="string">&quot;cargo nextest list --archive-file my-archive.tar.zst --extract-to my-path --extract-overwrite&quot;</span>,
             <span class="string">&quot;cargo nextest list --archive-file my-archive.tar.zst --persist-extract-tempdir&quot;</span>,
             <span class="string">&quot;cargo nextest list --archive-file my-archive.tar.zst --workspace-remap foo&quot;</span>,
+            <span class="string">&quot;cargo nextest list --archive-file my-archive.tar.zst --config target.&#39;cfg(all())&#39;.runner=\&quot;my-runner\&quot;&quot;</span>,
             <span class="comment">// ---</span>
             <span class="comment">// Filter expressions</span>
             <span class="comment">// ---</span>

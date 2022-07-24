@@ -1107,6 +1107,17 @@
 <span id="1102">1102</span>
 <span id="1103">1103</span>
 <span id="1104">1104</span>
+<span id="1105">1105</span>
+<span id="1106">1106</span>
+<span id="1107">1107</span>
+<span id="1108">1108</span>
+<span id="1109">1109</span>
+<span id="1110">1110</span>
+<span id="1111">1111</span>
+<span id="1112">1112</span>
+<span id="1113">1113</span>
+<span id="1114">1114</span>
+<span id="1115">1115</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1904,6 +1915,17 @@
     <span class="doccomment">/// The current directory was invalid UTF-8.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;current directory is invalid UTF-8&quot;</span>)]</span>
     <span class="ident">CurrentDirInvalidUtf8</span>(<span class="attribute">#[<span class="ident">source</span>]</span> <span class="ident">FromPathBufError</span>),
+
+    <span class="doccomment">/// Parsing a CLI config option failed.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;failed to parse --config option `{config_str}` as TOML&quot;</span>)]</span>
+    <span class="ident">CliConfigParseError</span> {
+        <span class="doccomment">/// The CLI config option.</span>
+        <span class="ident">config_str</span>: <span class="ident">String</span>,
+
+        <span class="doccomment">/// The error that occurred trying to deserialize the config.</span>
+        <span class="attribute">#[<span class="ident">source</span>]</span>
+        <span class="ident">error</span>: <span class="ident">toml::de::Error</span>,
+    },
 }
 
 <span class="doccomment">/// An error occurred while looking for Cargo configuration files.</span>

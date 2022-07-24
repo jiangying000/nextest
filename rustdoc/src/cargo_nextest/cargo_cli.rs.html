@@ -298,6 +298,8 @@
 <span id="293">293</span>
 <span id="294">294</span>
 <span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -425,9 +427,11 @@
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
     <span class="ident">offline</span>: <span class="ident">bool</span>,
 
+    <span class="comment">// NOTE: this does not conflict with reuse build opts since we let target.runner be specified</span>
+    <span class="comment">// this way</span>
     <span class="doccomment">/// Override a configuration value (unstable)</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;KEY=VALUE&quot;</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
-    <span class="ident">config</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;KEY=VALUE&quot;</span>)]</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">config</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Unstable (nightly-only) flags to Cargo, see &#39;cargo -Z help&#39; for details</span>
     <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;Z&#39;</span>, <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;FLAG&quot;</span>, <span class="ident">group</span> <span class="op">=</span> <span class="string">&quot;cargo-opts&quot;</span>)]</span>
