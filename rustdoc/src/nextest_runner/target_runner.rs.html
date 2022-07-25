@@ -593,6 +593,57 @@
 <span id="588">588</span>
 <span id="589">589</span>
 <span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+<span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
+<span id="603">603</span>
+<span id="604">604</span>
+<span id="605">605</span>
+<span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
+<span id="610">610</span>
+<span id="611">611</span>
+<span id="612">612</span>
+<span id="613">613</span>
+<span id="614">614</span>
+<span id="615">615</span>
+<span id="616">616</span>
+<span id="617">617</span>
+<span id="618">618</span>
+<span id="619">619</span>
+<span id="620">620</span>
+<span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
+<span id="628">628</span>
+<span id="629">629</span>
+<span id="630">630</span>
+<span id="631">631</span>
+<span id="632">632</span>
+<span id="633">633</span>
+<span id="634">634</span>
+<span id="635">635</span>
+<span id="636">636</span>
+<span id="637">637</span>
+<span id="638">638</span>
+<span id="639">639</span>
+<span id="640">640</span>
+<span id="641">641</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -602,7 +653,7 @@
     <span class="ident">cargo_config</span>::{<span class="ident">CargoConfigSource</span>, <span class="ident">CargoConfigs</span>, <span class="ident">Runner</span>, <span class="ident">TargetTriple</span>},
     <span class="ident">errors::TargetRunnerError</span>,
 };
-<span class="kw">use</span> <span class="ident">camino::Utf8PathBuf</span>;
+<span class="kw">use</span> <span class="ident">camino</span>::{<span class="ident">Utf8Path</span>, <span class="ident">Utf8PathBuf</span>};
 <span class="kw">use</span> <span class="ident">nextest_metadata::BuildPlatform</span>;
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
 <span class="kw">use</span> <span class="ident">target_spec::Platform</span>;
@@ -702,19 +753,24 @@
 
         <span class="comment">// Check if we have a CARGO_TARGET_{TRIPLE}_RUNNER environment variable</span>
         <span class="comment">// set, and if so use that, as it takes precedence over the static config(:?.toml)?</span>
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">tr</span>) <span class="op">=</span> <span class="ident"><span class="self">Self</span>::from_env</span>(<span class="ident"><span class="self">Self</span>::runner_env_var</span>(<span class="kw-2">&amp;</span><span class="ident">target</span>))<span class="question-mark">?</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">tr</span>) <span class="op">=</span> <span class="ident"><span class="self">Self</span>::from_env</span>(<span class="ident"><span class="self">Self</span>::runner_env_var</span>(<span class="kw-2">&amp;</span><span class="ident">target</span>), <span class="ident">configs</span>.<span class="ident">cwd</span>())<span class="question-mark">?</span> {
             <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">tr</span>));
         }
 
         <span class="ident"><span class="self">Self</span>::find_config</span>(<span class="ident">configs</span>, <span class="ident">target</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">from_env</span>(<span class="ident">env_key</span>: <span class="ident">String</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">TargetRunnerError</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_env</span>(<span class="ident">env_key</span>: <span class="ident">String</span>, <span class="ident">cwd</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">TargetRunnerError</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">runner_var</span>) <span class="op">=</span> <span class="ident">std::env::var_os</span>(<span class="kw-2">&amp;</span><span class="ident">env_key</span>) {
             <span class="kw">let</span> <span class="ident">runner</span> <span class="op">=</span> <span class="ident">runner_var</span>
                 .<span class="ident">into_string</span>()
                 .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">_osstr</span><span class="op">|</span> <span class="ident">TargetRunnerError::InvalidEnvironmentVar</span>(<span class="ident">env_key</span>.<span class="ident">clone</span>()))<span class="question-mark">?</span>;
-            <span class="ident"><span class="self">Self</span>::parse_runner</span>(<span class="ident">PlatformRunnerSource::Env</span>(<span class="ident">env_key</span>), <span class="ident">Runner::Simple</span>(<span class="ident">runner</span>)).<span class="ident">map</span>(<span class="prelude-val">Some</span>)
+            <span class="ident"><span class="self">Self</span>::parse_runner</span>(
+                <span class="ident">PlatformRunnerSource::Env</span>(<span class="ident">env_key</span>),
+                <span class="ident">Runner::Simple</span>(<span class="ident">runner</span>),
+                <span class="ident">cwd</span>,
+            )
+            .<span class="ident">map</span>(<span class="prelude-val">Some</span>)
         } <span class="kw">else</span> {
             <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
         }
@@ -753,6 +809,7 @@
                                 <span class="ident">target_table</span>: <span class="ident">target</span>.<span class="ident">triple_str</span>().<span class="ident">into</span>(),
                             },
                             <span class="ident">runner</span>.<span class="ident">clone</span>(),
+                            <span class="ident">configs</span>.<span class="ident">cwd</span>(),
                         )<span class="question-mark">?</span>);
                         <span class="kw">continue</span>;
                     }
@@ -779,6 +836,7 @@
                                 <span class="ident">target_table</span>: <span class="ident">cfg</span>.<span class="ident">clone</span>(),
                             },
                             <span class="ident">runner</span>.<span class="ident">clone</span>(),
+                            <span class="ident">configs</span>.<span class="ident">cwd</span>(),
                         )<span class="question-mark">?</span>);
                         <span class="kw">continue</span> <span class="lifetime">&#39;config</span>;
                     }
@@ -792,6 +850,7 @@
     <span class="kw">fn</span> <span class="ident">parse_runner</span>(
         <span class="ident">source</span>: <span class="ident">PlatformRunnerSource</span>,
         <span class="ident">runner</span>: <span class="ident">Runner</span>,
+        <span class="ident">cwd</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">TargetRunnerError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> (<span class="ident">runner_binary</span>, <span class="ident">args</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">runner</span> {
             <span class="ident">Runner::Simple</span>(<span class="ident">value</span>) =&gt; {
@@ -807,7 +866,10 @@
                             <span class="ident">value</span>: <span class="ident">value</span>.<span class="ident">clone</span>(),
                         })<span class="question-mark">?</span>;
                 <span class="kw">let</span> <span class="ident">args</span> <span class="op">=</span> <span class="ident">runner_iter</span>.<span class="ident">map</span>(<span class="ident">String::from</span>).<span class="ident">collect</span>();
-                (<span class="ident">runner_binary</span>.<span class="ident">into</span>(), <span class="ident">args</span>)
+                (
+                    <span class="ident"><span class="self">Self</span>::normalize_runner</span>(<span class="ident">runner_binary</span>, <span class="ident">source</span>.<span class="ident">root</span>(<span class="ident">cwd</span>)),
+                    <span class="ident">args</span>,
+                )
             }
             <span class="ident">Runner::List</span>(<span class="kw-2">mut</span> <span class="ident">values</span>) =&gt; {
                 <span class="kw">if</span> <span class="ident">values</span>.<span class="ident">is_empty</span>() {
@@ -817,7 +879,10 @@
                     });
                 } <span class="kw">else</span> {
                     <span class="kw">let</span> <span class="ident">runner_binary</span> <span class="op">=</span> <span class="ident">values</span>.<span class="ident">remove</span>(<span class="number">0</span>);
-                    (<span class="ident">runner_binary</span>.<span class="ident">into</span>(), <span class="ident">values</span>)
+                    (
+                        <span class="ident"><span class="self">Self</span>::normalize_runner</span>(<span class="kw-2">&amp;</span><span class="ident">runner_binary</span>, <span class="ident">source</span>.<span class="ident">root</span>(<span class="ident">cwd</span>)),
+                        <span class="ident">values</span>,
+                    )
                 }
             }
         };
@@ -827,6 +892,18 @@
             <span class="ident">args</span>,
             <span class="ident">source</span>,
         })
+    }
+
+    <span class="comment">// https://github.com/rust-lang/cargo/blob/40b674cd1115299034fafa34e7db3a9140b48a49/src/cargo/util/config/mod.rs#L735-L743</span>
+    <span class="kw">fn</span> <span class="ident">normalize_runner</span>(<span class="ident">runner_binary</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">root</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>) -&gt; <span class="ident">Utf8PathBuf</span> {
+        <span class="kw">let</span> <span class="ident">is_path</span> <span class="op">=</span>
+            <span class="ident">runner_binary</span>.<span class="ident">contains</span>(<span class="string">&#39;/&#39;</span>) <span class="op">|</span><span class="op">|</span> (<span class="macro">cfg!</span>(<span class="ident">windows</span>) <span class="op">&amp;&amp;</span> <span class="ident">runner_binary</span>.<span class="ident">contains</span>(<span class="string">&#39;\\&#39;</span>));
+        <span class="kw">if</span> <span class="ident">is_path</span> {
+            <span class="ident">root</span>.<span class="ident">join</span>(<span class="ident">runner_binary</span>)
+        } <span class="kw">else</span> {
+            <span class="comment">// A pathless name.</span>
+            <span class="ident">runner_binary</span>.<span class="ident">into</span>()
+        }
     }
 
     <span class="doccomment">/// Gets the runner binary path.</span>
@@ -874,6 +951,32 @@
         <span class="doccomment">/// If `target.&#39;cfg(target_os = &quot;linux&quot;)&#39;.runner` is used, this is `cfg(target_os = &quot;linux&quot;)`.</span>
         <span class="ident">target_table</span>: <span class="ident">String</span>,
     },
+}
+
+<span class="kw">impl</span> <span class="ident">PlatformRunnerSource</span> {
+    <span class="comment">// https://github.com/rust-lang/cargo/blob/3959f87158ea4f8733e2fcbe032b8a50ae0b6834/src/cargo/util/config/value.rs#L66-L75</span>
+    <span class="kw">fn</span> <span class="ident">root</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>, <span class="ident">cwd</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Utf8Path</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Utf8Path</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Env</span>(<span class="kw">_</span>)
+            <span class="op">|</span> <span class="ident"><span class="self">Self</span>::CargoConfig</span> {
+                <span class="ident">source</span>: <span class="ident">CargoConfigSource::CliOption</span>,
+                ..
+            } =&gt; {
+                <span class="comment">// Use the cwd as specified.</span>
+                <span class="ident">cwd</span>
+            }
+            <span class="ident"><span class="self">Self</span>::CargoConfig</span> {
+                <span class="ident">source</span>: <span class="ident">CargoConfigSource::File</span>(<span class="ident">file</span>),
+                ..
+            } =&gt; {
+                <span class="comment">// The file is e.g. .cargo/config.toml -- go up two levels.</span>
+                <span class="ident">file</span>.<span class="ident">parent</span>()
+                    .<span class="ident">expect</span>(<span class="string">&quot;got to .cargo&quot;</span>)
+                    .<span class="ident">parent</span>()
+                    .<span class="ident">expect</span>(<span class="string">&quot;got to cwd&quot;</span>)
+            }
+        }
+    }
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">PlatformRunnerSource</span> {
@@ -958,7 +1061,7 @@
                 <span class="kw-2">&amp;</span><span class="ident">dir_path</span>,
             ),
             <span class="prelude-val">Some</span>(<span class="ident">PlatformRunner</span> {
-                <span class="ident">runner_binary</span>: <span class="string">&quot;unix-runner&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">runner_binary</span>: <span class="ident">dir_path</span>.<span class="ident">join</span>(<span class="string">&quot;unix-runner&quot;</span>),
                 <span class="ident">args</span>: <span class="macro">vec!</span>[],
                 <span class="ident">source</span>: <span class="ident">PlatformRunnerSource::CargoConfig</span> {
                     <span class="ident">source</span>: <span class="ident">CargoConfigSource::File</span>(<span class="ident">dir_path</span>.<span class="ident">join</span>(<span class="string">&quot;.cargo/config&quot;</span>)),
@@ -978,7 +1081,7 @@
                 <span class="kw-2">&amp;</span><span class="ident">dir_path</span>,
             ),
             <span class="prelude-val">Some</span>(<span class="ident">PlatformRunner</span> {
-                <span class="ident">runner_binary</span>: <span class="string">&quot;parent-wine&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">runner_binary</span>: <span class="ident">dir_path</span>.<span class="ident">join</span>(<span class="string">&quot;../parent-wine&quot;</span>),
                 <span class="ident">args</span>: <span class="macro">vec!</span>[],
                 <span class="ident">source</span>: <span class="ident">PlatformRunnerSource::CargoConfig</span> {
                     <span class="ident">source</span>: <span class="ident">CargoConfigSource::File</span>(<span class="ident">dir_path</span>.<span class="ident">join</span>(<span class="string">&quot;.cargo/config&quot;</span>)),
@@ -1008,7 +1111,7 @@
                 <span class="kw-2">&amp;</span><span class="ident">dir_path</span>,
             ),
             <span class="prelude-val">Some</span>(<span class="ident">PlatformRunner</span> {
-                <span class="ident">runner_binary</span>: <span class="string">&quot;parent-wine&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">runner_binary</span>: <span class="ident">dir_path</span>.<span class="ident">join</span>(<span class="string">&quot;../parent-wine&quot;</span>),
                 <span class="ident">args</span>: <span class="macro">vec!</span>[],
                 <span class="ident">source</span>: <span class="ident">PlatformRunnerSource::CargoConfig</span> {
                     <span class="ident">source</span>: <span class="ident">CargoConfigSource::File</span>(<span class="ident">dir_path</span>.<span class="ident">join</span>(<span class="string">&quot;.cargo/config&quot;</span>)),
@@ -1073,7 +1176,7 @@
                 <span class="kw-2">&amp;</span><span class="ident">dir_path</span>,
             ),
             <span class="prelude-val">Some</span>(<span class="ident">PlatformRunner</span> {
-                <span class="ident">runner_binary</span>: <span class="string">&quot;parent-wine&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">runner_binary</span>: <span class="ident">dir_path</span>.<span class="ident">join</span>(<span class="string">&quot;../parent-wine&quot;</span>),
                 <span class="ident">args</span>: <span class="macro">vec!</span>[],
                 <span class="ident">source</span>: <span class="ident">PlatformRunnerSource::CargoConfig</span> {
                     <span class="ident">source</span>: <span class="ident">CargoConfigSource::File</span>(<span class="ident">dir_path</span>.<span class="ident">join</span>(<span class="string">&quot;.cargo/config&quot;</span>)),
@@ -1117,14 +1220,14 @@
             <span class="ident">find_config</span>(
                 <span class="ident">Platform::new</span>(<span class="string">&quot;x86_64-pc-windows-msvc&quot;</span>, <span class="ident">TargetFeatures::Unknown</span>).<span class="ident">unwrap</span>(),
                 <span class="kw-2">&amp;</span>[
-                    <span class="string">&quot;target.&#39;cfg(all())&#39;.runner=&#39;all-runner&#39;&quot;</span>,
+                    <span class="string">&quot;target.&#39;cfg(all())&#39;.runner=&#39;./all-runner&#39;&quot;</span>,
                     <span class="string">&quot;target.&#39;cfg(windows)&#39;.runner=&#39;windows-runner&#39;&quot;</span>,
                 ],
                 <span class="kw-2">&amp;</span><span class="ident">dir_path</span>,
                 <span class="kw-2">&amp;</span><span class="ident">dir_path</span>,
             ),
             <span class="prelude-val">Some</span>(<span class="ident">PlatformRunner</span> {
-                <span class="ident">runner_binary</span>: <span class="string">&quot;all-runner&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">runner_binary</span>: <span class="ident">dir_path</span>.<span class="ident">join</span>(<span class="string">&quot;all-runner&quot;</span>),
                 <span class="ident">args</span>: <span class="macro">vec!</span>[],
                 <span class="ident">source</span>: <span class="ident">PlatformRunnerSource::CargoConfig</span> {
                     <span class="ident">source</span>: <span class="ident">CargoConfigSource::CliOption</span>,
@@ -1158,21 +1261,20 @@
     <span class="kw">fn</span> <span class="ident">find_config</span>(
         <span class="ident">platform</span>: <span class="ident">Platform</span>,
         <span class="ident">cli_configs</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>],
-        <span class="ident">start_search_at</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>,
+        <span class="ident">cwd</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>,
         <span class="ident">terminate_search_at</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>,
     ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PlatformRunner</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">configs</span> <span class="op">=</span>
-            <span class="ident">CargoConfigs::new_with_isolation</span>(<span class="ident">cli_configs</span>, <span class="ident">start_search_at</span>, <span class="ident">terminate_search_at</span>)
-                .<span class="ident">unwrap</span>();
+            <span class="ident">CargoConfigs::new_with_isolation</span>(<span class="ident">cli_configs</span>, <span class="ident">cwd</span>, <span class="ident">terminate_search_at</span>).<span class="ident">unwrap</span>();
         <span class="ident">PlatformRunner::find_config</span>(<span class="kw-2">&amp;</span><span class="ident">configs</span>, <span class="ident">platform</span>).<span class="ident">unwrap</span>()
     }
 
     <span class="kw">static</span> <span class="ident">CARGO_CONFIG_CONTENTS</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">r#&quot;
     [target.x86_64-pc-windows-msvc]
-    runner = &quot;parent-wine&quot;
+    runner = &quot;../parent-wine&quot;
 
     [target.&#39;cfg(unix)&#39;]
-    runner = &quot;unix-runner&quot;
+    runner = &quot;./unix-runner&quot;
     &quot;#</span>;
 
     <span class="kw">static</span> <span class="ident">FOO_BAR_CARGO_CONFIG_CONTENTS</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">r#&quot;
