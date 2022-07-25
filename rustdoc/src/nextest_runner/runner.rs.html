@@ -2871,7 +2871,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">cmd_pre_exec</span>(<span class="ident">_cmd</span>: <span class="kw-2">&amp;mut</span> <span class="ident">tokio::process::Command</span>) {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">cmd_pre_exec</span>(<span class="ident">_cmd</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::process::Command</span>) {
         <span class="comment">// TODO: set process group on Windows for better ctrl-C handling.</span>
     }
 
