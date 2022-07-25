@@ -1595,6 +1595,17 @@
 <span id="1590">1590</span>
 <span id="1591">1591</span>
 <span id="1592">1592</span>
+<span id="1593">1593</span>
+<span id="1594">1594</span>
+<span id="1595">1595</span>
+<span id="1596">1596</span>
+<span id="1597">1597</span>
+<span id="1598">1598</span>
+<span id="1599">1599</span>
+<span id="1600">1600</span>
+<span id="1601">1601</span>
+<span id="1602">1602</span>
+<span id="1603">1603</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -2062,6 +2073,7 @@
                 .<span class="ident">stderr</span>(<span class="ident">std::process::Stdio::piped</span>());
         };
 
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cmd</span> <span class="op">=</span> <span class="ident">tokio::process::Command::from</span>(<span class="ident">cmd</span>);
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">child</span> <span class="op">=</span> <span class="ident">cmd</span>.<span class="ident">spawn</span>()<span class="question-mark">?</span>;
 
         <span class="comment">// If assigning the child to the job fails, ignore this. This can happen if the process has</span>
@@ -2930,6 +2942,7 @@
 <span class="kw">mod</span> <span class="ident">imp</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">SIGHUP</span>, <span class="ident">SIGINT</span>, <span class="ident">SIGKILL</span>, <span class="ident">SIGTERM</span>};
+    <span class="kw">use</span> <span class="ident">std::os::unix::process::CommandExt</span>;
 
     <span class="comment">// This is a no-op on non-windows platforms.</span>
     <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">configure_handle_inheritance_impl</span>(
@@ -2940,8 +2953,17 @@
 
     <span class="doccomment">/// Pre-execution configuration on Unix.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This sets up the process group ID for now.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">cmd_pre_exec</span>(<span class="ident">cmd</span>: <span class="kw-2">&amp;mut</span> <span class="ident">tokio::process::Command</span>) {
+    <span class="doccomment">/// This sets up just the process group ID.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">process_group</span>)]</span>
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">cmd_pre_exec</span>(<span class="ident">cmd</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::process::Command</span>) {
+        <span class="ident">cmd</span>.<span class="ident">process_group</span>(<span class="number">0</span>);
+    }
+
+    <span class="doccomment">/// Pre-execution configuration on Unix.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This sets up just the process group ID.</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">process_group</span>))]</span>
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">cmd_pre_exec</span>(<span class="ident">cmd</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::process::Command</span>) {
         <span class="kw">unsafe</span> {
             <span class="comment">// TODO: replace with process_group once Rust 1.64 is out -- that will let this use the</span>
             <span class="comment">// posix_spawn fast path, which is significantly faster (0.5 seconds vs 1.5 on clap).</span>
