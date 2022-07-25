@@ -60,10 +60,14 @@
 <span id="55">55</span>
 <span id="56">56</span>
 <span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">missing_docs</span>)]</span>
+<span class="comment">// This is a temporary hack for our builds until Rust 1.64 is stabilized.</span>
+<span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">process_group_bootstrap_hack</span>, <span class="ident">feature</span>(<span class="ident">process_set_process_group</span>))]</span>
 
 <span class="doccomment">//! Core functionality for [cargo nextest](https://crates.io/crates/cargo-nextest). For a</span>
 <span class="doccomment">//! higher-level overview, see that documentation.</span>
