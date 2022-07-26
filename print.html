@@ -1160,6 +1160,19 @@ runner = &quot;wine&quot;
 <h2 id="cross-compiling"><a class="header" href="#cross-compiling">Cross-compiling</a></h2>
 <p>While cross-compiling code, some tests may need to be run on the host platform. (See the note about <a href="book/running.html#filtering-by-build-platform">Filtering by build platform</a> for more.)</p>
 <p>For tests that run on the host platform, nextest uses the target runner defined for the host. For example, if cross-compiling from <code>x86_64-unknown-linux-gnu</code> to <code>x86_64-pc-windows-msvc</code>, nextest will use the <code>CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER</code> for proc-macro and other host-only tests, and <code>CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_RUNNER</code> for other tests.</p>
+<h2 id="debugging-output"><a class="header" href="#debugging-output">Debugging output</a></h2>
+<p>Nextest invokes target runners during both the list and run phases. During the list phase, nextest has <a href="https://nexte.st/book/custom-test-harnesses.html#manually-implementing-a-test-harness">stringent rules</a> for the contents of standard output.</p>
+<p>If a target runner produces debugging or any other kind of output itself, it MUST NOT go to standard output. You can produce output to standard error, to a file on disk, etc.</p>
+<p>For example, this target runner will not work:</p>
+<pre><code class="language-bash">#!/bin/bash
+echo &quot;This is some debugging output&quot;
+$@
+</code></pre>
+<p>Instead, redirect debugging output <a href="https://stackoverflow.com/questions/2990414/echo-that-outputs-to-stderr">to standard error</a>:</p>
+<pre><code class="language-bash">#!/bin/bash
+echo &quot;This is some debugging output&quot; &gt;&amp;2
+$@
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="other-options"><a class="header" href="#other-options">Other options</a></h1>
 <p>Some other options accepted by <code>cargo nextest run</code>. Many of these options are also accepted as <a href="book/configuration.html">configuration settings</a> and <a href="book/env-vars.html">environment variables</a>.</p>
 <h3 id="runner-options"><a class="header" href="#runner-options">Runner options</a></h3>
