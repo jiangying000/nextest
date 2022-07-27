@@ -1696,7 +1696,8 @@ cargo llvm-cov nextest
 <p>If you've integrated nextest into a coverage tool, feel free to <a href="https://github.com/nextest-rs/nextest/pulls">submit a pull request</a> with documentation.</p>
 </blockquote>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="miri-and-nextest"><a class="header" href="#miri-and-nextest">Miri and nextest</a></h1>
-<p>Nextest works with the <a href="https://github.com/rust-lang/miri">Miri interpreter</a> for Rust. This interpreter can check for certain classes of undefined behavior.</p>
+<p>Nextest works with the <a href="https://github.com/rust-lang/miri">Miri interpreter</a> for Rust. This interpreter can check for certain classes of <a href="https://doc.rust-lang.org/reference/behavior-considered-undefined.html">undefined behavior</a>.
+It can also run your tests for (almost) arbitrary targets.</p>
 <h2 id="benefits"><a class="header" href="#benefits">Benefits</a></h2>
 <p>The main benefit of using nextest with Miri is that each test runs in its own process. This means that it's easier to <a href="https://github.com/rust-lang/miri/issues/1481">identify memory leaks</a>, for example.</p>
 <p>Miri can be very taxing on most computers. If nextest is run under Miri, it configures itself to use 1 thread by default. This mirrors <code>cargo miri test</code>. You can customize this with the <code>--test-threads</code>/<code>-j</code> option.</p>
@@ -1710,6 +1711,10 @@ cargo llvm-cov nextest
 <pre><code>cargo miri nextest run
 </code></pre>
 <p>You may need to specify the toolchain to run as, using <code>cargo +nightly-YYYY-MM-DD miri nextest run</code>.</p>
+<p>Miri supports cross-interpretation, so e.g. to run your tests on a big-endian target, run:</p>
+<pre><code>cargo miri nextest run --target mips64-unknown-linux-gnuabi64
+</code></pre>
+<p>This does not require installing any special toolchain, and will work even if you are using macOS or Windows.</p>
 <blockquote>
 <p><strong>Note:</strong> <a href="book/reusing-builds.html">Archiving and reusing builds</a> is not supported under Miri.</p>
 </blockquote>
