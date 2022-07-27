@@ -1606,6 +1606,10 @@
 <span id="1601">1601</span>
 <span id="1602">1602</span>
 <span id="1603">1603</span>
+<span id="1604">1604</span>
+<span id="1605">1605</span>
+<span id="1606">1606</span>
+<span id="1607">1607</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1642,6 +1646,7 @@
     <span class="ident">runtime::Runtime</span>,
     <span class="ident">sync::mpsc::UnboundedSender</span>,
 };
+<span class="kw">use</span> <span class="ident">uuid::Uuid</span>;
 
 <span class="doccomment">/// Test runner options.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>)]</span>
@@ -1722,6 +1727,7 @@
                 <span class="ident">test_list</span>,
                 <span class="ident">target_runner</span>,
                 <span class="ident">runtime</span>,
+                <span class="ident">run_id</span>: <span class="ident">Uuid::new_v4</span>(),
             },
             <span class="ident">handler</span>,
         })
@@ -1778,6 +1784,7 @@
     <span class="ident">test_list</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">TestList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
     <span class="ident">target_runner</span>: <span class="ident">TargetRunner</span>,
     <span class="ident">runtime</span>: <span class="ident">Runtime</span>,
+    <span class="ident">run_id</span>: <span class="ident">Uuid</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">TestRunnerInner</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
@@ -2060,6 +2067,7 @@
 
         <span class="comment">// Debug environment variable for testing.</span>
         <span class="ident">cmd</span>.<span class="ident">env</span>(<span class="string">&quot;__NEXTEST_ATTEMPT&quot;</span>, <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">attempt</span>));
+        <span class="ident">cmd</span>.<span class="ident">env</span>(<span class="string">&quot;NEXTEST_RUN_ID&quot;</span>, <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">run_id</span>));
         <span class="ident">cmd</span>.<span class="ident">stdin</span>(<span class="ident">Stdio::null</span>());
         <span class="ident">imp::cmd_pre_exec</span>(<span class="kw-2">&amp;mut</span> <span class="ident">cmd</span>);
 
