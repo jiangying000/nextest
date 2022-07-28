@@ -1539,6 +1539,50 @@
 <span id="1534">1534</span>
 <span id="1535">1535</span>
 <span id="1536">1536</span>
+<span id="1537">1537</span>
+<span id="1538">1538</span>
+<span id="1539">1539</span>
+<span id="1540">1540</span>
+<span id="1541">1541</span>
+<span id="1542">1542</span>
+<span id="1543">1543</span>
+<span id="1544">1544</span>
+<span id="1545">1545</span>
+<span id="1546">1546</span>
+<span id="1547">1547</span>
+<span id="1548">1548</span>
+<span id="1549">1549</span>
+<span id="1550">1550</span>
+<span id="1551">1551</span>
+<span id="1552">1552</span>
+<span id="1553">1553</span>
+<span id="1554">1554</span>
+<span id="1555">1555</span>
+<span id="1556">1556</span>
+<span id="1557">1557</span>
+<span id="1558">1558</span>
+<span id="1559">1559</span>
+<span id="1560">1560</span>
+<span id="1561">1561</span>
+<span id="1562">1562</span>
+<span id="1563">1563</span>
+<span id="1564">1564</span>
+<span id="1565">1565</span>
+<span id="1566">1566</span>
+<span id="1567">1567</span>
+<span id="1568">1568</span>
+<span id="1569">1569</span>
+<span id="1570">1570</span>
+<span id="1571">1571</span>
+<span id="1572">1572</span>
+<span id="1573">1573</span>
+<span id="1574">1574</span>
+<span id="1575">1575</span>
+<span id="1576">1576</span>
+<span id="1577">1577</span>
+<span id="1578">1578</span>
+<span id="1579">1579</span>
+<span id="1580">1580</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -2134,32 +2178,40 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Args</span>)]</span>
 <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">next_help_heading</span> <span class="op">=</span> <span class="string">&quot;RUNNER OPTIONS&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TestRunnerOpts</span> {
+    <span class="doccomment">/// Compile, but don&#39;t run tests</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>)]</span>
+    <span class="ident">no_run</span>: <span class="ident">bool</span>,
+
     <span class="doccomment">/// Number of tests to run simultaneously [possible values: integer or &quot;num-cpus&quot;]</span>
     <span class="attribute">#[<span class="ident">clap</span>(
         <span class="ident">long</span>,
         <span class="ident">short</span> <span class="op">=</span> <span class="string">&#39;j&#39;</span>,
         <span class="ident">visible_alias</span> <span class="op">=</span> <span class="string">&quot;jobs&quot;</span>,
         <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;THREADS&quot;</span>,
-        <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;no-capture&quot;</span>,
+        <span class="ident">conflicts_with_all</span> <span class="op">=</span> <span class="kw-2">&amp;</span>[<span class="string">&quot;no-capture&quot;</span>, <span class="string">&quot;no-run&quot;</span>]</span>,
         <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_TEST_THREADS&quot;</span>
-    )]</span>
+    )]
     <span class="ident">test_threads</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TestThreads</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Number of retries for failing tests [default: from profile]</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_RETRIES&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_RETRIES&quot;</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;no-run&quot;</span>)]</span>
     <span class="ident">retries</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Cancel test run on the first failure</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;no-run&quot;</span>)]</span>
     <span class="ident">fail_fast</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Run all tests regardless of failure</span>
-    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">overrides_with</span> <span class="op">=</span> <span class="string">&quot;fail-fast&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;no-run&quot;</span>, <span class="ident">overrides_with</span> <span class="op">=</span> <span class="string">&quot;fail-fast&quot;</span>)]</span>
     <span class="ident">no_fail_fast</span>: <span class="ident">bool</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">TestRunnerOpts</span> {
-    <span class="kw">fn</span> <span class="ident">to_builder</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">no_capture</span>: <span class="ident">bool</span>) -&gt; <span class="ident">TestRunnerBuilder</span> {
+    <span class="kw">fn</span> <span class="ident">to_builder</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">no_capture</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TestRunnerBuilder</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">no_run</span> {
+            <span class="kw">return</span> <span class="prelude-val">None</span>;
+        }
+
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder</span> <span class="op">=</span> <span class="ident">TestRunnerBuilder::default</span>();
         <span class="ident">builder</span>.<span class="ident">set_no_capture</span>(<span class="ident">no_capture</span>);
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">retries</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">retries</span> {
@@ -2174,7 +2226,7 @@
             <span class="ident">builder</span>.<span class="ident">set_test_threads</span>(<span class="ident">test_threads</span>);
         }
 
-        <span class="ident">builder</span>
+        <span class="prelude-val">Some</span>(<span class="ident">builder</span>)
     }
 }
 
@@ -2191,20 +2243,20 @@
     <span class="attribute">#[<span class="ident">clap</span>(
         <span class="ident">long</span>,
         <span class="ident">possible_values</span> <span class="op">=</span> <span class="ident">TestOutputDisplay::variants</span>(),
-        <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;no-capture&quot;</span>,
+        <span class="ident">conflicts_with_all</span> <span class="op">=</span> <span class="kw-2">&amp;</span>[<span class="string">&quot;no-capture&quot;</span>, <span class="string">&quot;no-run&quot;</span>]</span>,
         <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;WHEN&quot;</span>,
         <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_FAILURE_OUTPUT&quot;</span>,
-    )]</span>
+    )]
     <span class="ident">failure_output</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TestOutputDisplay</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Output stdout and stderr on success</span>
     <span class="attribute">#[<span class="ident">clap</span>(
         <span class="ident">long</span>,
         <span class="ident">possible_values</span> <span class="op">=</span> <span class="ident">TestOutputDisplay::variants</span>(),
-        <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;no-capture&quot;</span>,
+        <span class="ident">conflicts_with_all</span> <span class="op">=</span> <span class="kw-2">&amp;</span>[<span class="string">&quot;no-capture&quot;</span>, <span class="string">&quot;no-run&quot;</span>]</span>,
         <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;WHEN&quot;</span>,
         <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_SUCCESS_OUTPUT&quot;</span>,
-    )]</span>
+    )]
     <span class="ident">success_output</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TestOutputDisplay</span><span class="op">&gt;</span>,
 
     <span class="comment">// status_level does not conflict with --no-capture because pass vs skip still makes sense.</span>
@@ -2212,6 +2264,7 @@
     <span class="attribute">#[<span class="ident">clap</span>(
         <span class="ident">long</span>,
         <span class="ident">possible_values</span> <span class="op">=</span> <span class="ident">StatusLevel::variants</span>(),
+        <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;no-run&quot;</span>,
         <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;LEVEL&quot;</span>,
         <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_STATUS_LEVEL&quot;</span>,
     )]</span>
@@ -2221,6 +2274,7 @@
     <span class="attribute">#[<span class="ident">clap</span>(
         <span class="ident">long</span>,
         <span class="ident">arg_enum</span>,
+        <span class="ident">conflicts_with</span> <span class="op">=</span> <span class="string">&quot;no-run&quot;</span>,
         <span class="ident">value_name</span> <span class="op">=</span> <span class="string">&quot;LEVEL&quot;</span>,
         <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_FINAL_STATUS_LEVEL&quot;</span>
     )]</span>
@@ -2608,7 +2662,14 @@
         }
 
         <span class="kw">let</span> <span class="ident">handler</span> <span class="op">=</span> <span class="ident">SignalHandlerKind::Standard</span>;
-        <span class="kw">let</span> <span class="ident">runner_builder</span> <span class="op">=</span> <span class="ident">runner_opts</span>.<span class="ident">to_builder</span>(<span class="ident">no_capture</span>);
+        <span class="kw">let</span> <span class="ident">runner_builder</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">runner_opts</span>.<span class="ident">to_builder</span>(<span class="ident">no_capture</span>) {
+            <span class="prelude-val">Some</span>(<span class="ident">runner_builder</span>) =&gt; <span class="ident">runner_builder</span>,
+            <span class="prelude-val">None</span> =&gt; {
+                <span class="comment">// This means --no-run was passed in. Exit.</span>
+                <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+            }
+        };
+
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">runner</span> <span class="op">=</span>
             <span class="ident">runner_builder</span>.<span class="ident">build</span>(<span class="kw-2">&amp;</span><span class="ident">test_list</span>, <span class="ident">profile</span>, <span class="ident">handler</span>, <span class="ident">target_runner</span>.<span class="ident">clone</span>())<span class="question-mark">?</span>;
 
@@ -2840,6 +2901,7 @@
             <span class="string">&quot;cargo nextest run --status-level=all&quot;</span>,
             <span class="string">&quot;cargo nextest run --no-capture&quot;</span>,
             <span class="string">&quot;cargo nextest run --nocapture&quot;</span>,
+            <span class="string">&quot;cargo nextest run --no-run&quot;</span>,
             <span class="string">&quot;cargo nextest run --final-status-level flaky&quot;</span>,
             <span class="comment">// retry is an alias for flaky -- ensure that it parses</span>
             <span class="string">&quot;cargo nextest run --final-status-level retry&quot;</span>,
@@ -2890,6 +2952,32 @@
             ),
             (
                 <span class="string">&quot;cargo nextest run --no-capture --success-output=final&quot;</span>,
+                <span class="ident">ArgumentConflict</span>,
+            ),
+            <span class="comment">// ---</span>
+            <span class="comment">// --no-run and these options conflict</span>
+            <span class="comment">// ---</span>
+            (<span class="string">&quot;cargo nextest run --no-run -j8&quot;</span>, <span class="ident">ArgumentConflict</span>),
+            (<span class="string">&quot;cargo nextest run --no-run --retries 3&quot;</span>, <span class="ident">ArgumentConflict</span>),
+            (<span class="string">&quot;cargo nextest run --no-run --fail-fast&quot;</span>, <span class="ident">ArgumentConflict</span>),
+            (
+                <span class="string">&quot;cargo nextest run --no-run --no-fail-fast&quot;</span>,
+                <span class="ident">ArgumentConflict</span>,
+            ),
+            (
+                <span class="string">&quot;cargo nextest run --no-run --failure-output immediate&quot;</span>,
+                <span class="ident">ArgumentConflict</span>,
+            ),
+            (
+                <span class="string">&quot;cargo nextest run --no-run --success-output never&quot;</span>,
+                <span class="ident">ArgumentConflict</span>,
+            ),
+            (
+                <span class="string">&quot;cargo nextest run --no-run --status-level pass&quot;</span>,
+                <span class="ident">ArgumentConflict</span>,
+            ),
+            (
+                <span class="string">&quot;cargo nextest run --no-run --final-status-level skip&quot;</span>,
                 <span class="ident">ArgumentConflict</span>,
             ),
             <span class="comment">// ---</span>
