@@ -199,6 +199,9 @@
 <p><code>NEXTEST</code> — always set to <code>&quot;1&quot;</code>.</p>
 </li>
 <li>
+<p><code>NEXTEST_RUN_ID</code> — A UUID corresponding to a particular nextest run. All tests run via a particular invocation of <code>cargo nextest run</code> will have the same UUID.</p>
+</li>
+<li>
 <p><code>NEXTEST_EXECUTION_MODE</code> — currently, always set to <code>process-per-test</code>. More options may be added in the future if nextest gains the ability to run all tests within the same process (<a href="https://github.com/nextest-rs/nextest/issues/27">#27</a>).</p>
 </li>
 <li>
