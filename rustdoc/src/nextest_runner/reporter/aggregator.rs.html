@@ -398,6 +398,8 @@
 <span id="393">393</span>
 <span id="394">394</span>
 <span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -595,6 +597,7 @@
             }
             <span class="ident">TestEvent::RunBeginCancel</span> { .. } =&gt; {}
             <span class="ident">TestEvent::RunFinished</span> {
+                <span class="ident">run_id</span>,
                 <span class="ident">start_time</span>,
                 <span class="ident">elapsed</span>,
                 ..
@@ -602,6 +605,7 @@
                 <span class="comment">// Write out the report to the given file.</span>
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">report</span> <span class="op">=</span> <span class="ident">Report::new</span>(<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">report_name</span>());
                 <span class="ident">report</span>
+                    .<span class="ident">set_uuid</span>(<span class="ident">run_id</span>)
                     .<span class="ident">set_timestamp</span>(<span class="ident">to_datetime</span>(<span class="ident">start_time</span>))
                     .<span class="ident">set_time</span>(<span class="ident">elapsed</span>)
                     .<span class="ident">add_test_suites</span>(<span class="self">self</span>.<span class="ident">test_suites</span>.<span class="ident">drain</span>().<span class="ident">map</span>(<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">testsuite</span>)<span class="op">|</span> <span class="ident">testsuite</span>));

@@ -693,6 +693,21 @@
 <span id="688">688</span>
 <span id="689">689</span>
 <span id="690">690</span>
+<span id="691">691</span>
+<span id="692">692</span>
+<span id="693">693</span>
+<span id="694">694</span>
+<span id="695">695</span>
+<span id="696">696</span>
+<span id="697">697</span>
+<span id="698">698</span>
+<span id="699">699</span>
+<span id="700">700</span>
+<span id="701">701</span>
+<span id="702">702</span>
+<span id="703">703</span>
+<span id="704">704</span>
+<span id="705">705</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -700,12 +715,18 @@
 <span class="kw">use</span> <span class="ident">chrono</span>::{<span class="ident">DateTime</span>, <span class="ident">FixedOffset</span>};
 <span class="kw">use</span> <span class="ident">indexmap::map::IndexMap</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">io</span>, <span class="ident">iter</span>, <span class="ident">time::Duration</span>};
+<span class="kw">use</span> <span class="ident">uuid::Uuid</span>;
 
 <span class="doccomment">/// The root element of a JUnit report.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Report</span> {
     <span class="doccomment">/// The name of this report.</span>
     <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
+
+    <span class="doccomment">/// A unique identifier associated with this report.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is an extension to the spec that&#39;s used by nextest.</span>
+    <span class="kw">pub</span> <span class="ident">uuid</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Uuid</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// The time at which the first test in this report began execution.</span>
     <span class="doccomment">///</span>
@@ -735,6 +756,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">name</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">name</span>: <span class="ident">name</span>.<span class="ident">into</span>(),
+            <span class="ident">uuid</span>: <span class="prelude-val">None</span>,
             <span class="ident">timestamp</span>: <span class="prelude-val">None</span>,
             <span class="ident">time</span>: <span class="prelude-val">None</span>,
             <span class="ident">tests</span>: <span class="number">0</span>,
@@ -742,6 +764,14 @@
             <span class="ident">errors</span>: <span class="number">0</span>,
             <span class="ident">test_suites</span>: <span class="macro">vec!</span>[],
         }
+    }
+
+    <span class="doccomment">/// Sets a unique ID for this `Report`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is an extension that&#39;s used by nextest.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_uuid</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">uuid</span>: <span class="ident">Uuid</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">uuid</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">uuid</span>);
+        <span class="self">self</span>
     }
 
     <span class="doccomment">/// Sets the start timestamp for the report.</span>

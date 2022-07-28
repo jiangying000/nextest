@@ -1406,6 +1406,14 @@
 <span id="1401">1401</span>
 <span id="1402">1402</span>
 <span id="1403">1403</span>
+<span id="1404">1404</span>
+<span id="1405">1405</span>
+<span id="1406">1406</span>
+<span id="1407">1407</span>
+<span id="1408">1408</span>
+<span id="1409">1409</span>
+<span id="1410">1410</span>
+<span id="1411">1411</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1415,6 +1423,7 @@
 
 <span class="kw">mod</span> <span class="ident">aggregator</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">aggregator::heuristic_extract_description</span>;
+<span class="kw">use</span> <span class="ident">uuid::Uuid</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">config::NextestProfile</span>,
@@ -2026,7 +2035,7 @@
         <span class="ident">writer</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">Write</span>,
     ) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">event</span> {
-            <span class="ident">TestEvent::RunStarted</span> { <span class="ident">test_list</span> } =&gt; {
+            <span class="ident">TestEvent::RunStarted</span> { <span class="ident">test_list</span>, .. } =&gt; {
                 <span class="macro">write!</span>(<span class="ident">writer</span>, <span class="string">&quot;{:&gt;12} &quot;</span>, <span class="string">&quot;Starting&quot;</span>.<span class="ident">style</span>(<span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">pass</span>))<span class="question-mark">?</span>;
 
                 <span class="kw">let</span> <span class="ident">count_style</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">count</span>;
@@ -2165,6 +2174,7 @@
                 <span class="ident">start_time</span>: <span class="ident">_start_time</span>,
                 <span class="ident">elapsed</span>,
                 <span class="ident">run_stats</span>,
+                ..
             } =&gt; {
                 <span class="kw">let</span> <span class="ident">summary_style</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">run_stats</span>.<span class="ident">any_failed</span>() {
                     <span class="self">self</span>.<span class="ident">styles</span>.<span class="ident">fail</span>
@@ -2633,8 +2643,11 @@
     <span class="ident">RunStarted</span> {
         <span class="doccomment">/// The list of tests that will be run.</span>
         <span class="doccomment">///</span>
-        <span class="doccomment">/// The methods on the test list indicate the number of</span>
+        <span class="doccomment">/// The methods on the test list indicate the number of tests that will be run.</span>
         <span class="ident">test_list</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">TestList</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
+
+        <span class="doccomment">/// The UUID for this run.</span>
+        <span class="ident">run_id</span>: <span class="ident">Uuid</span>,
     },
 
     <span class="comment">// TODO: add events for BinaryStarted and BinaryFinished? May want a slightly different way to</span>
@@ -2713,6 +2726,9 @@
 
     <span class="doccomment">/// The test run finished.</span>
     <span class="ident">RunFinished</span> {
+        <span class="doccomment">/// The unique ID for this run.</span>
+        <span class="ident">run_id</span>: <span class="ident">Uuid</span>,
+
         <span class="doccomment">/// The time at which the run was started.</span>
         <span class="ident">start_time</span>: <span class="ident">SystemTime</span>,
 
