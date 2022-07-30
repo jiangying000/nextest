@@ -232,8 +232,10 @@ modify this material as long as you give appropriate credit.</p>
 <ul>
 <li><a href="https://get.nexte.st/latest/linux"><strong>get.nexte.st/latest/linux</strong></a> for Linux x86_64, including Windows Subsystem for Linux (WSL)</li>
 <li><a href="https://get.nexte.st/latest/linux-arm"><strong>get.nexte.st/latest/linux-arm</strong></a> for Linux aarch64</li>
+<li><a href="https://get.nexte.st/latest/linux-musl"><strong>get.nexte.st/latest/linux-musl</strong></a> for Linux with musl libc</li>
 <li><a href="https://get.nexte.st/latest/mac"><strong>get.nexte.st/latest/mac</strong></a> for macOS, both x86_64 and Apple Silicon</li>
 <li><a href="https://get.nexte.st/latest/windows"><strong>get.nexte.st/latest/windows</strong></a> for Windows x86_64</li>
+<li><a href="https://get.nexte.st/latest/windows-x86"><strong>get.nexte.st/latest/windows-x86</strong></a> for Windows i686</li>
 </ul>
 <p>These archives contain a single binary called <code>cargo-nextest</code> (<code>cargo-nextest.exe</code> on Windows). Add this binary to a location on your PATH.</p>
 <h2 id="downloading-and-installing-from-your-terminal"><a class="header" href="#downloading-and-installing-from-your-terminal">Downloading and installing from your terminal</a></h2>
@@ -326,6 +328,8 @@ $tmp | Remove-Item
 <li><code>universal-apple-darwin.tar.gz</code> for x86_64 and arm64 macOS (tar.gz)</li>
 <li><code>x86_64-pc-windows-msvc.zip</code> for x86_64 Windows (zip)</li>
 <li><code>x86_64-pc-windows-msvc.tar.gz</code> for x86_64 Windows (tar.gz)</li>
+<li><code>i686-pc-windows-msvc.zip</code> for i686 Windows (zip)</li>
+<li><code>i686-pc-windows-msvc.tar.gz</code> for i686 Windows (tar.gz)</li>
 </ul>
 <p>For convenience, the following shortcuts are defined:</p>
 <ul>
@@ -335,6 +339,8 @@ $tmp | Remove-Item
 <li><code>mac</code> points to <code>universal-apple-darwin.tar.gz</code></li>
 <li><code>windows</code> points to <code>x86_64-pc-windows-msvc.zip</code></li>
 <li><code>windows-tar</code> points to <code>x86_64-pc-windows-msvc.tar.gz</code></li>
+<li><code>windows-x86</code> points to <code>i686-pc-windows-msvc.zip</code></li>
+<li><code>windows-x86-tar</code> points to <code>i686-pc-windows-msvc.tar.gz</code></li>
 </ul>
 <p>Also, each release's canonical GitHub Releases URL is available at <strong><code>https://get.nexte.st/{version}/release</code></strong>. For example, the latest GitHub release is avaiable at <a href="https://get.nexte.st/latest/release">get.nexte.st/latest/release</a>.</p>
 <h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
