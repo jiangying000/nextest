@@ -149,10 +149,6 @@
 <span id="144">144</span>
 <span id="145">145</span>
 <span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -166,6 +162,7 @@
     <span class="ident">PackageId</span>,
 };
 <span class="kw">use</span> <span class="ident">miette::SourceSpan</span>;
+<span class="kw">use</span> <span class="ident">recursion::Collapse</span>;
 <span class="kw">use</span> <span class="ident">std::collections::HashSet</span>;
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">compile</span>(
@@ -288,20 +285,15 @@
     <span class="ident">cache</span>: <span class="kw-2">&amp;mut</span> <span class="ident">DependsCache</span>,
     <span class="ident">errors</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ParseSingleError</span><span class="op">&gt;</span>,
 ) -&gt; <span class="ident">FilteringExpr</span> {
-    <span class="kw">match</span> <span class="ident">expr</span> {
-        <span class="ident">Expr::Set</span>(<span class="ident">set</span>) =&gt; <span class="ident">FilteringExpr::Set</span>(<span class="ident">compile_set_def</span>(<span class="ident">set</span>, <span class="ident">packages</span>, <span class="ident">cache</span>, <span class="ident">errors</span>)),
-        <span class="ident">Expr::Not</span>(<span class="ident">expr</span>) =&gt; {
-            <span class="ident">FilteringExpr::Not</span>(<span class="ident">Box::new</span>(<span class="ident">compile_expr</span>(<span class="ident">expr</span>, <span class="ident">packages</span>, <span class="ident">cache</span>, <span class="ident">errors</span>)))
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::expression::ExprLayer</span>::<span class="kw-2">*</span>;
+    <span class="ident">expr</span>.<span class="ident">collapse_layers</span>(<span class="op">|</span><span class="ident">layer</span>: <span class="ident">ExprLayer</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">SetDef</span>, <span class="ident">FilteringExpr</span><span class="op">&gt;</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">layer</span> {
+        <span class="ident">Set</span>(<span class="ident">set</span>) =&gt; <span class="ident">FilteringExpr::Set</span>(<span class="ident">compile_set_def</span>(<span class="ident">set</span>, <span class="ident">packages</span>, <span class="ident">cache</span>, <span class="ident">errors</span>)),
+        <span class="ident">Not</span>(<span class="ident">expr</span>) =&gt; <span class="ident">FilteringExpr::Not</span>(<span class="ident">Box::new</span>(<span class="ident">expr</span>)),
+        <span class="ident">Union</span>(<span class="ident">expr_1</span>, <span class="ident">expr_2</span>) =&gt; <span class="ident">FilteringExpr::Union</span>(<span class="ident">Box::new</span>(<span class="ident">expr_1</span>), <span class="ident">Box::new</span>(<span class="ident">expr_2</span>)),
+        <span class="ident">Intersection</span>(<span class="ident">expr_1</span>, <span class="ident">expr_2</span>) =&gt; {
+            <span class="ident">FilteringExpr::Intersection</span>(<span class="ident">Box::new</span>(<span class="ident">expr_1</span>), <span class="ident">Box::new</span>(<span class="ident">expr_2</span>))
         }
-        <span class="ident">Expr::Union</span>(<span class="ident">expr_1</span>, <span class="ident">expr_2</span>) =&gt; <span class="ident">FilteringExpr::Union</span>(
-            <span class="ident">Box::new</span>(<span class="ident">compile_expr</span>(<span class="ident">expr_1</span>, <span class="ident">packages</span>, <span class="ident">cache</span>, <span class="ident">errors</span>)),
-            <span class="ident">Box::new</span>(<span class="ident">compile_expr</span>(<span class="ident">expr_2</span>, <span class="ident">packages</span>, <span class="ident">cache</span>, <span class="ident">errors</span>)),
-        ),
-        <span class="ident">Expr::Intersection</span>(<span class="ident">expr_1</span>, <span class="ident">expr_2</span>) =&gt; <span class="ident">FilteringExpr::Intersection</span>(
-            <span class="ident">Box::new</span>(<span class="ident">compile_expr</span>(<span class="ident">expr_1</span>, <span class="ident">packages</span>, <span class="ident">cache</span>, <span class="ident">errors</span>)),
-            <span class="ident">Box::new</span>(<span class="ident">compile_expr</span>(<span class="ident">expr_2</span>, <span class="ident">packages</span>, <span class="ident">cache</span>, <span class="ident">errors</span>)),
-        ),
-    }
+    })
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="nextest_filtering" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.1 (e092d0b6b 2022-07-16)" ></div>

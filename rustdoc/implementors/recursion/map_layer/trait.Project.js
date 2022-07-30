@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["nextest_filtering"] = [{"text":"impl&lt;'a&gt; <a class=\"trait\" href=\"recursion/map_layer/trait.Project.html\" title=\"trait recursion::map_layer::Project\">Project</a> for &amp;'a <a class=\"enum\" href=\"nextest_filtering/enum.FilteringExpr.html\" title=\"enum nextest_filtering::FilteringExpr\">FilteringExpr</a>","synthetic":false,"types":["nextest_filtering::expression::FilteringExpr"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["ArenaIndex","Used to mark structures stored in an ‘RecursiveTree<Layer, ArenaIndex>’"]]});

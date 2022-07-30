@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["StackMarker","Used to mark structures that are expanded via depth first traversal and consumed via stack machine This is a zero-size marker type and has the lowest memory cost (lower than boxed pointers) at the cost of a slightly slower ‘Collapse::collapse_layers’ fn speed"]]});
