@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.17.0/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.16.2/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../indicatif/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -226,27 +226,6 @@
 <span id="221">221</span>
 <span id="222">222</span>
 <span id="223">223</span>
-<span id="224">224</span>
-<span id="225">225</span>
-<span id="226">226</span>
-<span id="227">227</span>
-<span id="228">228</span>
-<span id="229">229</span>
-<span id="230">230</span>
-<span id="231">231</span>
-<span id="232">232</span>
-<span id="233">233</span>
-<span id="234">234</span>
-<span id="235">235</span>
-<span id="236">236</span>
-<span id="237">237</span>
-<span id="238">238</span>
-<span id="239">239</span>
-<span id="240">240</span>
-<span id="241">241</span>
-<span id="242">242</span>
-<span id="243">243</span>
-<span id="244">244</span>
 </pre><pre class="rust"><code><span class="doccomment">//! indicatif is a library for Rust that helps you build command line</span>
 <span class="doccomment">//! interfaces that report progress to users.  It comes with various</span>
 <span class="doccomment">//! tools and utilities for formatting anything that indicates progress.</span>
@@ -272,7 +251,6 @@
 <span class="doccomment">//!   * [`DecimalBytes`](struct.DecimalBytes.html) for formatting bytes using SI prefixes</span>
 <span class="doccomment">//!   * [`BinaryBytes`](struct.BinaryBytes.html) for formatting bytes using ISO/IEC prefixes</span>
 <span class="doccomment">//!   * [`HumanDuration`](struct.HumanDuration.html) for formatting durations</span>
-<span class="doccomment">//!   * [`HumanCount`](struct.HumanCount.html) for formatting large counts</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Progress Bars and Spinners</span>
 <span class="doccomment">//!</span>
@@ -286,7 +264,7 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! To whet your appetite, this is what this can look like:</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! &lt;img src=&quot;https://github.com/console-rs/indicatif/raw/main/screenshots/yarn.gif?raw=true&quot; width=&quot;60%&quot;&gt;</span>
+<span class="doccomment">//! &lt;img src=&quot;https://github.com/mitsuhiko/indicatif/raw/main/screenshots/yarn.gif?raw=true&quot; width=&quot;60%&quot;&gt;</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Progress bars are manually advanced and by default draw to stderr.</span>
 <span class="doccomment">//! When you are done, the progress bar can be finished either visibly</span>
@@ -357,13 +335,13 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ```rust,ignore</span>
 <span class="doccomment">//! # extern crate rayon;</span>
-<span class="doccomment">//! use indicatif::{ProgressBar, ParallelProgressIterator, ProgressStyle};</span>
+<span class="doccomment">//! use indicatif::{ProgressBar, ParallelProgressIterator};</span>
 <span class="doccomment">//! use rayon::iter::{ParallelIterator, IntoParallelRefIterator};</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! // Alternatively, use `ProgressBar::new().with_style()`</span>
-<span class="doccomment">//! let style = ProgressStyle::default_bar();</span>
+<span class="doccomment">//! // Use `ProgressBar::with_style` to change the view</span>
+<span class="doccomment">//! let pb = ProgressBar::new();</span>
 <span class="doccomment">//! let v: Vec&lt;_&gt; = (0..100000).collect();</span>
-<span class="doccomment">//! let v2: Vec&lt;_&gt; = v.par_iter().progress_with_style(style).map(|i| i + 1).collect();</span>
+<span class="doccomment">//! let v2: Vec&lt;_&gt; = v.par_iter().progress_with(pb).map(|i| i + 1).collect();</span>
 <span class="doccomment">//! assert_eq!(v2[0], 1);</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
@@ -400,8 +378,8 @@
 <span class="doccomment">//! ```rust</span>
 <span class="doccomment">//! # use indicatif::{ProgressBar, ProgressStyle};</span>
 <span class="doccomment">//! # let bar = ProgressBar::new(0);</span>
-<span class="doccomment">//! bar.set_style(ProgressStyle::with_template(&quot;[{elapsed_precise}] {bar:40.cyan/blue} {pos:&gt;7}/{len:7} {msg}&quot;)</span>
-<span class="doccomment">//!     .unwrap()</span>
+<span class="doccomment">//! bar.set_style(ProgressStyle::default_bar()</span>
+<span class="doccomment">//!     .template(&quot;[{elapsed_precise}] {bar:40.cyan/blue} {pos:&gt;7}/{len:7} {msg}&quot;)</span>
 <span class="doccomment">//!     .progress_chars(&quot;##-&quot;));</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
@@ -410,19 +388,13 @@
 <span class="doccomment">//! * `bar`: renders a progress bar. By default 20 characters wide.  The</span>
 <span class="doccomment">//!   style string is used to color the elapsed part, the alternative</span>
 <span class="doccomment">//!   style is used for the bar that is yet to render.</span>
-<span class="doccomment">//! * `wide_bar`: like `bar` but always fills the remaining space. It should not be used with</span>
-<span class="doccomment">//! `wide_msg`.</span>
+<span class="doccomment">//! * `wide_bar`: like `bar` but always fills the remaining space.</span>
 <span class="doccomment">//! * `spinner`: renders the spinner (current tick string).</span>
 <span class="doccomment">//! * `prefix`: renders the prefix set on the progress bar.</span>
 <span class="doccomment">//! * `msg`: renders the currently set message on the progress bar.</span>
-<span class="doccomment">//! * `wide_msg`: like `msg` but always fills the remaining space and truncates. It should not be used</span>
-<span class="doccomment">//! with `wide_bar`.</span>
+<span class="doccomment">//! * `wide_msg`: like `msg` but always fills the remaining space and truncates.</span>
 <span class="doccomment">//! * `pos`: renders the current position of the bar as integer</span>
-<span class="doccomment">//! * `human_pos`: renders the current position of the bar as an integer, with commas as the</span>
-<span class="doccomment">//! thousands separator.</span>
-<span class="doccomment">//! * `len`: renders the amount of work to be done as an integer</span>
-<span class="doccomment">//! * `human_len`: renders the total length of the bar as an integer, with commas as the thousands</span>
-<span class="doccomment">//! separator.</span>
+<span class="doccomment">//! * `len`: renders the total length of the bar as integer</span>
 <span class="doccomment">//! * `bytes`: renders the current position of the bar as bytes.</span>
 <span class="doccomment">//! * `percent`: renders the current position of the bar as a percentage of the total length.</span>
 <span class="doccomment">//! * `total_bytes`: renders the total length of the bar as bytes.</span>
@@ -449,11 +421,10 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ```rust</span>
 <span class="doccomment">//! # use std::time::Duration;</span>
-<span class="doccomment">//! use indicatif::{HumanBytes, HumanCount, HumanDuration};</span>
+<span class="doccomment">//! use indicatif::{HumanDuration, HumanBytes};</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! assert_eq!(&quot;3.00 MiB&quot;, HumanBytes(3*1024*1024).to_string());</span>
+<span class="doccomment">//! assert_eq!(&quot;3.00MiB&quot;, HumanBytes(3*1024*1024).to_string());</span>
 <span class="doccomment">//! assert_eq!(&quot;8 seconds&quot;, HumanDuration(Duration::from_secs(8)).to_string());</span>
-<span class="doccomment">//! assert_eq!(&quot;33,857,009&quot;, HumanCount(33857009).to_string());</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Feature Flags</span>
@@ -461,36 +432,23 @@
 <span class="doccomment">//! * `rayon`: adds rayon support</span>
 <span class="doccomment">//! * `improved_unicode`: adds improved unicode support (graphemes, better width calculation)</span>
 
-<span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">feature</span>(<span class="ident">doc_cfg</span>))]</span>
-<span class="attribute">#![<span class="ident">warn</span>(<span class="ident">unreachable_pub</span>)]</span>
-
-<span class="kw">mod</span> <span class="ident">draw_target</span>;
 <span class="kw">mod</span> <span class="ident">format</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;in_memory&quot;</span>)]</span>
-<span class="kw">mod</span> <span class="ident">in_memory</span>;
 <span class="kw">mod</span> <span class="ident">iter</span>;
-<span class="kw">mod</span> <span class="ident">multi</span>;
 <span class="kw">mod</span> <span class="ident">progress_bar</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rayon&quot;</span>)]</span>
 <span class="kw">mod</span> <span class="ident">rayon</span>;
 <span class="kw">mod</span> <span class="ident">state</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">style</span>;
-<span class="kw">mod</span> <span class="ident">term_like</span>;
+<span class="kw">mod</span> <span class="ident">style</span>;
+<span class="kw">mod</span> <span class="ident">utils</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::draw_target::ProgressDrawTarget</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::format</span>::{
-    <span class="ident">BinaryBytes</span>, <span class="ident">DecimalBytes</span>, <span class="ident">FormattedDuration</span>, <span class="ident">HumanBytes</span>, <span class="ident">HumanCount</span>, <span class="ident">HumanDuration</span>,
-};
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;in_memory&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::in_memory::InMemoryTerm</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::format</span>::{<span class="ident">BinaryBytes</span>, <span class="ident">DecimalBytes</span>, <span class="ident">FormattedDuration</span>, <span class="ident">HumanBytes</span>, <span class="ident">HumanDuration</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::iter</span>::{<span class="ident">ProgressBarIter</span>, <span class="ident">ProgressIterator</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::multi</span>::{<span class="ident">MultiProgress</span>, <span class="ident">MultiProgressAlignment</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::progress_bar</span>::{<span class="ident">ProgressBar</span>, <span class="ident">WeakProgressBar</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::progress_bar</span>::{<span class="ident">MultiProgress</span>, <span class="ident">ProgressBar</span>, <span class="ident">WeakProgressBar</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::state::ProgressDrawTarget</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::style</span>::{<span class="ident">ProgressFinish</span>, <span class="ident">ProgressStyle</span>};
+
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rayon&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::rayon::ParallelProgressIterator</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::state</span>::{<span class="ident">ProgressFinish</span>, <span class="ident">ProgressState</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::style::ProgressStyle</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::term_like::TermLike</span>;
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="indicatif" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.1 (e092d0b6b 2022-07-16)" ></div>
 </body></html>

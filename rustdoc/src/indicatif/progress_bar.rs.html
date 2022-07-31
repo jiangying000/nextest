@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.17.0/src/progress_bar.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>progress_bar.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/indicatif-0.16.2/src/progress_bar.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>progress_bar.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../indicatif/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -777,20 +777,218 @@
 <span id="772">772</span>
 <span id="773">773</span>
 <span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
+<span id="781">781</span>
+<span id="782">782</span>
+<span id="783">783</span>
+<span id="784">784</span>
+<span id="785">785</span>
+<span id="786">786</span>
+<span id="787">787</span>
+<span id="788">788</span>
+<span id="789">789</span>
+<span id="790">790</span>
+<span id="791">791</span>
+<span id="792">792</span>
+<span id="793">793</span>
+<span id="794">794</span>
+<span id="795">795</span>
+<span id="796">796</span>
+<span id="797">797</span>
+<span id="798">798</span>
+<span id="799">799</span>
+<span id="800">800</span>
+<span id="801">801</span>
+<span id="802">802</span>
+<span id="803">803</span>
+<span id="804">804</span>
+<span id="805">805</span>
+<span id="806">806</span>
+<span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
+<span id="818">818</span>
+<span id="819">819</span>
+<span id="820">820</span>
+<span id="821">821</span>
+<span id="822">822</span>
+<span id="823">823</span>
+<span id="824">824</span>
+<span id="825">825</span>
+<span id="826">826</span>
+<span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
+<span id="830">830</span>
+<span id="831">831</span>
+<span id="832">832</span>
+<span id="833">833</span>
+<span id="834">834</span>
+<span id="835">835</span>
+<span id="836">836</span>
+<span id="837">837</span>
+<span id="838">838</span>
+<span id="839">839</span>
+<span id="840">840</span>
+<span id="841">841</span>
+<span id="842">842</span>
+<span id="843">843</span>
+<span id="844">844</span>
+<span id="845">845</span>
+<span id="846">846</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+<span id="852">852</span>
+<span id="853">853</span>
+<span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
+<span id="862">862</span>
+<span id="863">863</span>
+<span id="864">864</span>
+<span id="865">865</span>
+<span id="866">866</span>
+<span id="867">867</span>
+<span id="868">868</span>
+<span id="869">869</span>
+<span id="870">870</span>
+<span id="871">871</span>
+<span id="872">872</span>
+<span id="873">873</span>
+<span id="874">874</span>
+<span id="875">875</span>
+<span id="876">876</span>
+<span id="877">877</span>
+<span id="878">878</span>
+<span id="879">879</span>
+<span id="880">880</span>
+<span id="881">881</span>
+<span id="882">882</span>
+<span id="883">883</span>
+<span id="884">884</span>
+<span id="885">885</span>
+<span id="886">886</span>
+<span id="887">887</span>
+<span id="888">888</span>
+<span id="889">889</span>
+<span id="890">890</span>
+<span id="891">891</span>
+<span id="892">892</span>
+<span id="893">893</span>
+<span id="894">894</span>
+<span id="895">895</span>
+<span id="896">896</span>
+<span id="897">897</span>
+<span id="898">898</span>
+<span id="899">899</span>
+<span id="900">900</span>
+<span id="901">901</span>
+<span id="902">902</span>
+<span id="903">903</span>
+<span id="904">904</span>
+<span id="905">905</span>
+<span id="906">906</span>
+<span id="907">907</span>
+<span id="908">908</span>
+<span id="909">909</span>
+<span id="910">910</span>
+<span id="911">911</span>
+<span id="912">912</span>
+<span id="913">913</span>
+<span id="914">914</span>
+<span id="915">915</span>
+<span id="916">916</span>
+<span id="917">917</span>
+<span id="918">918</span>
+<span id="919">919</span>
+<span id="920">920</span>
+<span id="921">921</span>
+<span id="922">922</span>
+<span id="923">923</span>
+<span id="924">924</span>
+<span id="925">925</span>
+<span id="926">926</span>
+<span id="927">927</span>
+<span id="928">928</span>
+<span id="929">929</span>
+<span id="930">930</span>
+<span id="931">931</span>
+<span id="932">932</span>
+<span id="933">933</span>
+<span id="934">934</span>
+<span id="935">935</span>
+<span id="936">936</span>
+<span id="937">937</span>
+<span id="938">938</span>
+<span id="939">939</span>
+<span id="940">940</span>
+<span id="941">941</span>
+<span id="942">942</span>
+<span id="943">943</span>
+<span id="944">944</span>
+<span id="945">945</span>
+<span id="946">946</span>
+<span id="947">947</span>
+<span id="948">948</span>
+<span id="949">949</span>
+<span id="950">950</span>
+<span id="951">951</span>
+<span id="952">952</span>
+<span id="953">953</span>
+<span id="954">954</span>
+<span id="955">955</span>
+<span id="956">956</span>
+<span id="957">957</span>
+<span id="958">958</span>
+<span id="959">959</span>
+<span id="960">960</span>
+<span id="961">961</span>
+<span id="962">962</span>
+<span id="963">963</span>
+<span id="964">964</span>
+<span id="965">965</span>
+<span id="966">966</span>
+<span id="967">967</span>
+<span id="968">968</span>
+<span id="969">969</span>
+<span id="970">970</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">use</span> <span class="ident">std::fmt</span>;
+<span class="kw">use</span> <span class="ident">std::io</span>;
 <span class="kw">use</span> <span class="ident">std::sync::atomic</span>::{<span class="ident">AtomicBool</span>, <span class="ident">Ordering</span>};
-<span class="kw">use</span> <span class="ident">std::sync</span>::{<span class="ident">Arc</span>, <span class="ident">Condvar</span>, <span class="ident">Mutex</span>, <span class="ident">MutexGuard</span>, <span class="ident">Weak</span>};
+<span class="kw">use</span> <span class="ident">std::sync::mpsc</span>::{<span class="ident">channel</span>, <span class="ident">Receiver</span>, <span class="ident">Sender</span>};
+<span class="kw">use</span> <span class="ident">std::sync</span>::{<span class="ident">Arc</span>, <span class="ident">Mutex</span>, <span class="ident">RwLock</span>, <span class="ident">Weak</span>};
+<span class="kw">use</span> <span class="ident">std::thread</span>;
 <span class="kw">use</span> <span class="ident">std::time</span>::{<span class="ident">Duration</span>, <span class="ident">Instant</span>};
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">fmt</span>, <span class="ident">io</span>, <span class="ident">thread</span>};
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">use</span> <span class="ident">once_cell::sync::Lazy</span>;
-
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::draw_target::ProgressDrawTarget</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::state</span>::{<span class="ident">AtomicPosition</span>, <span class="ident">BarState</span>, <span class="ident">ProgressFinish</span>, <span class="ident">Reset</span>, <span class="ident">TabExpandedString</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::state</span>::{
+    <span class="ident">MultiObject</span>, <span class="ident">MultiProgressState</span>, <span class="ident">ProgressDrawState</span>, <span class="ident">ProgressDrawTarget</span>, <span class="ident">ProgressDrawTargetKind</span>,
+    <span class="ident">ProgressState</span>, <span class="ident">Status</span>,
+};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::style::ProgressStyle</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">ProgressBarIter</span>, <span class="ident">ProgressIterator</span>, <span class="ident">ProgressState</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::utils::Estimate</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">ProgressBarIter</span>, <span class="ident">ProgressIterator</span>};
 
 <span class="doccomment">/// A progress bar or spinner</span>
 <span class="doccomment">///</span>
@@ -798,9 +996,7 @@
 <span class="doccomment">/// just increments the refcount (so the original and its clone share the same state).</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ProgressBar</span> {
-    <span class="ident">state</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">BarState</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">pos</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">AtomicPosition</span><span class="op">&gt;</span>,
-    <span class="ident">ticker</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Ticker</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">state</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">ProgressState</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">fmt::Debug</span> <span class="kw">for</span> <span class="ident">ProgressBar</span> {
@@ -816,7 +1012,7 @@
     <span class="doccomment">/// a second. To change the refresh rate, set the draw target to one with a different refresh</span>
     <span class="doccomment">/// rate.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">len</span>: <span class="ident">u64</span>) -&gt; <span class="ident">ProgressBar</span> {
-        <span class="ident">ProgressBar::with_draw_target</span>(<span class="prelude-val">Some</span>(<span class="ident">len</span>), <span class="ident">ProgressDrawTarget::stderr</span>())
+        <span class="ident">ProgressBar::with_draw_target</span>(<span class="ident">len</span>, <span class="ident">ProgressDrawTarget::stderr</span>())
     }
 
     <span class="doccomment">/// Creates a completely hidden progress bar</span>
@@ -824,77 +1020,53 @@
     <span class="doccomment">/// This progress bar still responds to API changes but it does not have a length or render in</span>
     <span class="doccomment">/// any way.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hidden</span>() -&gt; <span class="ident">ProgressBar</span> {
-        <span class="ident">ProgressBar::with_draw_target</span>(<span class="prelude-val">None</span>, <span class="ident">ProgressDrawTarget::hidden</span>())
+        <span class="ident">ProgressBar::with_draw_target</span>(<span class="op">!</span><span class="number">0</span>, <span class="ident">ProgressDrawTarget::hidden</span>())
     }
 
     <span class="doccomment">/// Creates a new progress bar with a given length and draw target</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_draw_target</span>(<span class="ident">len</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>, <span class="ident">draw_target</span>: <span class="ident">ProgressDrawTarget</span>) -&gt; <span class="ident">ProgressBar</span> {
-        <span class="kw">let</span> <span class="ident">pos</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="ident">AtomicPosition::new</span>());
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_draw_target</span>(<span class="ident">len</span>: <span class="ident">u64</span>, <span class="ident">target</span>: <span class="ident">ProgressDrawTarget</span>) -&gt; <span class="ident">ProgressBar</span> {
         <span class="ident">ProgressBar</span> {
-            <span class="ident">state</span>: <span class="ident">Arc::new</span>(<span class="ident">Mutex::new</span>(<span class="ident">BarState::new</span>(<span class="ident">len</span>, <span class="ident">draw_target</span>, <span class="ident">pos</span>.<span class="ident">clone</span>()))),
-            <span class="ident">pos</span>,
-            <span class="ident">ticker</span>: <span class="ident">Arc::new</span>(<span class="ident">Mutex::new</span>(<span class="prelude-val">None</span>)),
+            <span class="ident">state</span>: <span class="ident">Arc::new</span>(<span class="ident">Mutex::new</span>(<span class="ident">ProgressState</span> {
+                <span class="ident">style</span>: <span class="ident">ProgressStyle::default_bar</span>(),
+                <span class="ident">draw_target</span>: <span class="ident">target</span>,
+                <span class="ident">message</span>: <span class="string">&quot;&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">prefix</span>: <span class="string">&quot;&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">pos</span>: <span class="number">0</span>,
+                <span class="ident">len</span>,
+                <span class="ident">tick</span>: <span class="number">0</span>,
+                <span class="ident">draw_delta</span>: <span class="number">0</span>,
+                <span class="ident">draw_rate</span>: <span class="number">0</span>,
+                <span class="ident">draw_next</span>: <span class="number">0</span>,
+                <span class="ident">status</span>: <span class="ident">Status::InProgress</span>,
+                <span class="ident">started</span>: <span class="ident">Instant::now</span>(),
+                <span class="ident">est</span>: <span class="ident">Estimate::new</span>(),
+                <span class="ident">tick_thread</span>: <span class="prelude-val">None</span>,
+                <span class="ident">steady_tick</span>: <span class="number">0</span>,
+            })),
         }
-    }
-
-    <span class="doccomment">/// Get a clone of the current progress bar style.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">style</span>(<span class="self">self</span>) -&gt; <span class="ident">ProgressStyle</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">style</span>.<span class="ident">clone</span>()
     }
 
     <span class="doccomment">/// A convenience builder-like function for a progress bar with a given style</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_style</span>(<span class="self">self</span>, <span class="ident">style</span>: <span class="ident">ProgressStyle</span>) -&gt; <span class="ident">ProgressBar</span> {
-        <span class="self">self</span>.<span class="ident">set_style</span>(<span class="ident">style</span>);
-        <span class="self">self</span>
-    }
-
-    <span class="doccomment">/// A convenience builder-like function for a progress bar with a given tab width</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_tab_width</span>(<span class="self">self</span>, <span class="ident">tab_width</span>: <span class="ident">usize</span>) -&gt; <span class="ident">ProgressBar</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">set_tab_width</span>(<span class="ident">tab_width</span>);
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">style</span> <span class="op">=</span> <span class="ident">style</span>;
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// A convenience builder-like function for a progress bar with a given prefix</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_prefix</span>(<span class="self">self</span>, <span class="ident">prefix</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="ident">ProgressBar</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>();
-        <span class="ident">state</span>.<span class="ident">state</span>.<span class="ident">prefix</span> <span class="op">=</span> <span class="ident">TabExpandedString::new</span>(<span class="ident">prefix</span>.<span class="ident">into</span>(), <span class="ident">state</span>.<span class="ident">tab_width</span>);
-        <span class="ident">drop</span>(<span class="ident">state</span>);
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">prefix</span> <span class="op">=</span> <span class="ident">prefix</span>.<span class="ident">into</span>();
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// A convenience builder-like function for a progress bar with a given message</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_message</span>(<span class="self">self</span>, <span class="ident">message</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="ident">ProgressBar</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>();
-        <span class="ident">state</span>.<span class="ident">state</span>.<span class="ident">message</span> <span class="op">=</span> <span class="ident">TabExpandedString::new</span>(<span class="ident">message</span>.<span class="ident">into</span>(), <span class="ident">state</span>.<span class="ident">tab_width</span>);
-        <span class="ident">drop</span>(<span class="ident">state</span>);
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">message</span> <span class="op">=</span> <span class="ident">message</span>.<span class="ident">into</span>();
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// A convenience builder-like function for a progress bar with a given position</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_position</span>(<span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">u64</span>) -&gt; <span class="ident">ProgressBar</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">state</span>.<span class="ident">set_pos</span>(<span class="ident">pos</span>);
-        <span class="self">self</span>
-    }
-
-    <span class="doccomment">/// A convenience builder-like function for a progress bar with a given elapsed time</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_elapsed</span>(<span class="self">self</span>, <span class="ident">elapsed</span>: <span class="ident">Duration</span>) -&gt; <span class="ident">ProgressBar</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">state</span>.<span class="ident">started</span> <span class="op">=</span> <span class="ident">Instant::now</span>() <span class="op">-</span> <span class="ident">elapsed</span>;
-        <span class="self">self</span>
-    }
-
-    <span class="doccomment">/// Sets the finish behavior for the progress bar</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This behavior is invoked when [`ProgressBar`] or</span>
-    <span class="doccomment">/// [`ProgressBarIter`] completes and</span>
-    <span class="doccomment">/// [`ProgressBar::is_finished()`] is false.</span>
-    <span class="doccomment">/// If you don&#39;t want the progress bar to be automatically finished then</span>
-    <span class="doccomment">/// call `on_finish(None)`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// [`ProgressBar`]: crate::ProgressBar</span>
-    <span class="doccomment">/// [`ProgressBarIter`]: crate::ProgressBarIter</span>
-    <span class="doccomment">/// [`ProgressBar::is_finished()`]: crate::ProgressBar::is_finished</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_finish</span>(<span class="self">self</span>, <span class="ident">finish</span>: <span class="ident">ProgressFinish</span>) -&gt; <span class="ident">ProgressBar</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">on_finish</span> <span class="op">=</span> <span class="ident">finish</span>;
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">pos</span> <span class="op">=</span> <span class="ident">pos</span>;
         <span class="self">self</span>
     }
 
@@ -902,7 +1074,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This spinner by default draws directly to stderr. This adds the default spinner style to it.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_spinner</span>() -&gt; <span class="ident">ProgressBar</span> {
-        <span class="kw">let</span> <span class="ident">rv</span> <span class="op">=</span> <span class="ident">ProgressBar::with_draw_target</span>(<span class="prelude-val">None</span>, <span class="ident">ProgressDrawTarget::stderr</span>());
+        <span class="kw">let</span> <span class="ident">rv</span> <span class="op">=</span> <span class="ident">ProgressBar::new</span>(<span class="op">!</span><span class="number">0</span>);
         <span class="ident">rv</span>.<span class="ident">set_style</span>(<span class="ident">ProgressStyle::default_spinner</span>());
         <span class="ident">rv</span>
     }
@@ -911,127 +1083,187 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This does not redraw the bar. Call [`ProgressBar::tick()`] to force it.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_style</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">style</span>: <span class="ident">ProgressStyle</span>) {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">set_style</span>(<span class="ident">style</span>);
-    }
-
-    <span class="doccomment">/// Sets the tab width (default: 8). All tabs will be expanded to this many spaces.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_tab_width</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">tab_width</span>: <span class="ident">usize</span>) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>();
-        <span class="ident">state</span>.<span class="ident">set_tab_width</span>(<span class="ident">tab_width</span>);
-        <span class="ident">state</span>.<span class="ident">draw</span>(<span class="bool-val">true</span>, <span class="ident">Instant::now</span>()).<span class="ident">unwrap</span>();
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">style</span> <span class="op">=</span> <span class="ident">style</span>;
     }
 
     <span class="doccomment">/// Spawns a background thread to tick the progress bar</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// When this is enabled a background thread will regularly tick the progress bar in the given</span>
-    <span class="doccomment">/// interval. This is useful to advance progress bars that are very slow by themselves.</span>
+    <span class="doccomment">/// interval (in milliseconds). This is useful to advance progress bars that are very slow by</span>
+    <span class="doccomment">/// themselves.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// When steady ticks are enabled, calling [`ProgressBar::tick()`] on a progress bar does not</span>
     <span class="doccomment">/// have any effect.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enable_steady_tick</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">interval</span>: <span class="ident">Duration</span>) {
-        <span class="comment">// The way we test for ticker termination is with a single static `AtomicBool`. Since cargo</span>
-        <span class="comment">// runs tests concurrently, we have a `TICKER_TEST` lock to make sure tests using ticker</span>
-        <span class="comment">// don&#39;t step on each other. This check catches attempts to use tickers in tests without</span>
-        <span class="comment">// acquiring the lock.</span>
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-        {
-            <span class="kw">let</span> <span class="ident">guard</span> <span class="op">=</span> <span class="ident">TICKER_TEST</span>.<span class="ident">try_lock</span>();
-            <span class="kw">let</span> <span class="ident">lock_acquired</span> <span class="op">=</span> <span class="ident">guard</span>.<span class="ident">is_ok</span>();
-            <span class="comment">// Drop the guard before panicking to avoid poisoning the lock (which would cause other</span>
-            <span class="comment">// ticker tests to fail)</span>
-            <span class="ident">drop</span>(<span class="ident">guard</span>);
-            <span class="kw">if</span> <span class="ident">lock_acquired</span> {
-                <span class="macro">panic!</span>(<span class="string">&quot;you must acquire the TICKER_TEST lock in your test to use this method&quot;</span>);
-            }
-        }
-
-        <span class="kw">if</span> <span class="ident">interval</span>.<span class="ident">is_zero</span>() {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enable_steady_tick</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ms</span>: <span class="ident">u64</span>) {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
+        <span class="ident">state</span>.<span class="ident">steady_tick</span> <span class="op">=</span> <span class="ident">ms</span>;
+        <span class="kw">if</span> <span class="ident">state</span>.<span class="ident">tick_thread</span>.<span class="ident">is_some</span>() {
             <span class="kw">return</span>;
         }
 
-        <span class="self">self</span>.<span class="ident">stop_and_replace_ticker</span>(<span class="prelude-val">Some</span>(<span class="ident">interval</span>));
+        <span class="comment">// Using a weak pointer is required to prevent a potential deadlock. See issue #133</span>
+        <span class="kw">let</span> <span class="ident">state_arc</span> <span class="op">=</span> <span class="ident">Arc::downgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>);
+        <span class="ident">state</span>.<span class="ident">tick_thread</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">thread::spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident"><span class="self">Self</span>::steady_tick</span>(<span class="ident">state_arc</span>, <span class="ident">ms</span>)));
+
+        <span class="ident">::std::mem::drop</span>(<span class="ident">state</span>);
+        <span class="comment">// use the side effect of tick to force the bar to tick.</span>
+        <span class="self">self</span>.<span class="ident">tick</span>();
+    }
+
+    <span class="kw">fn</span> <span class="ident">steady_tick</span>(<span class="ident">state_arc</span>: <span class="ident">Weak</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">ProgressState</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="kw-2">mut</span> <span class="ident">ms</span>: <span class="ident">u64</span>) {
+        <span class="kw">loop</span> {
+            <span class="ident">thread::sleep</span>(<span class="ident">Duration::from_millis</span>(<span class="ident">ms</span>));
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">state_arc</span>) <span class="op">=</span> <span class="ident">state_arc</span>.<span class="ident">upgrade</span>() {
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">state_arc</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
+                <span class="kw">if</span> <span class="ident">state</span>.<span class="ident">is_finished</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">state</span>.<span class="ident">steady_tick</span> <span class="op">==</span> <span class="number">0</span> {
+                    <span class="ident">state</span>.<span class="ident">steady_tick</span> <span class="op">=</span> <span class="number">0</span>;
+                    <span class="ident">state</span>.<span class="ident">tick_thread</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+                    <span class="kw">break</span>;
+                }
+                <span class="kw">if</span> <span class="ident">state</span>.<span class="ident">tick</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
+                    <span class="ident">state</span>.<span class="ident">tick</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">tick</span>.<span class="ident">saturating_add</span>(<span class="number">1</span>);
+                }
+                <span class="ident">ms</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">steady_tick</span>;
+
+                <span class="ident">state</span>.<span class="ident">draw</span>().<span class="ident">ok</span>();
+            } <span class="kw">else</span> {
+                <span class="kw">break</span>;
+            }
+        }
     }
 
     <span class="doccomment">/// Undoes [`ProgressBar::enable_steady_tick()`]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">disable_steady_tick</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">stop_and_replace_ticker</span>(<span class="prelude-val">None</span>);
+        <span class="self">self</span>.<span class="ident">enable_steady_tick</span>(<span class="number">0</span>);
     }
 
-    <span class="kw">fn</span> <span class="ident">stop_and_replace_ticker</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">interval</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ticker_state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ticker</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ticker</span>) <span class="op">=</span> <span class="ident">ticker_state</span>.<span class="ident">take</span>() {
-            <span class="ident">ticker</span>.<span class="ident">stop</span>();
-        }
+    <span class="doccomment">/// Limit redrawing of progress bar to every `n` steps</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// By default, the progress bar will redraw whenever its state advances. This setting is</span>
+    <span class="doccomment">/// helpful in situations where the overhead of redrawing the progress bar dominates the</span>
+    <span class="doccomment">/// computation whose progress is being reported.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If `n` is greater than 0, operations that change the progress bar such as</span>
+    <span class="doccomment">/// [`ProgressBar::tick()`], [`ProgressBar::set_message()`] and [`ProgressBar::set_length()`]</span>
+    <span class="doccomment">/// will no longer cause the progress bar to be redrawn, and will only be shown once the</span>
+    <span class="doccomment">/// position advances by `n` steps.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust,no_run</span>
+    <span class="doccomment">/// # use indicatif::ProgressBar;</span>
+    <span class="doccomment">/// let n = 1_000_000;</span>
+    <span class="doccomment">/// let pb = ProgressBar::new(n);</span>
+    <span class="doccomment">/// pb.set_draw_delta(n / 100); // redraw every 1% of additional progress</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Note that `ProgressDrawTarget` may impose additional buffering of redraws.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_draw_delta</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">n</span>: <span class="ident">u64</span>) {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
+        <span class="ident">state</span>.<span class="ident">draw_delta</span> <span class="op">=</span> <span class="ident">n</span>;
+        <span class="ident">state</span>.<span class="ident">draw_next</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">pos</span>.<span class="ident">saturating_add</span>(<span class="ident">state</span>.<span class="ident">draw_delta</span>);
+    }
 
-        <span class="kw-2">*</span><span class="ident">ticker_state</span> <span class="op">=</span> <span class="ident">interval</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">interval</span><span class="op">|</span> <span class="ident">Ticker::new</span>(<span class="ident">interval</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>));
+    <span class="doccomment">/// Sets the refresh rate of progress bar to `n` updates per seconds</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is similar to `set_draw_delta` but automatically adapts to a constant refresh rate</span>
+    <span class="doccomment">/// regardless of how consistent the progress is.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This parameter takes precedence on `set_draw_delta` if different from 0.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust,no_run</span>
+    <span class="doccomment">/// # use indicatif::ProgressBar;</span>
+    <span class="doccomment">/// let n = 1_000_000;</span>
+    <span class="doccomment">/// let pb = ProgressBar::new(n);</span>
+    <span class="doccomment">/// pb.set_draw_rate(25); // aims at redrawing at most 25 times per seconds.</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Note that the [`ProgressDrawTarget`] may impose additional buffering of redraws.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_draw_rate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">n</span>: <span class="ident">u64</span>) {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
+        <span class="ident">state</span>.<span class="ident">draw_rate</span> <span class="op">=</span> <span class="ident">n</span>;
+        <span class="ident">state</span>.<span class="ident">draw_next</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">pos</span>.<span class="ident">saturating_add</span>(<span class="ident">state</span>.<span class="ident">per_sec</span>() <span class="op">/</span> <span class="ident">n</span>);
     }
 
     <span class="doccomment">/// Manually ticks the spinner or progress bar</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This automatically happens on any other change to a progress bar.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tick</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="comment">// Only tick if a `Ticker` isn&#39;t installed</span>
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">ticker</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">is_none</span>() {
-            <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">tick</span>(<span class="ident">Instant::now</span>())
-        }
+        <span class="self">self</span>.<span class="ident">update_and_draw</span>(<span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
+            <span class="kw">if</span> <span class="ident">state</span>.<span class="ident">steady_tick</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">state</span>.<span class="ident">tick</span> <span class="op">==</span> <span class="number">0</span> {
+                <span class="ident">state</span>.<span class="ident">tick</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">tick</span>.<span class="ident">saturating_add</span>(<span class="number">1</span>);
+            }
+        });
     }
 
     <span class="doccomment">/// Advances the position of the progress bar by `delta`</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">inc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">delta</span>: <span class="ident">u64</span>) {
-        <span class="self">self</span>.<span class="ident">pos</span>.<span class="ident">inc</span>(<span class="ident">delta</span>);
-        <span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">Instant::now</span>();
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">pos</span>.<span class="ident">allow</span>(<span class="ident">now</span>) {
-            <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">tick</span>(<span class="ident">now</span>);
-        }
+        <span class="self">self</span>.<span class="ident">update_and_draw</span>(<span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
+            <span class="ident">state</span>.<span class="ident">pos</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">pos</span>.<span class="ident">saturating_add</span>(<span class="ident">delta</span>);
+            <span class="kw">if</span> <span class="ident">state</span>.<span class="ident">steady_tick</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">state</span>.<span class="ident">tick</span> <span class="op">==</span> <span class="number">0</span> {
+                <span class="ident">state</span>.<span class="ident">tick</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">tick</span>.<span class="ident">saturating_add</span>(<span class="number">1</span>);
+            }
+        })
     }
 
     <span class="doccomment">/// A quick convenience check if the progress bar is hidden</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_hidden</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">draw_target</span>.<span class="ident">is_hidden</span>()
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">draw_target</span>.<span class="ident">is_hidden</span>()
     }
 
     <span class="doccomment">/// Indicates that the progress bar finished</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_finished</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">state</span>.<span class="ident">is_finished</span>()
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">is_finished</span>()
     }
 
     <span class="doccomment">/// Print a log line above the progress bar</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// If the progress bar is hidden (e.g. when standard output is not a terminal), `println()`</span>
-    <span class="doccomment">/// will not do anything. If you want to write to the standard output in such cases as well, use</span>
-    <span class="doccomment">/// [`suspend`] instead.</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// If the progress bar was added to a [`MultiProgress`], the log line will be</span>
     <span class="doccomment">/// printed above all other progress bars.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// [`suspend`]: ProgressBar::suspend</span>
-    <span class="doccomment">/// [`MultiProgress`]: crate::MultiProgress</span>
+    <span class="doccomment">/// Note that if the progress bar is hidden (which by default happens if the progress bar is</span>
+    <span class="doccomment">/// redirected into a file) `println()` will not do anything either.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">println</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">msg</span>: <span class="ident">I</span>) {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">println</span>(<span class="ident">Instant::now</span>(), <span class="ident">msg</span>.<span class="ident">as_ref</span>())
-    }
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
 
-    <span class="doccomment">/// Update the `ProgressBar`&#39;s inner [`ProgressState`]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="ident">ProgressState</span>)) {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">update</span>(<span class="ident">Instant::now</span>(), <span class="ident">f</span>)
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lines</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">msg</span>.<span class="ident">as_ref</span>().<span class="ident">lines</span>().<span class="ident">map</span>(<span class="ident">Into::into</span>).<span class="ident">collect</span>();
+        <span class="kw">let</span> <span class="ident">orphan_lines</span> <span class="op">=</span> <span class="ident">lines</span>.<span class="ident">len</span>();
+        <span class="kw">if</span> <span class="ident">state</span>.<span class="ident">should_render</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">state</span>.<span class="ident">draw_target</span>.<span class="ident">is_hidden</span>() {
+            <span class="ident">lines</span>.<span class="ident">extend</span>(<span class="ident">state</span>.<span class="ident">style</span>.<span class="ident">format_state</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">state</span>));
+        }
+
+        <span class="kw">let</span> <span class="ident">draw_state</span> <span class="op">=</span> <span class="ident">ProgressDrawState</span> {
+            <span class="ident">lines</span>,
+            <span class="ident">orphan_lines</span>,
+            <span class="ident">finished</span>: <span class="ident">state</span>.<span class="ident">is_finished</span>(),
+            <span class="ident">force_draw</span>: <span class="bool-val">true</span>,
+            <span class="ident">move_cursor</span>: <span class="bool-val">false</span>,
+        };
+
+        <span class="ident">state</span>.<span class="ident">draw_target</span>.<span class="ident">apply_draw_state</span>(<span class="ident">draw_state</span>).<span class="ident">ok</span>();
     }
 
     <span class="doccomment">/// Sets the position of the progress bar</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_position</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">u64</span>) {
-        <span class="self">self</span>.<span class="ident">pos</span>.<span class="ident">set</span>(<span class="ident">pos</span>);
-        <span class="kw">let</span> <span class="ident">now</span> <span class="op">=</span> <span class="ident">Instant::now</span>();
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">pos</span>.<span class="ident">allow</span>(<span class="ident">now</span>) {
-            <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">tick</span>(<span class="ident">now</span>);
-        }
+        <span class="self">self</span>.<span class="ident">update_and_draw</span>(<span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
+            <span class="ident">state</span>.<span class="ident">draw_next</span> <span class="op">=</span> <span class="ident">pos</span>;
+            <span class="ident">state</span>.<span class="ident">pos</span> <span class="op">=</span> <span class="ident">pos</span>;
+            <span class="kw">if</span> <span class="ident">state</span>.<span class="ident">steady_tick</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">state</span>.<span class="ident">tick</span> <span class="op">==</span> <span class="number">0</span> {
+                <span class="ident">state</span>.<span class="ident">tick</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">tick</span>.<span class="ident">saturating_add</span>(<span class="number">1</span>);
+            }
+        })
     }
 
     <span class="doccomment">/// Sets the length of the progress bar</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">len</span>: <span class="ident">u64</span>) {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">set_length</span>(<span class="ident">Instant::now</span>(), <span class="ident">len</span>)
+        <span class="self">self</span>.<span class="ident">update_and_draw</span>(<span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
+            <span class="ident">state</span>.<span class="ident">len</span> <span class="op">=</span> <span class="ident">len</span>;
+        })
     }
 
     <span class="doccomment">/// Increase the length of the progress bar</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">inc_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">delta</span>: <span class="ident">u64</span>) {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">inc_length</span>(<span class="ident">Instant::now</span>(), <span class="ident">delta</span>)
+        <span class="self">self</span>.<span class="ident">update_and_draw</span>(<span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
+            <span class="ident">state</span>.<span class="ident">len</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">len</span>.<span class="ident">saturating_add</span>(<span class="ident">delta</span>);
+        })
     }
 
     <span class="doccomment">/// Sets the current prefix of the progress bar</span>
@@ -1039,9 +1271,13 @@
     <span class="doccomment">/// For the prefix to be visible, the `{prefix}` placeholder must be present in the template</span>
     <span class="doccomment">/// (see [`ProgressStyle`]).</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_prefix</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">prefix</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>();
-        <span class="ident">state</span>.<span class="ident">state</span>.<span class="ident">prefix</span> <span class="op">=</span> <span class="ident">TabExpandedString::new</span>(<span class="ident">prefix</span>.<span class="ident">into</span>(), <span class="ident">state</span>.<span class="ident">tab_width</span>);
-        <span class="ident">state</span>.<span class="ident">update_estimate_and_draw</span>(<span class="ident">Instant::now</span>());
+        <span class="kw">let</span> <span class="ident">prefix</span> <span class="op">=</span> <span class="ident">prefix</span>.<span class="ident">into</span>();
+        <span class="self">self</span>.<span class="ident">update_and_draw</span>(<span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
+            <span class="ident">state</span>.<span class="ident">prefix</span> <span class="op">=</span> <span class="ident">prefix</span>;
+            <span class="kw">if</span> <span class="ident">state</span>.<span class="ident">steady_tick</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">state</span>.<span class="ident">tick</span> <span class="op">==</span> <span class="number">0</span> {
+                <span class="ident">state</span>.<span class="ident">tick</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">tick</span>.<span class="ident">saturating_add</span>(<span class="number">1</span>);
+            }
+        })
     }
 
     <span class="doccomment">/// Sets the current message of the progress bar</span>
@@ -1049,22 +1285,20 @@
     <span class="doccomment">/// For the message to be visible, the `{msg}` placeholder must be present in the template (see</span>
     <span class="doccomment">/// [`ProgressStyle`]).</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_message</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">msg</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>();
-        <span class="ident">state</span>.<span class="ident">state</span>.<span class="ident">message</span> <span class="op">=</span> <span class="ident">TabExpandedString::new</span>(<span class="ident">msg</span>.<span class="ident">into</span>(), <span class="ident">state</span>.<span class="ident">tab_width</span>);
-        <span class="ident">state</span>.<span class="ident">update_estimate_and_draw</span>(<span class="ident">Instant::now</span>());
+        <span class="kw">let</span> <span class="ident">msg</span> <span class="op">=</span> <span class="ident">msg</span>.<span class="ident">into</span>();
+        <span class="self">self</span>.<span class="ident">update_and_draw</span>(<span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
+            <span class="ident">state</span>.<span class="ident">message</span> <span class="op">=</span> <span class="ident">msg</span>;
+            <span class="kw">if</span> <span class="ident">state</span>.<span class="ident">steady_tick</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">state</span>.<span class="ident">tick</span> <span class="op">==</span> <span class="number">0</span> {
+                <span class="ident">state</span>.<span class="ident">tick</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">tick</span>.<span class="ident">saturating_add</span>(<span class="number">1</span>);
+            }
+        })
     }
 
     <span class="doccomment">/// Creates a new weak reference to this `ProgressBar`</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">downgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">WeakProgressBar</span> {
         <span class="ident">WeakProgressBar</span> {
             <span class="ident">state</span>: <span class="ident">Arc::downgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>),
-            <span class="ident">pos</span>: <span class="ident">Arc::downgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">pos</span>),
-            <span class="ident">ticker</span>: <span class="ident">Arc::downgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">ticker</span>),
         }
-    }
-
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">weak_bar_state</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Weak</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">BarState</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="ident">Arc::downgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>)
     }
 
     <span class="doccomment">/// Resets the ETA calculation</span>
@@ -1072,23 +1306,37 @@
     <span class="doccomment">/// This can be useful if the progress bars made a large jump or was paused for a prolonged</span>
     <span class="doccomment">/// time.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reset_eta</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">reset</span>(<span class="ident">Instant::now</span>(), <span class="ident">Reset::Eta</span>)
+        <span class="self">self</span>.<span class="ident">update_and_draw</span>(<span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
+            <span class="ident">state</span>.<span class="ident">est</span>.<span class="ident">reset</span>(<span class="ident">state</span>.<span class="ident">pos</span>);
+        });
     }
 
     <span class="doccomment">/// Resets elapsed time</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reset_elapsed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">reset</span>(<span class="ident">Instant::now</span>(), <span class="ident">Reset::Elapsed</span>)
+        <span class="self">self</span>.<span class="ident">update_and_draw</span>(<span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
+            <span class="ident">state</span>.<span class="ident">started</span> <span class="op">=</span> <span class="ident">Instant::now</span>();
+        });
     }
 
     <span class="doccomment">/// Resets all of the progress bar state</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reset</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">reset</span>(<span class="ident">Instant::now</span>(), <span class="ident">Reset::All</span>)
+        <span class="self">self</span>.<span class="ident">reset_eta</span>();
+        <span class="self">self</span>.<span class="ident">reset_elapsed</span>();
+        <span class="self">self</span>.<span class="ident">update_and_draw</span>(<span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
+            <span class="ident">state</span>.<span class="ident">draw_next</span> <span class="op">=</span> <span class="number">0</span>;
+            <span class="ident">state</span>.<span class="ident">pos</span> <span class="op">=</span> <span class="number">0</span>;
+            <span class="ident">state</span>.<span class="ident">status</span> <span class="op">=</span> <span class="ident">Status::InProgress</span>;
+        });
     }
 
     <span class="doccomment">/// Finishes the progress bar and leaves the current message</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">state</span>()
-            .<span class="ident">finish_using_style</span>(<span class="ident">Instant::now</span>(), <span class="ident">ProgressFinish::AndLeave</span>);
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">finish</span>();
+    }
+
+    <span class="doccomment">/// Finishes the progress bar at current position and leaves the current message</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish_at_current_pos</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">finish_at_current_pos</span>();
     }
 
     <span class="doccomment">/// Finishes the progress bar and sets a message</span>
@@ -1096,20 +1344,17 @@
     <span class="doccomment">/// For the message to be visible, the `{msg}` placeholder must be present in the template (see</span>
     <span class="doccomment">/// [`ProgressStyle`]).</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish_with_message</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">msg</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>) {
-        <span class="self">self</span>.<span class="ident">state</span>()
-            .<span class="ident">finish_using_style</span>(<span class="ident">Instant::now</span>(), <span class="ident">ProgressFinish::WithMessage</span>(<span class="ident">msg</span>.<span class="ident">into</span>()))
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">finish_with_message</span>(<span class="ident">msg</span>);
     }
 
     <span class="doccomment">/// Finishes the progress bar and completely clears it</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish_and_clear</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">state</span>()
-            .<span class="ident">finish_using_style</span>(<span class="ident">Instant::now</span>(), <span class="ident">ProgressFinish::AndClear</span>);
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">finish_and_clear</span>();
     }
 
     <span class="doccomment">/// Finishes the progress bar and leaves the current message and progress</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">abandon</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">state</span>()
-            .<span class="ident">finish_using_style</span>(<span class="ident">Instant::now</span>(), <span class="ident">ProgressFinish::Abandon</span>);
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">abandon</span>();
     }
 
     <span class="doccomment">/// Finishes the progress bar and sets a message, and leaves the current progress</span>
@@ -1117,19 +1362,14 @@
     <span class="doccomment">/// For the message to be visible, the `{msg}` placeholder must be present in the template (see</span>
     <span class="doccomment">/// [`ProgressStyle`]).</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">abandon_with_message</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">msg</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>) {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">finish_using_style</span>(
-            <span class="ident">Instant::now</span>(),
-            <span class="ident">ProgressFinish::AbandonWithMessage</span>(<span class="ident">msg</span>.<span class="ident">into</span>()),
-        )
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">abandon_with_message</span>(<span class="ident">msg</span>);
     }
 
     <span class="doccomment">/// Finishes the progress bar using the behavior stored in the [`ProgressStyle`]</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// See [`ProgressBar::with_finish()`].</span>
+    <span class="doccomment">/// See [`ProgressStyle::on_finish()`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish_using_style</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>();
-        <span class="kw">let</span> <span class="ident">finish</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">on_finish</span>.<span class="ident">clone</span>();
-        <span class="ident">state</span>.<span class="ident">finish_using_style</span>(<span class="ident">Instant::now</span>(), <span class="ident">finish</span>);
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">finish_using_style</span>();
     }
 
     <span class="doccomment">/// Sets a different draw target for the progress bar</span>
@@ -1145,33 +1385,10 @@
     <span class="doccomment">/// **Note:** Calling this method on a [`ProgressBar`] linked with a [`MultiProgress`] (after</span>
     <span class="doccomment">/// running [`MultiProgress::add`]) will unlink this progress bar. If you don&#39;t want this</span>
     <span class="doccomment">/// behavior, call [`MultiProgress::set_draw_target`] instead.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// [`MultiProgress`]: crate::MultiProgress</span>
-    <span class="doccomment">/// [`MultiProgress::add`]: crate::MultiProgress::add</span>
-    <span class="doccomment">/// [`MultiProgress::set_draw_target`]: crate::MultiProgress::set_draw_target</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_draw_target</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">target</span>: <span class="ident">ProgressDrawTarget</span>) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>();
-        <span class="ident">state</span>.<span class="ident">draw_target</span>.<span class="ident">disconnect</span>(<span class="ident">Instant::now</span>());
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
+        <span class="ident">state</span>.<span class="ident">draw_target</span>.<span class="ident">disconnect</span>();
         <span class="ident">state</span>.<span class="ident">draw_target</span> <span class="op">=</span> <span class="ident">target</span>;
-    }
-
-    <span class="doccomment">/// Hide the progress bar temporarily, execute `f`, then redraw the progress bar</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Useful for external code that writes to the standard output.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// **Note:** The internal lock is held while `f` is executed. Other threads trying to print</span>
-    <span class="doccomment">/// anything on the progress bar will be blocked until `f` finishes.</span>
-    <span class="doccomment">/// Therefore, it is recommended to avoid long-running operations in `f`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// # use indicatif::ProgressBar;</span>
-    <span class="doccomment">/// let mut pb = ProgressBar::new(3);</span>
-    <span class="doccomment">/// pb.suspend(|| {</span>
-    <span class="doccomment">///     println!(&quot;Log message&quot;);</span>
-    <span class="doccomment">/// })</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">suspend</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">FnOnce</span>() -&gt; <span class="ident">R</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="ident">R</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">suspend</span>(<span class="ident">Instant::now</span>(), <span class="ident">f</span>)
     }
 
     <span class="doccomment">/// Wraps an [`Iterator`] with the progress bar</span>
@@ -1230,223 +1447,327 @@
         }
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio&quot;</span>)))]</span>
-    <span class="doccomment">/// Wraps an [`tokio::io::AsyncWrite`] with the progress bar</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// # use tokio::fs::File;</span>
-    <span class="doccomment">/// # use tokio::io;</span>
-    <span class="doccomment">/// # use indicatif::ProgressBar;</span>
-    <span class="doccomment">/// # async fn test() -&gt; io::Result&lt;()&gt; {</span>
-    <span class="doccomment">/// let mut source = File::open(&quot;work.txt&quot;).await?;</span>
-    <span class="doccomment">/// let mut target = File::open(&quot;done.txt&quot;).await?;</span>
-    <span class="doccomment">/// let pb = ProgressBar::new(source.metadata().await?.len());</span>
-    <span class="doccomment">/// io::copy(&amp;mut source, &amp;mut pb.wrap_async_write(target)).await?;</span>
-    <span class="doccomment">/// # Ok(())</span>
-    <span class="doccomment">/// # }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wrap_async_write</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">tokio::io::AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">write</span>: <span class="ident">W</span>,
-    ) -&gt; <span class="ident">ProgressBarIter</span><span class="op">&lt;</span><span class="ident">W</span><span class="op">&gt;</span> {
-        <span class="ident">ProgressBarIter</span> {
-            <span class="ident">progress</span>: <span class="self">self</span>.<span class="ident">clone</span>(),
-            <span class="ident">it</span>: <span class="ident">write</span>,
-        }
-    }
-
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio&quot;</span>)))]</span>
-    <span class="doccomment">/// Wraps an [`tokio::io::AsyncRead`] with the progress bar</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// # use tokio::fs::File;</span>
-    <span class="doccomment">/// # use tokio::io;</span>
-    <span class="doccomment">/// # use indicatif::ProgressBar;</span>
-    <span class="doccomment">/// # async fn test() -&gt; io::Result&lt;()&gt; {</span>
-    <span class="doccomment">/// let mut source = File::open(&quot;work.txt&quot;).await?;</span>
-    <span class="doccomment">/// let mut target = File::open(&quot;done.txt&quot;).await?;</span>
-    <span class="doccomment">/// let pb = ProgressBar::new(source.metadata().await?.len());</span>
-    <span class="doccomment">/// io::copy(&amp;mut pb.wrap_async_read(source), &amp;mut target).await?;</span>
-    <span class="doccomment">/// # Ok(())</span>
-    <span class="doccomment">/// # }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wrap_async_read</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">tokio::io::AsyncRead</span> <span class="op">+</span> <span class="ident">Unpin</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">write</span>: <span class="ident">W</span>) -&gt; <span class="ident">ProgressBarIter</span><span class="op">&lt;</span><span class="ident">W</span><span class="op">&gt;</span> {
-        <span class="ident">ProgressBarIter</span> {
-            <span class="ident">progress</span>: <span class="self">self</span>.<span class="ident">clone</span>(),
-            <span class="ident">it</span>: <span class="ident">write</span>,
-        }
+    <span class="kw">fn</span> <span class="ident">update_and_draw</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="ident">ProgressState</span>)<span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) {
+        <span class="comment">// Delegate to the wrapped state.</span>
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
+        <span class="ident">state</span>.<span class="ident">update_and_draw</span>(<span class="ident">f</span>);
     }
 
     <span class="doccomment">/// Returns the current position</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">position</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">state</span>.<span class="ident">pos</span>()
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">pos</span>
     }
 
     <span class="doccomment">/// Returns the current length</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">state</span>.<span class="ident">len</span>()
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">len</span>
     }
 
     <span class="doccomment">/// Returns the current ETA</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eta</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Duration</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">state</span>.<span class="ident">eta</span>()
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">eta</span>()
     }
 
     <span class="doccomment">/// Returns the current rate of progress</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">per_sec</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">f64</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">state</span>.<span class="ident">per_sec</span>()
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">per_sec</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">per_sec</span>()
     }
 
     <span class="doccomment">/// Returns the current expected duration</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">duration</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Duration</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">state</span>.<span class="ident">duration</span>()
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">duration</span>()
     }
 
     <span class="doccomment">/// Returns the current elapsed time</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">elapsed</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Duration</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">state</span>.<span class="ident">elapsed</span>()
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">started</span>.<span class="ident">elapsed</span>()
+    }
+}
+
+<span class="doccomment">/// Manages multiple progress bars from different threads</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MultiProgress</span> {
+    <span class="ident">state</span>: <span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">RwLock</span><span class="op">&lt;</span><span class="ident">MultiProgressState</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">joining</span>: <span class="ident">AtomicBool</span>,
+    <span class="ident">tx</span>: <span class="ident">Sender</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">ProgressDrawState</span>)<span class="op">&gt;</span>,
+    <span class="ident">rx</span>: <span class="ident">Receiver</span><span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">ProgressDrawState</span>)<span class="op">&gt;</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">fmt::Debug</span> <span class="kw">for</span> <span class="ident">MultiProgress</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
+        <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;MultiProgress&quot;</span>).<span class="ident">finish</span>()
+    }
+}
+
+<span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Sync</span> <span class="kw">for</span> <span class="ident">MultiProgress</span> {}
+
+<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">MultiProgress</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="ident">MultiProgress</span> {
+        <span class="ident">MultiProgress::with_draw_target</span>(<span class="ident">ProgressDrawTarget::stderr</span>())
+    }
+}
+
+<span class="kw">impl</span> <span class="ident">MultiProgress</span> {
+    <span class="doccomment">/// Creates a new multi progress object.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Progress bars added to this object by default draw directly to stderr, and refresh</span>
+    <span class="doccomment">/// a maximum of 15 times a second. To change the refresh rate set the draw target to</span>
+    <span class="doccomment">/// one with a different refresh rate.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">MultiProgress</span> {
+        <span class="ident">MultiProgress::default</span>()
     }
 
-    <span class="doccomment">/// Index in the `MultiState`</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">index</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">draw_target</span>.<span class="ident">remote</span>().<span class="ident">map</span>(<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">idx</span>)<span class="op">|</span> <span class="ident">idx</span>)
+    <span class="doccomment">/// Creates a new multi progress object with the given draw target.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_draw_target</span>(<span class="ident">draw_target</span>: <span class="ident">ProgressDrawTarget</span>) -&gt; <span class="ident">MultiProgress</span> {
+        <span class="kw">let</span> (<span class="ident">tx</span>, <span class="ident">rx</span>) <span class="op">=</span> <span class="ident">channel</span>();
+        <span class="ident">MultiProgress</span> {
+            <span class="ident">state</span>: <span class="ident">Arc::new</span>(<span class="ident">RwLock::new</span>(<span class="ident">MultiProgressState</span> {
+                <span class="ident">objects</span>: <span class="ident">Vec::new</span>(),
+                <span class="ident">free_set</span>: <span class="ident">Vec::new</span>(),
+                <span class="ident">ordering</span>: <span class="macro">vec!</span>[],
+                <span class="ident">draw_target</span>,
+                <span class="ident">move_cursor</span>: <span class="bool-val">false</span>,
+            })),
+            <span class="ident">joining</span>: <span class="ident">AtomicBool::new</span>(<span class="bool-val">false</span>),
+            <span class="ident">tx</span>,
+            <span class="ident">rx</span>,
+        }
     }
 
-    <span class="doccomment">/// Current message</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">message</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">state</span>.<span class="ident">message</span>.<span class="ident">expanded</span>().<span class="ident">to_string</span>()
+    <span class="doccomment">/// Sets a different draw target for the multiprogress bar.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_draw_target</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">target</span>: <span class="ident">ProgressDrawTarget</span>) {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">write</span>().<span class="ident">unwrap</span>();
+        <span class="ident">state</span>.<span class="ident">draw_target</span>.<span class="ident">disconnect</span>();
+        <span class="ident">state</span>.<span class="ident">draw_target</span> <span class="op">=</span> <span class="ident">target</span>;
     }
 
-    <span class="doccomment">/// Current prefix</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">prefix</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
-        <span class="self">self</span>.<span class="ident">state</span>().<span class="ident">state</span>.<span class="ident">prefix</span>.<span class="ident">expanded</span>().<span class="ident">to_string</span>()
+    <span class="doccomment">/// Set whether we should try to move the cursor when possible instead of clearing lines.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This can reduce flickering, but do not enable it if you intend to change the number of</span>
+    <span class="doccomment">/// progress bars.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_move_cursor</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">move_cursor</span>: <span class="ident">bool</span>) {
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">write</span>().<span class="ident">unwrap</span>().<span class="ident">move_cursor</span> <span class="op">=</span> <span class="ident">move_cursor</span>;
     }
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">state</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">MutexGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">BarState</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>()
+    <span class="doccomment">/// Adds a progress bar.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The progress bar added will have the draw target changed to a</span>
+    <span class="doccomment">/// remote draw target that is intercepted by the multi progress</span>
+    <span class="doccomment">/// object overriding custom `ProgressDrawTarget` settings.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pb</span>: <span class="ident">ProgressBar</span>) -&gt; <span class="ident">ProgressBar</span> {
+        <span class="self">self</span>.<span class="ident">push</span>(<span class="prelude-val">None</span>, <span class="ident">pb</span>)
+    }
+
+    <span class="doccomment">/// Inserts a progress bar.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The progress bar inserted at position `index` will have the draw</span>
+    <span class="doccomment">/// target changed to a remote draw target that is intercepted by the</span>
+    <span class="doccomment">/// multi progress object overriding custom `ProgressDrawTarget` settings.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If `index &gt;= MultiProgressState::objects.len()`, the progress bar</span>
+    <span class="doccomment">/// is added to the end of the list.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">insert</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">index</span>: <span class="ident">usize</span>, <span class="ident">pb</span>: <span class="ident">ProgressBar</span>) -&gt; <span class="ident">ProgressBar</span> {
+        <span class="self">self</span>.<span class="ident">push</span>(<span class="prelude-val">Some</span>(<span class="ident">index</span>), <span class="ident">pb</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pos</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>, <span class="ident">pb</span>: <span class="ident">ProgressBar</span>) -&gt; <span class="ident">ProgressBar</span> {
+        <span class="kw">let</span> <span class="ident">new</span> <span class="op">=</span> <span class="ident">MultiObject</span> {
+            <span class="ident">done</span>: <span class="bool-val">false</span>,
+            <span class="ident">draw_state</span>: <span class="prelude-val">None</span>,
+        };
+
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">write</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">idx</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">state</span>.<span class="ident">free_set</span>.<span class="ident">pop</span>() {
+            <span class="prelude-val">Some</span>(<span class="ident">idx</span>) =&gt; {
+                <span class="ident">state</span>.<span class="ident">objects</span>[<span class="ident">idx</span>] <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">new</span>);
+                <span class="ident">idx</span>
+            }
+            <span class="prelude-val">None</span> =&gt; {
+                <span class="ident">state</span>.<span class="ident">objects</span>.<span class="ident">push</span>(<span class="prelude-val">Some</span>(<span class="ident">new</span>));
+                <span class="ident">state</span>.<span class="ident">objects</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>
+            }
+        };
+
+        <span class="kw">match</span> <span class="ident">pos</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">pos</span>) <span class="kw">if</span> <span class="ident">pos</span> <span class="op">&lt;</span> <span class="ident">state</span>.<span class="ident">ordering</span>.<span class="ident">len</span>() =&gt; <span class="ident">state</span>.<span class="ident">ordering</span>.<span class="ident">insert</span>(<span class="ident">pos</span>, <span class="ident">idx</span>),
+            <span class="kw">_</span> =&gt; <span class="ident">state</span>.<span class="ident">ordering</span>.<span class="ident">push</span>(<span class="ident">idx</span>),
+        }
+
+        <span class="ident">pb</span>.<span class="ident">set_draw_target</span>(<span class="ident">ProgressDrawTarget</span> {
+            <span class="ident">kind</span>: <span class="ident">ProgressDrawTargetKind::Remote</span> {
+                <span class="ident">state</span>: <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">clone</span>(),
+                <span class="ident">idx</span>,
+                <span class="ident">chan</span>: <span class="ident">Mutex::new</span>(<span class="self">self</span>.<span class="ident">tx</span>.<span class="ident">clone</span>()),
+            },
+        });
+        <span class="ident">pb</span>
+    }
+
+    <span class="doccomment">/// Removes a progress bar.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The progress bar is removed only if it was previously inserted or added</span>
+    <span class="doccomment">/// by the methods `MultiProgress::insert` or `MultiProgress::add`.</span>
+    <span class="doccomment">/// If the passed progress bar does not satisfy the condition above,</span>
+    <span class="doccomment">/// the `remove` method does nothing.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pb</span>: <span class="kw-2">&amp;</span><span class="ident">ProgressBar</span>) {
+        <span class="kw">let</span> <span class="ident">idx</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">pb</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">draw_target</span>.<span class="ident">kind</span> {
+            <span class="ident">ProgressDrawTargetKind::Remote</span> { <span class="ident">state</span>, <span class="ident">idx</span>, .. } =&gt; {
+                <span class="comment">// Check that this progress bar is owned by the current MultiProgress.</span>
+                <span class="macro">assert!</span>(<span class="ident">Arc::ptr_eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>, <span class="ident">state</span>));
+                <span class="kw-2">*</span><span class="ident">idx</span>
+            }
+            <span class="kw">_</span> =&gt; <span class="kw">return</span>,
+        };
+
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">write</span>().<span class="ident">unwrap</span>().<span class="ident">remove_idx</span>(<span class="ident">idx</span>);
+    }
+
+    <span class="doccomment">/// Waits for all progress bars to report that they are finished.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// You need to call this as this will request the draw instructions</span>
+    <span class="doccomment">/// from the remote progress bars.  Not calling this will deadlock</span>
+    <span class="doccomment">/// your program.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">join</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">join_impl</span>(<span class="bool-val">false</span>)
+    }
+
+    <span class="doccomment">/// Works like `join` but clears the progress bar in the end.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">join_and_clear</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">join_impl</span>(<span class="bool-val">true</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">join_impl</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">clear</span>: <span class="ident">bool</span>) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">joining</span>.<span class="ident">load</span>(<span class="ident">Ordering::Acquire</span>) {
+            <span class="macro">panic!</span>(<span class="string">&quot;Already joining!&quot;</span>);
+        }
+        <span class="self">self</span>.<span class="ident">joining</span>.<span class="ident">store</span>(<span class="bool-val">true</span>, <span class="ident">Ordering::Release</span>);
+
+        <span class="kw">let</span> <span class="ident">move_cursor</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>().<span class="ident">move_cursor</span>;
+        <span class="comment">// Max amount of grouped together updates at once. This is meant</span>
+        <span class="comment">// to ensure there isn&#39;t a situation where continuous updates prevent</span>
+        <span class="comment">// any actual draws happening.</span>
+        <span class="kw">const</span> <span class="ident">MAX_GROUP_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">32</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">recv_peek</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">grouped</span> <span class="op">=</span> <span class="number">0usize</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">orphan_lines</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">force_draw</span> <span class="op">=</span> <span class="bool-val">false</span>;
+        <span class="kw">while</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">state</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>().<span class="ident">is_done</span>() {
+            <span class="kw">let</span> (<span class="ident">idx</span>, <span class="ident">draw_state</span>) <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">peeked</span>) <span class="op">=</span> <span class="ident">recv_peek</span>.<span class="ident">take</span>() {
+                <span class="ident">peeked</span>
+            } <span class="kw">else</span> {
+                <span class="self">self</span>.<span class="ident">rx</span>.<span class="ident">recv</span>().<span class="ident">unwrap</span>()
+            };
+            <span class="ident">force_draw</span> <span class="op">|</span><span class="op">=</span> <span class="ident">draw_state</span>.<span class="ident">finished</span> <span class="op">|</span><span class="op">|</span> <span class="ident">draw_state</span>.<span class="ident">force_draw</span>;
+
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">write</span>().<span class="ident">unwrap</span>();
+            <span class="kw">if</span> <span class="ident">draw_state</span>.<span class="ident">finished</span> {
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">obj</span>) <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">state</span>.<span class="ident">objects</span>[<span class="ident">idx</span>] {
+                    <span class="ident">obj</span>.<span class="ident">done</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                }
+                <span class="kw">if</span> <span class="ident">draw_state</span>.<span class="ident">lines</span>.<span class="ident">is_empty</span>() {
+                    <span class="comment">// `finish_and_clear` was called</span>
+                    <span class="ident">state</span>.<span class="ident">remove_idx</span>(<span class="ident">idx</span>);
+                }
+            }
+
+            <span class="comment">// Split orphan lines out of the draw state, if any</span>
+            <span class="kw">let</span> <span class="ident">lines</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">draw_state</span>.<span class="ident">orphan_lines</span> <span class="op">&gt;</span> <span class="number">0</span> {
+                <span class="kw">let</span> <span class="ident">split</span> <span class="op">=</span> <span class="ident">draw_state</span>.<span class="ident">lines</span>.<span class="ident">split_at</span>(<span class="ident">draw_state</span>.<span class="ident">orphan_lines</span>);
+                <span class="ident">orphan_lines</span>.<span class="ident">extend_from_slice</span>(<span class="ident">split</span>.<span class="number">0</span>);
+                <span class="ident">split</span>.<span class="number">1</span>.<span class="ident">to_vec</span>()
+            } <span class="kw">else</span> {
+                <span class="ident">draw_state</span>.<span class="ident">lines</span>
+            };
+
+            <span class="kw">let</span> <span class="ident">draw_state</span> <span class="op">=</span> <span class="ident">ProgressDrawState</span> {
+                <span class="ident">lines</span>,
+                <span class="ident">orphan_lines</span>: <span class="number">0</span>,
+                ..<span class="ident">draw_state</span>
+            };
+
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">obj</span>) <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">state</span>.<span class="ident">objects</span>[<span class="ident">idx</span>] {
+                <span class="ident">obj</span>.<span class="ident">draw_state</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">draw_state</span>);
+            }
+
+            <span class="comment">// the rest from here is only drawing, we can skip it.</span>
+            <span class="kw">if</span> <span class="ident">state</span>.<span class="ident">draw_target</span>.<span class="ident">is_hidden</span>() {
+                <span class="kw">continue</span>;
+            }
+
+            <span class="macro">debug_assert!</span>(<span class="ident">recv_peek</span>.<span class="ident">is_none</span>());
+            <span class="kw">if</span> <span class="ident">grouped</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">MAX_GROUP_SIZE</span> {
+                <span class="comment">// Can&#39;t group any more draw calls, proceed to just draw</span>
+                <span class="ident">grouped</span> <span class="op">=</span> <span class="number">0</span>;
+            } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">state</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">rx</span>.<span class="ident">try_recv</span>() {
+                <span class="comment">// Only group draw calls if there is another draw already queued</span>
+                <span class="ident">recv_peek</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">state</span>);
+                <span class="ident">grouped</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                <span class="kw">continue</span>;
+            } <span class="kw">else</span> {
+                <span class="comment">// No more draws queued, proceed to just draw</span>
+                <span class="ident">grouped</span> <span class="op">=</span> <span class="number">0</span>;
+            }
+
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lines</span> <span class="op">=</span> <span class="macro">vec!</span>[];
+
+            <span class="comment">// Make orphaned lines appear at the top, so they can be properly</span>
+            <span class="comment">// forgotten.</span>
+            <span class="kw">let</span> <span class="ident">orphan_lines_count</span> <span class="op">=</span> <span class="ident">orphan_lines</span>.<span class="ident">len</span>();
+            <span class="ident">lines</span>.<span class="ident">append</span>(<span class="kw-2">&amp;mut</span> <span class="ident">orphan_lines</span>);
+
+            <span class="kw">for</span> <span class="ident">index</span> <span class="kw">in</span> <span class="ident">state</span>.<span class="ident">ordering</span>.<span class="ident">iter</span>() {
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">obj</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">state</span>.<span class="ident">objects</span>[<span class="kw-2">*</span><span class="ident">index</span>] {
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">draw_state</span>) <span class="op">=</span> <span class="ident">obj</span>.<span class="ident">draw_state</span> {
+                        <span class="ident">lines</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">draw_state</span>.<span class="ident">lines</span>[..]);
+                    }
+                }
+            }
+
+            <span class="kw">let</span> <span class="ident">finished</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">is_done</span>();
+            <span class="ident">state</span>.<span class="ident">draw_target</span>.<span class="ident">apply_draw_state</span>(<span class="ident">ProgressDrawState</span> {
+                <span class="ident">lines</span>,
+                <span class="ident">orphan_lines</span>: <span class="ident">orphan_lines_count</span>,
+                <span class="ident">force_draw</span>: <span class="ident">force_draw</span> <span class="op">|</span><span class="op">|</span> <span class="ident">orphan_lines_count</span> <span class="op">&gt;</span> <span class="number">0</span>,
+                <span class="ident">move_cursor</span>,
+                <span class="ident">finished</span>,
+            })<span class="question-mark">?</span>;
+
+            <span class="ident">force_draw</span> <span class="op">=</span> <span class="bool-val">false</span>;
+        }
+
+        <span class="kw">if</span> <span class="ident">clear</span> {
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">write</span>().<span class="ident">unwrap</span>();
+            <span class="ident">state</span>.<span class="ident">draw_target</span>.<span class="ident">apply_draw_state</span>(<span class="ident">ProgressDrawState</span> {
+                <span class="ident">lines</span>: <span class="macro">vec!</span>[],
+                <span class="ident">orphan_lines</span>: <span class="number">0</span>,
+                <span class="ident">finished</span>: <span class="bool-val">true</span>,
+                <span class="ident">force_draw</span>: <span class="bool-val">true</span>,
+                <span class="ident">move_cursor</span>,
+            })<span class="question-mark">?</span>;
+        }
+
+        <span class="self">self</span>.<span class="ident">joining</span>.<span class="ident">store</span>(<span class="bool-val">false</span>, <span class="ident">Ordering::Release</span>);
+
+        <span class="prelude-val">Ok</span>(())
     }
 }
 
 <span class="doccomment">/// A weak reference to a `ProgressBar`.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Useful for creating custom steady tick implementations</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Default</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">WeakProgressBar</span> {
-    <span class="ident">state</span>: <span class="ident">Weak</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">BarState</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">pos</span>: <span class="ident">Weak</span><span class="op">&lt;</span><span class="ident">AtomicPosition</span><span class="op">&gt;</span>,
-    <span class="ident">ticker</span>: <span class="ident">Weak</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Ticker</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">state</span>: <span class="ident">Weak</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">ProgressState</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">WeakProgressBar</span> {
-    <span class="doccomment">/// Create a new `WeakProgressBar` that returns `None` when [`upgrade`] is called.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// [`upgrade`]: WeakProgressBar::upgrade</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">WeakProgressBar</span> {
-        <span class="ident">Default::default</span>()
-    }
-
     <span class="doccomment">/// Attempts to upgrade the Weak pointer to a [`ProgressBar`], delaying dropping of the inner</span>
     <span class="doccomment">/// value if successful. Returns `None` if the inner value has since been dropped.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`ProgressBar`]: struct.ProgressBar.html</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ProgressBar</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">upgrade</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">pos</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">pos</span>.<span class="ident">upgrade</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">ticker</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ticker</span>.<span class="ident">upgrade</span>()<span class="question-mark">?</span>;
-        <span class="prelude-val">Some</span>(<span class="ident">ProgressBar</span> { <span class="ident">state</span>, <span class="ident">pos</span>, <span class="ident">ticker</span> })
+        <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">upgrade</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="ident">ProgressBar</span> { <span class="ident">state</span> })
     }
 }
-
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">Ticker</span> {
-    <span class="ident">stopping</span>: <span class="ident">Arc</span><span class="op">&lt;</span>(<span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>, <span class="ident">Condvar</span>)<span class="op">&gt;</span>,
-    <span class="ident">join_handle</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">thread::JoinHandle</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span>,
-}
-
-<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Ticker</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">stop</span>();
-        <span class="self">self</span>.<span class="ident">join_handle</span>.<span class="ident">take</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">handle</span><span class="op">|</span> <span class="ident">handle</span>.<span class="ident">join</span>());
-    }
-}
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">static</span> <span class="ident">TICKER_RUNNING</span>: <span class="ident">AtomicBool</span> <span class="op">=</span> <span class="ident">AtomicBool::new</span>(<span class="bool-val">false</span>);
-
-<span class="kw">impl</span> <span class="ident">Ticker</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">interval</span>: <span class="ident">Duration</span>, <span class="ident">bar_state</span>: <span class="kw-2">&amp;</span><span class="ident">Arc</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">BarState</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="macro">debug_assert!</span>(<span class="op">!</span><span class="ident">interval</span>.<span class="ident">is_zero</span>());
-
-        <span class="comment">// A `Mutex&lt;bool&gt;` is used as a flag to indicate whether the ticker was requested to stop.</span>
-        <span class="comment">// The `Condvar` is used a notification mechanism: when the ticker is dropped, we notify</span>
-        <span class="comment">// the thread and interrupt the ticker wait.</span>
-        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::mutex_atomic</span>)]</span>
-        <span class="kw">let</span> <span class="ident">stopping</span> <span class="op">=</span> <span class="ident">Arc::new</span>((<span class="ident">Mutex::new</span>(<span class="bool-val">false</span>), <span class="ident">Condvar::new</span>()));
-        <span class="kw">let</span> <span class="ident">control</span> <span class="op">=</span> <span class="ident">TickerControl</span> {
-            <span class="ident">stopping</span>: <span class="ident">stopping</span>.<span class="ident">clone</span>(),
-            <span class="ident">state</span>: <span class="ident">Arc::downgrade</span>(<span class="ident">bar_state</span>),
-        };
-
-        <span class="kw">let</span> <span class="ident">join_handle</span> <span class="op">=</span> <span class="ident">thread::spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">control</span>.<span class="ident">run</span>(<span class="ident">interval</span>));
-        <span class="self">Self</span> {
-            <span class="ident">stopping</span>,
-            <span class="ident">join_handle</span>: <span class="prelude-val">Some</span>(<span class="ident">join_handle</span>),
-        }
-    }
-
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">stop</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">stopping</span>.<span class="number">0</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>() <span class="op">=</span> <span class="bool-val">true</span>;
-        <span class="self">self</span>.<span class="ident">stopping</span>.<span class="number">1</span>.<span class="ident">notify_one</span>();
-    }
-}
-
-<span class="kw">struct</span> <span class="ident">TickerControl</span> {
-    <span class="ident">stopping</span>: <span class="ident">Arc</span><span class="op">&lt;</span>(<span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>, <span class="ident">Condvar</span>)<span class="op">&gt;</span>,
-    <span class="ident">state</span>: <span class="ident">Weak</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span><span class="ident">BarState</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-}
-
-<span class="kw">impl</span> <span class="ident">TickerControl</span> {
-    <span class="kw">fn</span> <span class="ident">run</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">interval</span>: <span class="ident">Duration</span>) {
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-        <span class="ident">TICKER_RUNNING</span>.<span class="ident">store</span>(<span class="bool-val">true</span>, <span class="ident">Ordering::SeqCst</span>);
-
-        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">arc</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>.<span class="ident">upgrade</span>() {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">arc</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
-            <span class="kw">if</span> <span class="ident">state</span>.<span class="ident">state</span>.<span class="ident">is_finished</span>() {
-                <span class="kw">break</span>;
-            }
-
-            <span class="ident">state</span>.<span class="ident">state</span>.<span class="ident">tick</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">state</span>.<span class="ident">tick</span>.<span class="ident">saturating_add</span>(<span class="number">1</span>);
-            <span class="ident">state</span>.<span class="ident">draw</span>(<span class="bool-val">false</span>, <span class="ident">Instant::now</span>()).<span class="ident">ok</span>();
-
-            <span class="ident">drop</span>(<span class="ident">state</span>); <span class="comment">// Don&#39;t forget to drop the lock before sleeping</span>
-            <span class="ident">drop</span>(<span class="ident">arc</span>); <span class="comment">// Also need to drop Arc otherwise BarState won&#39;t be dropped</span>
-
-            <span class="comment">// Wait for `interval` but return early if we are notified to stop</span>
-            <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">result</span>) <span class="op">=</span> <span class="self">self</span>
-                .<span class="ident">stopping</span>
-                .<span class="number">1</span>
-                .<span class="ident">wait_timeout_while</span>(<span class="self">self</span>.<span class="ident">stopping</span>.<span class="number">0</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>(), <span class="ident">interval</span>, <span class="op">|</span><span class="ident">stopped</span><span class="op">|</span> {
-                    <span class="op">!</span><span class="kw-2">*</span><span class="ident">stopped</span>
-                })
-                .<span class="ident">unwrap</span>();
-
-            <span class="comment">// If the wait didn&#39;t time out, it means we were notified to stop</span>
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">result</span>.<span class="ident">timed_out</span>() {
-                <span class="kw">break</span>;
-            }
-        }
-
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-        <span class="ident">TICKER_RUNNING</span>.<span class="ident">store</span>(<span class="bool-val">false</span>, <span class="ident">Ordering::SeqCst</span>);
-    }
-}
-
-<span class="comment">// Tests using the global TICKER_RUNNING flag need to be serialized</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">static</span> <span class="ident">TICKER_TEST</span>: <span class="ident">Lazy</span><span class="op">&lt;</span><span class="ident">Mutex</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Lazy::new</span>(<span class="ident">Mutex::default</span>);
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
@@ -1456,14 +1777,14 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_pbar_zero</span>() {
         <span class="kw">let</span> <span class="ident">pb</span> <span class="op">=</span> <span class="ident">ProgressBar::new</span>(<span class="number">0</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">pb</span>.<span class="ident">state</span>().<span class="ident">state</span>.<span class="ident">fraction</span>(), <span class="number">1.0</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">pb</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">fraction</span>(), <span class="number">1.0</span>);
     }
 
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::float_cmp</span>)]</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_pbar_maxu64</span>() {
         <span class="kw">let</span> <span class="ident">pb</span> <span class="op">=</span> <span class="ident">ProgressBar::new</span>(<span class="op">!</span><span class="number">0</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">pb</span>.<span class="ident">state</span>().<span class="ident">state</span>.<span class="ident">fraction</span>(), <span class="number">0.0</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">pb</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">fraction</span>(), <span class="number">0.0</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -1493,6 +1814,36 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_draw_delta_deadlock</span>() {
+        <span class="comment">// see issue #187</span>
+        <span class="kw">let</span> <span class="ident">mpb</span> <span class="op">=</span> <span class="ident">MultiProgress::new</span>();
+        <span class="kw">let</span> <span class="ident">pb</span> <span class="op">=</span> <span class="ident">mpb</span>.<span class="ident">add</span>(<span class="ident">ProgressBar::new</span>(<span class="number">1</span>));
+        <span class="ident">pb</span>.<span class="ident">set_draw_delta</span>(<span class="number">2</span>);
+        <span class="ident">drop</span>(<span class="ident">pb</span>);
+        <span class="ident">mpb</span>.<span class="ident">join</span>().<span class="ident">unwrap</span>();
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_abandon_deadlock</span>() {
+        <span class="kw">let</span> <span class="ident">mpb</span> <span class="op">=</span> <span class="ident">MultiProgress::new</span>();
+        <span class="kw">let</span> <span class="ident">pb</span> <span class="op">=</span> <span class="ident">mpb</span>.<span class="ident">add</span>(<span class="ident">ProgressBar::new</span>(<span class="number">1</span>));
+        <span class="ident">pb</span>.<span class="ident">set_draw_delta</span>(<span class="number">2</span>);
+        <span class="ident">pb</span>.<span class="ident">abandon</span>();
+        <span class="ident">drop</span>(<span class="ident">pb</span>);
+        <span class="ident">mpb</span>.<span class="ident">join</span>().<span class="ident">unwrap</span>();
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">late_pb_drop</span>() {
+        <span class="kw">let</span> <span class="ident">pb</span> <span class="op">=</span> <span class="ident">ProgressBar::new</span>(<span class="number">10</span>);
+        <span class="kw">let</span> <span class="ident">mpb</span> <span class="op">=</span> <span class="ident">MultiProgress::new</span>();
+        <span class="comment">// This clone call is required to trigger a now fixed bug.</span>
+        <span class="comment">// See &lt;https://github.com/mitsuhiko/indicatif/pull/141&gt; for context</span>
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::redundant_clone</span>)]</span>
+        <span class="ident">mpb</span>.<span class="ident">add</span>(<span class="ident">pb</span>.<span class="ident">clone</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">it_can_wrap_a_reader</span>() {
         <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="string">b&quot;I am an implementation of io::Read&quot;</span>[..];
         <span class="kw">let</span> <span class="ident">pb</span> <span class="op">=</span> <span class="ident">ProgressBar::new</span>(<span class="ident">bytes</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u64</span>);
@@ -1514,41 +1865,82 @@
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">ticker_thread_terminates_on_drop</span>() {
-        <span class="kw">let</span> <span class="ident">_guard</span> <span class="op">=</span> <span class="ident">TICKER_TEST</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
-        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">TICKER_RUNNING</span>.<span class="ident">load</span>(<span class="ident">Ordering::SeqCst</span>));
-
-        <span class="kw">let</span> <span class="ident">pb</span> <span class="op">=</span> <span class="ident">ProgressBar::new_spinner</span>();
-        <span class="ident">pb</span>.<span class="ident">enable_steady_tick</span>(<span class="ident">Duration::from_millis</span>(<span class="number">50</span>));
-
-        <span class="comment">// Give the thread time to start up</span>
-        <span class="ident">thread::sleep</span>(<span class="ident">Duration::from_millis</span>(<span class="number">250</span>));
-
-        <span class="macro">assert!</span>(<span class="ident">TICKER_RUNNING</span>.<span class="ident">load</span>(<span class="ident">Ordering::SeqCst</span>));
-
-        <span class="ident">drop</span>(<span class="ident">pb</span>);
-        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">TICKER_RUNNING</span>.<span class="ident">load</span>(<span class="ident">Ordering::SeqCst</span>));
+    <span class="kw">fn</span> <span class="ident">progress_bar_sync_send</span>() {
+        <span class="kw">let</span> <span class="kw">_</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Sync</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Box::new</span>(<span class="ident">ProgressBar::new</span>(<span class="number">1</span>));
+        <span class="kw">let</span> <span class="kw">_</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Send</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Box::new</span>(<span class="ident">ProgressBar::new</span>(<span class="number">1</span>));
+        <span class="kw">let</span> <span class="kw">_</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Sync</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Box::new</span>(<span class="ident">MultiProgress::new</span>());
+        <span class="kw">let</span> <span class="kw">_</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Send</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Box::new</span>(<span class="ident">MultiProgress::new</span>());
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">ticker_thread_terminates_on_drop_2</span>() {
-        <span class="kw">let</span> <span class="ident">_guard</span> <span class="op">=</span> <span class="ident">TICKER_TEST</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
-        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">TICKER_RUNNING</span>.<span class="ident">load</span>(<span class="ident">Ordering::SeqCst</span>));
+    <span class="kw">fn</span> <span class="ident">multi_progress_modifications</span>() {
+        <span class="kw">let</span> <span class="ident">mp</span> <span class="op">=</span> <span class="ident">MultiProgress::new</span>();
+        <span class="kw">let</span> <span class="ident">p0</span> <span class="op">=</span> <span class="ident">mp</span>.<span class="ident">add</span>(<span class="ident">ProgressBar::new</span>(<span class="number">1</span>));
+        <span class="kw">let</span> <span class="ident">p1</span> <span class="op">=</span> <span class="ident">mp</span>.<span class="ident">add</span>(<span class="ident">ProgressBar::new</span>(<span class="number">1</span>));
+        <span class="kw">let</span> <span class="ident">p2</span> <span class="op">=</span> <span class="ident">mp</span>.<span class="ident">add</span>(<span class="ident">ProgressBar::new</span>(<span class="number">1</span>));
+        <span class="kw">let</span> <span class="ident">p3</span> <span class="op">=</span> <span class="ident">mp</span>.<span class="ident">add</span>(<span class="ident">ProgressBar::new</span>(<span class="number">1</span>));
+        <span class="ident">mp</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">p2</span>);
+        <span class="ident">mp</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">p1</span>);
+        <span class="kw">let</span> <span class="ident">p4</span> <span class="op">=</span> <span class="ident">mp</span>.<span class="ident">insert</span>(<span class="number">1</span>, <span class="ident">ProgressBar::new</span>(<span class="number">1</span>));
 
-        <span class="kw">let</span> <span class="ident">pb</span> <span class="op">=</span> <span class="ident">ProgressBar::new_spinner</span>();
-        <span class="ident">pb</span>.<span class="ident">enable_steady_tick</span>(<span class="ident">Duration::from_millis</span>(<span class="number">50</span>));
-        <span class="kw">let</span> <span class="ident">pb2</span> <span class="op">=</span> <span class="ident">pb</span>.<span class="ident">clone</span>();
+        <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">mp</span>.<span class="ident">state</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
+        <span class="comment">// the removed place for p1 is reused</span>
+        <span class="macro">assert_eq!</span>(<span class="ident">state</span>.<span class="ident">objects</span>.<span class="ident">len</span>(), <span class="number">4</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">state</span>.<span class="ident">objects</span>.<span class="ident">iter</span>().<span class="ident">filter</span>(<span class="op">|</span><span class="ident">o</span><span class="op">|</span> <span class="ident">o</span>.<span class="ident">is_some</span>()).<span class="ident">count</span>(), <span class="number">3</span>);
 
-        <span class="comment">// Give the thread time to start up</span>
-        <span class="ident">thread::sleep</span>(<span class="ident">Duration::from_millis</span>(<span class="number">250</span>));
+        <span class="comment">// free_set may contain 1 or 2</span>
+        <span class="kw">match</span> <span class="ident">state</span>.<span class="ident">free_set</span>.<span class="ident">last</span>() {
+            <span class="prelude-val">Some</span>(<span class="number">1</span>) =&gt; {
+                <span class="macro">assert_eq!</span>(<span class="ident">state</span>.<span class="ident">ordering</span>, <span class="macro">vec!</span>[<span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>]);
+                <span class="macro">assert_eq!</span>(<span class="ident">extract_index</span>(<span class="kw-2">&amp;</span><span class="ident">p4</span>), <span class="number">2</span>);
+            }
+            <span class="prelude-val">Some</span>(<span class="number">2</span>) =&gt; {
+                <span class="macro">assert_eq!</span>(<span class="ident">state</span>.<span class="ident">ordering</span>, <span class="macro">vec!</span>[<span class="number">0</span>, <span class="number">1</span>, <span class="number">3</span>]);
+                <span class="macro">assert_eq!</span>(<span class="ident">extract_index</span>(<span class="kw-2">&amp;</span><span class="ident">p4</span>), <span class="number">1</span>);
+            }
+            <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(),
+        }
 
-        <span class="macro">assert!</span>(<span class="ident">TICKER_RUNNING</span>.<span class="ident">load</span>(<span class="ident">Ordering::SeqCst</span>));
+        <span class="macro">assert_eq!</span>(<span class="ident">extract_index</span>(<span class="kw-2">&amp;</span><span class="ident">p0</span>), <span class="number">0</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">extract_index</span>(<span class="kw-2">&amp;</span><span class="ident">p1</span>), <span class="number">1</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">extract_index</span>(<span class="kw-2">&amp;</span><span class="ident">p2</span>), <span class="number">2</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">extract_index</span>(<span class="kw-2">&amp;</span><span class="ident">p3</span>), <span class="number">3</span>);
+    }
 
-        <span class="ident">drop</span>(<span class="ident">pb</span>);
-        <span class="macro">assert!</span>(<span class="ident">TICKER_RUNNING</span>.<span class="ident">load</span>(<span class="ident">Ordering::SeqCst</span>));
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">multi_progress_multiple_remove</span>() {
+        <span class="kw">let</span> <span class="ident">mp</span> <span class="op">=</span> <span class="ident">MultiProgress::new</span>();
+        <span class="kw">let</span> <span class="ident">p0</span> <span class="op">=</span> <span class="ident">mp</span>.<span class="ident">add</span>(<span class="ident">ProgressBar::new</span>(<span class="number">1</span>));
+        <span class="kw">let</span> <span class="ident">p1</span> <span class="op">=</span> <span class="ident">mp</span>.<span class="ident">add</span>(<span class="ident">ProgressBar::new</span>(<span class="number">1</span>));
+        <span class="comment">// double remove beyond the first one have no effect</span>
+        <span class="ident">mp</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">p0</span>);
+        <span class="ident">mp</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">p0</span>);
+        <span class="ident">mp</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">p0</span>);
 
-        <span class="ident">drop</span>(<span class="ident">pb2</span>);
-        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">TICKER_RUNNING</span>.<span class="ident">load</span>(<span class="ident">Ordering::SeqCst</span>));
+        <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">mp</span>.<span class="ident">state</span>.<span class="ident">read</span>().<span class="ident">unwrap</span>();
+        <span class="comment">// the removed place for p1 is reused</span>
+        <span class="macro">assert_eq!</span>(<span class="ident">state</span>.<span class="ident">objects</span>.<span class="ident">len</span>(), <span class="number">2</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">state</span>.<span class="ident">objects</span>.<span class="ident">iter</span>().<span class="ident">filter</span>(<span class="op">|</span><span class="ident">obj</span><span class="op">|</span> <span class="ident">obj</span>.<span class="ident">is_some</span>()).<span class="ident">count</span>(), <span class="number">1</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">state</span>.<span class="ident">free_set</span>.<span class="ident">last</span>(), <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="number">0</span>));
+
+        <span class="macro">assert_eq!</span>(<span class="ident">state</span>.<span class="ident">ordering</span>, <span class="macro">vec!</span>[<span class="number">1</span>]);
+        <span class="macro">assert_eq!</span>(<span class="ident">extract_index</span>(<span class="kw-2">&amp;</span><span class="ident">p0</span>), <span class="number">0</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">extract_index</span>(<span class="kw-2">&amp;</span><span class="ident">p1</span>), <span class="number">1</span>);
+    }
+
+    <span class="kw">fn</span> <span class="ident">extract_index</span>(<span class="ident">pb</span>: <span class="kw-2">&amp;</span><span class="ident">ProgressBar</span>) -&gt; <span class="ident">usize</span> {
+        <span class="kw">match</span> <span class="ident">pb</span>.<span class="ident">state</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">draw_target</span>.<span class="ident">kind</span> {
+            <span class="ident">ProgressDrawTargetKind::Remote</span> { <span class="ident">idx</span>, .. } =&gt; <span class="ident">idx</span>,
+            <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(),
+        }
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">multi_progress_hidden</span>() {
+        <span class="kw">let</span> <span class="ident">mpb</span> <span class="op">=</span> <span class="ident">MultiProgress::with_draw_target</span>(<span class="ident">ProgressDrawTarget::hidden</span>());
+        <span class="kw">let</span> <span class="ident">pb</span> <span class="op">=</span> <span class="ident">mpb</span>.<span class="ident">add</span>(<span class="ident">ProgressBar::new</span>(<span class="number">123</span>));
+        <span class="ident">pb</span>.<span class="ident">finish</span>();
+        <span class="ident">mpb</span>.<span class="ident">join</span>().<span class="ident">unwrap</span>();
     }
 }
 </code></pre></div>
