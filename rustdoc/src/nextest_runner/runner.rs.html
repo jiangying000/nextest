@@ -2202,7 +2202,7 @@
                 };
             };
 
-            <span class="comment">// Once the process is done executing, wait up to 100ms for the pipes to shut down.</span>
+            <span class="comment">// Once the process is done executing, wait up to leak_timeout for the pipes to shut down.</span>
             <span class="comment">// Previously, this used to hang if spawned grandchildren inherited stdout/stderr but</span>
             <span class="comment">// didn&#39;t shut down properly. Now, this detects those cases and marks them as leaked.</span>
             <span class="kw">let</span> <span class="ident">leaked</span> <span class="op">=</span> <span class="kw">loop</span> {
