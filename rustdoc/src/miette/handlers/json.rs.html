@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/miette-5.1.1/src/handlers/json.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>json.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/miette-5.2.0/src/handlers/json.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>json.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../miette/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -164,9 +164,32 @@
 <span id="159">159</span>
 <span id="160">160</span>
 <span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt</span>::{<span class="self">self</span>, <span class="ident">Write</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">protocol::Diagnostic</span>, <span class="ident">ReportHandler</span>, <span class="ident">Severity</span>, <span class="ident">SourceCode</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">diagnostic_chain::DiagnosticChain</span>, <span class="ident">protocol::Diagnostic</span>, <span class="ident">ReportHandler</span>, <span class="ident">Severity</span>, <span class="ident">SourceCode</span>,
+};
 
 <span class="doccomment">/**
 [`ReportHandler`] that renders JSON output. It&#39;s a machine-readable output.
@@ -245,6 +268,25 @@
             <span class="prelude-val">Some</span>(<span class="ident">Severity::Advice</span>) =&gt; <span class="string">&quot;advice&quot;</span>,
         };
         <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">r#&quot;&quot;severity&quot;: &quot;{:}&quot;,&quot;#</span>, <span class="ident">severity</span>)<span class="question-mark">?</span>;
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cause_iter</span>) <span class="op">=</span> <span class="ident">diagnostic</span>
+            .<span class="ident">diagnostic_source</span>()
+            .<span class="ident">map</span>(<span class="ident">DiagnosticChain::from_diagnostic</span>)
+            .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">diagnostic</span>.<span class="ident">source</span>().<span class="ident">map</span>(<span class="ident">DiagnosticChain::from_stderror</span>))
+        {
+            <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">r#&quot;&quot;causes&quot;: [&quot;#</span>)<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">add_comma</span> <span class="op">=</span> <span class="bool-val">false</span>;
+            <span class="kw">for</span> <span class="ident">error</span> <span class="kw">in</span> <span class="ident">cause_iter</span> {
+                <span class="kw">if</span> <span class="ident">add_comma</span> {
+                    <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;,&quot;</span>)<span class="question-mark">?</span>;
+                } <span class="kw">else</span> {
+                    <span class="ident">add_comma</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                }
+                <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">r#&quot;&quot;{}&quot;&quot;#</span>, <span class="ident">escape</span>(<span class="kw-2">&amp;</span><span class="ident">error</span>.<span class="ident">to_string</span>()))<span class="question-mark">?</span>;
+            }
+            <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;],&quot;</span>)<span class="question-mark">?</span>
+        } <span class="kw">else</span> {
+            <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">r#&quot;&quot;causes&quot;: [],&quot;#</span>)<span class="question-mark">?</span>;
+        }
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">url</span>) <span class="op">=</span> <span class="ident">diagnostic</span>.<span class="ident">url</span>() {
             <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">r#&quot;&quot;url&quot;: &quot;{}&quot;,&quot;#</span>, <span class="kw-2">&amp;</span><span class="ident">url</span>.<span class="ident">to_string</span>())<span class="question-mark">?</span>;
         }
