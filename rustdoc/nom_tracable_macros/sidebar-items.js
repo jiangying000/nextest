@@ -1,1 +1,1 @@
-initSidebarItems({"attr":[["tracable_parser",""]]});
+window.SIDEBAR_ITEMS = {"attr":[["tracable_parser",""]]};

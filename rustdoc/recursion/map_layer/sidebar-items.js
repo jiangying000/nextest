@@ -1,1 +1,1 @@
-initSidebarItems({"trait":[["CoProject",""],["MapLayer","Provides the ability to map over some structure ‘Layer’, such that ‘Self’ is ‘Layer’, via a function ‘Fn(Unwrapped) -> B’ producing a value ‘To’ such ‘To’ is ‘Layer’."],["Project",""]]});
+window.SIDEBAR_ITEMS = {"trait":[["CoProject",""],["MapLayer","Provides the ability to map over some structure ‘Layer’, such that ‘Self’ is ‘Layer’, via a function ‘Fn(Unwrapped) -> B’ producing a value ‘To’ such ‘To’ is ‘Layer’."],["Project",""]]};

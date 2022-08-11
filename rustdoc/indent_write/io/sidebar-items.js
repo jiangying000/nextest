@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["IndentWriter","Adapter for writers to indent each line"]]});
+window.SIDEBAR_ITEMS = {"struct":[["IndentWriter","Adapter for writers to indent each line"]]};

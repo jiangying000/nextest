@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["fmt",""],["indentable",""],["io",""]]});
+window.SIDEBAR_ITEMS = {"mod":[["fmt",""],["indentable",""],["io",""]]};

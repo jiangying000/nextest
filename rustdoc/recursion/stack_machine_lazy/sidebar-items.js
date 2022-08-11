@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["unfold_and_fold",""],["unfold_and_fold_annotate_result",""],["unfold_and_fold_result",""]]});
+window.SIDEBAR_ITEMS = {"fn":[["unfold_and_fold",""],["unfold_and_fold_annotate_result",""],["unfold_and_fold_result",""]]};

@@ -1,9 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/camino-1.0.9/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
-    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../camino/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/camino-1.1.0/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../camino/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
     <nav class="sidebar"><a class="sidebar-logo" href="../../camino/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../camino/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../camino/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
+                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
+                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -2776,6 +2777,141 @@
 <span id="2771">2771</span>
 <span id="2772">2772</span>
 <span id="2773">2773</span>
+<span id="2774">2774</span>
+<span id="2775">2775</span>
+<span id="2776">2776</span>
+<span id="2777">2777</span>
+<span id="2778">2778</span>
+<span id="2779">2779</span>
+<span id="2780">2780</span>
+<span id="2781">2781</span>
+<span id="2782">2782</span>
+<span id="2783">2783</span>
+<span id="2784">2784</span>
+<span id="2785">2785</span>
+<span id="2786">2786</span>
+<span id="2787">2787</span>
+<span id="2788">2788</span>
+<span id="2789">2789</span>
+<span id="2790">2790</span>
+<span id="2791">2791</span>
+<span id="2792">2792</span>
+<span id="2793">2793</span>
+<span id="2794">2794</span>
+<span id="2795">2795</span>
+<span id="2796">2796</span>
+<span id="2797">2797</span>
+<span id="2798">2798</span>
+<span id="2799">2799</span>
+<span id="2800">2800</span>
+<span id="2801">2801</span>
+<span id="2802">2802</span>
+<span id="2803">2803</span>
+<span id="2804">2804</span>
+<span id="2805">2805</span>
+<span id="2806">2806</span>
+<span id="2807">2807</span>
+<span id="2808">2808</span>
+<span id="2809">2809</span>
+<span id="2810">2810</span>
+<span id="2811">2811</span>
+<span id="2812">2812</span>
+<span id="2813">2813</span>
+<span id="2814">2814</span>
+<span id="2815">2815</span>
+<span id="2816">2816</span>
+<span id="2817">2817</span>
+<span id="2818">2818</span>
+<span id="2819">2819</span>
+<span id="2820">2820</span>
+<span id="2821">2821</span>
+<span id="2822">2822</span>
+<span id="2823">2823</span>
+<span id="2824">2824</span>
+<span id="2825">2825</span>
+<span id="2826">2826</span>
+<span id="2827">2827</span>
+<span id="2828">2828</span>
+<span id="2829">2829</span>
+<span id="2830">2830</span>
+<span id="2831">2831</span>
+<span id="2832">2832</span>
+<span id="2833">2833</span>
+<span id="2834">2834</span>
+<span id="2835">2835</span>
+<span id="2836">2836</span>
+<span id="2837">2837</span>
+<span id="2838">2838</span>
+<span id="2839">2839</span>
+<span id="2840">2840</span>
+<span id="2841">2841</span>
+<span id="2842">2842</span>
+<span id="2843">2843</span>
+<span id="2844">2844</span>
+<span id="2845">2845</span>
+<span id="2846">2846</span>
+<span id="2847">2847</span>
+<span id="2848">2848</span>
+<span id="2849">2849</span>
+<span id="2850">2850</span>
+<span id="2851">2851</span>
+<span id="2852">2852</span>
+<span id="2853">2853</span>
+<span id="2854">2854</span>
+<span id="2855">2855</span>
+<span id="2856">2856</span>
+<span id="2857">2857</span>
+<span id="2858">2858</span>
+<span id="2859">2859</span>
+<span id="2860">2860</span>
+<span id="2861">2861</span>
+<span id="2862">2862</span>
+<span id="2863">2863</span>
+<span id="2864">2864</span>
+<span id="2865">2865</span>
+<span id="2866">2866</span>
+<span id="2867">2867</span>
+<span id="2868">2868</span>
+<span id="2869">2869</span>
+<span id="2870">2870</span>
+<span id="2871">2871</span>
+<span id="2872">2872</span>
+<span id="2873">2873</span>
+<span id="2874">2874</span>
+<span id="2875">2875</span>
+<span id="2876">2876</span>
+<span id="2877">2877</span>
+<span id="2878">2878</span>
+<span id="2879">2879</span>
+<span id="2880">2880</span>
+<span id="2881">2881</span>
+<span id="2882">2882</span>
+<span id="2883">2883</span>
+<span id="2884">2884</span>
+<span id="2885">2885</span>
+<span id="2886">2886</span>
+<span id="2887">2887</span>
+<span id="2888">2888</span>
+<span id="2889">2889</span>
+<span id="2890">2890</span>
+<span id="2891">2891</span>
+<span id="2892">2892</span>
+<span id="2893">2893</span>
+<span id="2894">2894</span>
+<span id="2895">2895</span>
+<span id="2896">2896</span>
+<span id="2897">2897</span>
+<span id="2898">2898</span>
+<span id="2899">2899</span>
+<span id="2900">2900</span>
+<span id="2901">2901</span>
+<span id="2902">2902</span>
+<span id="2903">2903</span>
+<span id="2904">2904</span>
+<span id="2905">2905</span>
+<span id="2906">2906</span>
+<span id="2907">2907</span>
+<span id="2908">2908</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The camino Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -2898,6 +3034,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// let path = Utf8PathBuf::new();</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">Utf8PathBuf</span> {
         <span class="ident">Utf8PathBuf</span>(<span class="ident">PathBuf::new</span>())
     }
@@ -2955,6 +3092,7 @@
     <span class="doccomment">/// let new_utf8_path_buf = Utf8PathBuf::from_path_buf(std_path_buf).unwrap();</span>
     <span class="doccomment">/// assert_eq!(new_utf8_path_buf, &quot;foo.txt&quot;);</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;`self` will be dropped if the result is not used&quot;</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_std_path_buf</span>(<span class="self">self</span>) -&gt; <span class="ident">PathBuf</span> {
         <span class="self">self</span>.<span class="ident">into</span>()
     }
@@ -2980,6 +3118,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`with_capacity`]: PathBuf::with_capacity</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">path_buf_capacity</span>)]</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_capacity</span>(<span class="ident">capacity</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Utf8PathBuf</span> {
         <span class="ident">Utf8PathBuf</span>(<span class="ident">PathBuf::with_capacity</span>(<span class="ident">capacity</span>))
     }
@@ -2994,6 +3133,7 @@
     <span class="doccomment">/// let p = Utf8PathBuf::from(&quot;/test&quot;);</span>
     <span class="doccomment">/// assert_eq!(Utf8Path::new(&quot;/test&quot;), p.as_path());</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_path</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span> {
         <span class="comment">// SAFETY: every Utf8PathBuf constructor ensures that self is valid UTF-8</span>
         <span class="kw">unsafe</span> { <span class="ident">Utf8Path::assume_utf8</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="self">self</span>.<span class="number">0</span>) }
@@ -3125,6 +3265,7 @@
     <span class="doccomment">/// let s = p.into_string();</span>
     <span class="doccomment">/// assert_eq!(s, &quot;/the/head&quot;);</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;`self` will be dropped if the result is not used&quot;</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_string</span>(<span class="self">self</span>) -&gt; <span class="ident">String</span> {
         <span class="self">self</span>.<span class="ident">into_os_string</span>().<span class="ident">into_string</span>().<span class="ident">unwrap</span>()
     }
@@ -3141,11 +3282,13 @@
     <span class="doccomment">/// let s = p.into_os_string();</span>
     <span class="doccomment">/// assert_eq!(s, OsStr::new(&quot;/the/head&quot;));</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;`self` will be dropped if the result is not used&quot;</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_os_string</span>(<span class="self">self</span>) -&gt; <span class="ident">OsString</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">into_os_string</span>()
     }
 
     <span class="doccomment">/// Converts this `Utf8PathBuf` into a [boxed](Box) [`Utf8Path`].</span>
+    <span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;`self` will be dropped if the result is not used&quot;</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_boxed_path</span>(<span class="self">self</span>) -&gt; <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Utf8Path</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="ident">Box::into_raw</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">into_boxed_path</span>()) <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">Utf8Path</span>;
         <span class="comment">// SAFETY:</span>
@@ -3162,6 +3305,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`capacity`]: PathBuf::capacity</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">path_buf_capacity</span>)]</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">capacity</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">capacity</span>()
     }
@@ -3186,6 +3330,20 @@
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">reserve</span>(<span class="ident">additional</span>)
     }
 
+    <span class="doccomment">/// Invokes [`try_reserve`] on the underlying instance of [`PathBuf`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// *Requires Rust 1.63 or newer.*</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`try_reserve`]: PathBuf::try_reserve</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">try_reserve_2</span>)]</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_reserve</span>(
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">additional</span>: <span class="ident">usize</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">std::collections::TryReserveError</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">try_reserve</span>(<span class="ident">additional</span>)
+    }
+
     <span class="doccomment">/// Invokes [`reserve_exact`] on the underlying instance of [`PathBuf`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// *Requires Rust 1.44 or newer.*</span>
@@ -3196,6 +3354,20 @@
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">reserve_exact</span>(<span class="ident">additional</span>)
     }
 
+    <span class="doccomment">/// Invokes [`try_reserve_exact`] on the underlying instance of [`PathBuf`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// *Requires Rust 1.63 or newer.*</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`try_reserve_exact`]: PathBuf::try_reserve_exact</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">try_reserve_2</span>)]</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_reserve_exact</span>(
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">additional</span>: <span class="ident">usize</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">std::collections::TryReserveError</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">try_reserve_exact</span>(<span class="ident">additional</span>)
+    }
+
     <span class="doccomment">/// Invokes [`shrink_to_fit`] on the underlying instance of [`PathBuf`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// *Requires Rust 1.44 or newer.*</span>
@@ -3204,6 +3376,17 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">path_buf_capacity</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shrink_to_fit</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">shrink_to_fit</span>()
+    }
+
+    <span class="doccomment">/// Invokes [`shrink_to`] on the underlying instance of [`PathBuf`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// *Requires Rust 1.56 or newer.*</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`shrink_to`]: PathBuf::shrink_to</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">shrink_to</span>)]</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">shrink_to</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">min_capacity</span>: <span class="ident">usize</span>) {
+        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">shrink_to</span>(<span class="ident">min_capacity</span>)
     }
 }
 
@@ -3364,6 +3547,7 @@
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`str`]: str</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="comment">// SAFETY: every Utf8Path constructor ensures that self is valid UTF-8</span>
         <span class="kw">unsafe</span> { <span class="ident">assume_utf8</span>(<span class="self">self</span>.<span class="ident">as_os_str</span>()) }
@@ -3379,6 +3563,7 @@
     <span class="doccomment">/// let os_str = Utf8Path::new(&quot;foo.txt&quot;).as_os_str();</span>
     <span class="doccomment">/// assert_eq!(os_str, std::ffi::OsStr::new(&quot;foo.txt&quot;));</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_os_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">OsStr</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_os_str</span>()
     }
@@ -3393,6 +3578,8 @@
     <span class="doccomment">/// let path_buf = Utf8Path::new(&quot;foo.txt&quot;).to_path_buf();</span>
     <span class="doccomment">/// assert_eq!(path_buf, Utf8PathBuf::from(&quot;foo.txt&quot;));</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;this returns the result of the operation, \
+                  without modifying the original&quot;</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_path_buf</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Utf8PathBuf</span> {
         <span class="ident">Utf8PathBuf</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">to_path_buf</span>())
     }
@@ -3415,6 +3602,7 @@
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`has_root`]: Utf8Path::has_root</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_absolute</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">is_absolute</span>()
     }
@@ -3432,6 +3620,7 @@
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`is_absolute`]: Utf8Path::is_absolute</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_relative</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">is_relative</span>()
     }
@@ -3452,6 +3641,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(Utf8Path::new(&quot;/etc/passwd&quot;).has_root());</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">has_root</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">has_root</span>()
     }
@@ -3473,6 +3663,7 @@
     <span class="doccomment">/// assert_eq!(grand_parent, Utf8Path::new(&quot;/&quot;));</span>
     <span class="doccomment">/// assert_eq!(grand_parent.parent(), None);</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parent</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Utf8Path</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">parent</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">path</span><span class="op">|</span> {
             <span class="comment">// SAFETY: self is valid UTF-8, so parent is valid UTF-8 as well</span>
@@ -3531,6 +3722,7 @@
     <span class="doccomment">/// assert_eq!(None, Utf8Path::new(&quot;foo.txt/..&quot;).file_name());</span>
     <span class="doccomment">/// assert_eq!(None, Utf8Path::new(&quot;/&quot;).file_name());</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">file_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">file_name</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> {
             <span class="comment">// SAFETY: self is valid UTF-8, so file_name is valid UTF-8 as well</span>
@@ -3596,6 +3788,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(!Utf8Path::new(&quot;/etc/foo.rs&quot;).starts_with(&quot;/etc/foo&quot;));</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">starts_with</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">base</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">starts_with</span>(<span class="ident">base</span>)
     }
@@ -3618,6 +3811,7 @@
     <span class="doccomment">/// assert!(!path.ends_with(&quot;/resolv.conf&quot;));</span>
     <span class="doccomment">/// assert!(!path.ends_with(&quot;conf&quot;)); // use .extension() instead</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ends_with</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">base</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">ends_with</span>(<span class="ident">base</span>)
     }
@@ -3641,6 +3835,7 @@
     <span class="doccomment">/// assert_eq!(&quot;foo&quot;, Utf8Path::new(&quot;foo.rs&quot;).file_stem().unwrap());</span>
     <span class="doccomment">/// assert_eq!(&quot;foo.tar&quot;, Utf8Path::new(&quot;foo.tar.gz&quot;).file_stem().unwrap());</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">file_stem</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">file_stem</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> {
             <span class="comment">// SAFETY: self is valid UTF-8, so file_stem is valid UTF-8 as well</span>
@@ -3667,6 +3862,7 @@
     <span class="doccomment">/// assert_eq!(&quot;rs&quot;, Utf8Path::new(&quot;foo.rs&quot;).extension().unwrap());</span>
     <span class="doccomment">/// assert_eq!(&quot;gz&quot;, Utf8Path::new(&quot;foo.tar.gz&quot;).extension().unwrap());</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extension</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">extension</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> {
             <span class="comment">// SAFETY: self is valid UTF-8, so extension is valid UTF-8 as well</span>
@@ -3685,6 +3881,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(Utf8Path::new(&quot;/etc&quot;).join(&quot;passwd&quot;), Utf8PathBuf::from(&quot;/etc/passwd&quot;));</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">join</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">path</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Utf8Path</span><span class="op">&gt;</span>) -&gt; <span class="ident">Utf8PathBuf</span> {
         <span class="ident">Utf8PathBuf</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">join</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>.<span class="ident">as_ref</span>().<span class="number">0</span>))
     }
@@ -3701,6 +3898,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(Utf8Path::new(&quot;/etc&quot;).join_os(&quot;passwd&quot;), PathBuf::from(&quot;/etc/passwd&quot;));</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">join_os</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">path</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>) -&gt; <span class="ident">PathBuf</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">join</span>(<span class="ident">path</span>)
     }
@@ -3720,6 +3918,7 @@
     <span class="doccomment">/// let path = Utf8Path::new(&quot;/tmp&quot;);</span>
     <span class="doccomment">/// assert_eq!(path.with_file_name(&quot;var&quot;), Utf8PathBuf::from(&quot;/var&quot;));</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_file_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">file_name</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="ident">Utf8PathBuf</span> {
         <span class="ident">Utf8PathBuf</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">with_file_name</span>(<span class="ident">file_name</span>.<span class="ident">as_ref</span>()))
     }
@@ -4001,6 +4200,9 @@
 
     <span class="doccomment">/// Returns `true` if the path points at an existing entity.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// Warning: this method may be error-prone, consider using [`try_exists()`] instead!</span>
+    <span class="doccomment">/// It also has a risk of introducing time-of-check to time-of-use (TOCTOU) bugs.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// This function will traverse symbolic links to query information about the</span>
     <span class="doccomment">/// destination file. In case of broken symbolic links this will return `false`.</span>
     <span class="doccomment">///</span>
@@ -4018,8 +4220,47 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This is a convenience function that coerces errors to false. If you want to</span>
     <span class="doccomment">/// check errors, call [`fs::metadata`].</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">exists</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">exists</span>()
+    }
+
+    <span class="doccomment">/// Returns `Ok(true)` if the path points at an existing entity.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This function will traverse symbolic links to query information about the</span>
+    <span class="doccomment">/// destination file. In case of broken symbolic links this will return `Ok(false)`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// As opposed to the [`exists()`] method, this one doesn&#39;t silently ignore errors</span>
+    <span class="doccomment">/// unrelated to the path not existing. (E.g. it will return `Err(_)` in case of permission</span>
+    <span class="doccomment">/// denied on some of the parent directories.)</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Note that while this avoids some pitfalls of the `exists()` method, it still can not</span>
+    <span class="doccomment">/// prevent time-of-check to time-of-use (TOCTOU) bugs. You should only use it in scenarios</span>
+    <span class="doccomment">/// where those bugs are not an issue.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```no_run</span>
+    <span class="doccomment">/// use camino::Utf8Path;</span>
+    <span class="doccomment">/// assert!(!Utf8Path::new(&quot;does_not_exist.txt&quot;).try_exists().expect(&quot;Can&#39;t check existence of file does_not_exist.txt&quot;));</span>
+    <span class="doccomment">/// assert!(Utf8Path::new(&quot;/root/secret_file.txt&quot;).try_exists().is_err());</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`exists()`]: Self::exists</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_exists</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+        <span class="comment">// Note: this block is written this way rather than with a pattern guard to appease Rust</span>
+        <span class="comment">// 1.34.</span>
+        <span class="kw">match</span> <span class="ident">fs::metadata</span>(<span class="self">self</span>) {
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>),
+            <span class="prelude-val">Err</span>(<span class="ident">error</span>) =&gt; {
+                <span class="kw">if</span> <span class="ident">error</span>.<span class="ident">kind</span>() <span class="op">==</span> <span class="ident">io::ErrorKind::NotFound</span> {
+                    <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>)
+                } <span class="kw">else</span> {
+                    <span class="prelude-val">Err</span>(<span class="ident">error</span>)
+                }
+            }
+        }
     }
 
     <span class="doccomment">/// Returns `true` if the path exists on disk and is pointing at a regular file.</span>
@@ -4049,6 +4290,7 @@
     <span class="doccomment">/// it. Only using `is_file` can break workflows like `diff &lt;( prog_a )` on</span>
     <span class="doccomment">/// a Unix-like system for example. See [`fs::File::open`] or</span>
     <span class="doccomment">/// [`fs::OpenOptions::open`] for more information.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_file</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">is_file</span>()
     }
@@ -4074,6 +4316,7 @@
     <span class="doccomment">/// This is a convenience function that coerces errors to false. If you want to</span>
     <span class="doccomment">/// check errors, call [`fs::metadata`] and handle its [`Result`]. Then call</span>
     <span class="doccomment">/// [`fs::Metadata::is_dir`] if it was [`Ok`].</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_dir</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">is_dir</span>()
     }
@@ -4112,6 +4355,7 @@
     }
 
     <span class="doccomment">/// Converts a `Box&lt;Utf8Path&gt;` into a [`Utf8PathBuf`] without copying or allocating.</span>
+    <span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;`self` will be dropped if the result is not used&quot;</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_path_buf</span>(<span class="self">self</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Utf8Path</span><span class="op">&gt;</span>) -&gt; <span class="ident">Utf8PathBuf</span> {
         <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="ident">Box::into_raw</span>(<span class="self">self</span>) <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">Path</span>;
         <span class="comment">// SAFETY:</span>
@@ -4175,6 +4419,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// [`ancestors`]: Utf8Path::ancestors</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
+<span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;iterators are lazy and do nothing unless consumed&quot;</span>]</span>
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">transparent</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Utf8Ancestors</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">Ancestors</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>);
 
@@ -4217,6 +4462,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// [`components`]: Utf8Path::components</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Eq</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>)]</span>
+<span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;iterators are lazy and do nothing unless consumed&quot;</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Utf8Components</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">Components</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>);
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Utf8Components</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
@@ -4233,6 +4479,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(Utf8Path::new(&quot;foo/bar.txt&quot;), components.as_path());</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_path</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Utf8Path</span> {
         <span class="comment">// SAFETY: Utf8Components was constructed from a Utf8Path, so it is guaranteed to be valid</span>
         <span class="comment">// UTF-8</span>
@@ -4301,6 +4548,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// [`iter`]: Utf8Path::iter</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
+<span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;iterators are lazy and do nothing unless consumed&quot;</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Iter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="ident">inner</span>: <span class="ident">Utf8Components</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
 }
@@ -4335,6 +4583,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(Utf8Path::new(&quot;foo/bar.txt&quot;), iter.as_path());</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_path</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Utf8Path</span> {
         <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">as_path</span>()
     }
@@ -4452,6 +4701,7 @@
     <span class="doccomment">/// let components: Vec&lt;_&gt; = path.components().map(|comp| comp.as_str()).collect();</span>
     <span class="doccomment">/// assert_eq!(&amp;components, &amp;[&quot;.&quot;, &quot;tmp&quot;, &quot;foo&quot;, &quot;bar.txt&quot;]);</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span> {
         <span class="comment">// SAFETY: Utf8Component was constructed from a Utf8Path, so it is guaranteed to be</span>
         <span class="comment">// valid UTF-8</span>
@@ -4469,6 +4719,7 @@
     <span class="doccomment">/// let components: Vec&lt;_&gt; = path.components().map(|comp| comp.as_os_str()).collect();</span>
     <span class="doccomment">/// assert_eq!(&amp;components, &amp;[&quot;.&quot;, &quot;tmp&quot;, &quot;foo&quot;, &quot;bar.txt&quot;]);</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_os_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">OsStr</span> {
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
             <span class="ident">Utf8Component::Prefix</span>(<span class="ident">prefix</span>) =&gt; <span class="ident">prefix</span>.<span class="ident">as_os_str</span>(),
@@ -4599,6 +4850,7 @@
     <span class="doccomment">/// assert!(!UNC(&quot;server&quot;, &quot;share&quot;).is_verbatim());</span>
     <span class="doccomment">/// assert!(!Disk(b&#39;C&#39;).is_verbatim());</span>
     <span class="doccomment">/// ```</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_verbatim</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">use</span> <span class="ident">Utf8Prefix</span>::<span class="kw-2">*</span>;
         <span class="kw">match</span> <span class="self">self</span> {
@@ -4650,6 +4902,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// See [`Utf8Prefix`]&#39;s documentation for more information on the different</span>
     <span class="doccomment">/// kinds of prefixes.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kind</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Utf8Prefix</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
         <span class="comment">// SAFETY for all the below unsafe blocks: the path self was originally constructed from was</span>
         <span class="comment">// UTF-8 so any parts of it are valid UTF-8</span>
@@ -4672,6 +4925,7 @@
     }
 
     <span class="doccomment">/// Returns the [`str`] slice for this prefix.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span> {
         <span class="comment">// SAFETY: Utf8PrefixComponent was constructed from a Utf8Path, so it is guaranteed to be</span>
         <span class="comment">// valid UTF-8</span>
@@ -4679,6 +4933,7 @@
     }
 
     <span class="doccomment">/// Returns the raw [`OsStr`] slice for this prefix.</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_os_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">OsStr</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_os_str</span>()
     }
@@ -5374,6 +5629,7 @@
 
 <span class="macro">macro_rules!</span> <span class="ident">impl_cmp</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span>: <span class="ident">ty</span>) =&gt; {
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span>) -&gt; <span class="ident">bool</span> {
@@ -5381,6 +5637,7 @@
             }
         }
 
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span>) -&gt; <span class="ident">bool</span> {
@@ -5388,6 +5645,7 @@
             }
         }
 
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialOrd</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Ordering</span><span class="op">&gt;</span> {
@@ -5395,6 +5653,7 @@
             }
         }
 
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialOrd</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Ordering</span><span class="op">&gt;</span> {
@@ -5412,6 +5671,7 @@
 
 <span class="macro">macro_rules!</span> <span class="ident">impl_cmp_std_path</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span>: <span class="ident">ty</span>) =&gt; {
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span>) -&gt; <span class="ident">bool</span> {
@@ -5419,6 +5679,7 @@
             }
         }
 
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span>) -&gt; <span class="ident">bool</span> {
@@ -5426,6 +5687,7 @@
             }
         }
 
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialOrd</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">std::cmp::Ordering</span><span class="op">&gt;</span> {
@@ -5433,6 +5695,7 @@
             }
         }
 
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialOrd</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">std::cmp::Ordering</span><span class="op">&gt;</span> {
@@ -5457,6 +5720,7 @@
 
 <span class="macro">macro_rules!</span> <span class="ident">impl_cmp_str</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span>: <span class="ident">ty</span>) =&gt; {
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span>) -&gt; <span class="ident">bool</span> {
@@ -5464,6 +5728,7 @@
             }
         }
 
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span>) -&gt; <span class="ident">bool</span> {
@@ -5471,6 +5736,7 @@
             }
         }
 
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialOrd</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">std::cmp::Ordering</span><span class="op">&gt;</span> {
@@ -5478,6 +5744,7 @@
             }
         }
 
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialOrd</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">std::cmp::Ordering</span><span class="op">&gt;</span> {
@@ -5502,6 +5769,7 @@
 
 <span class="macro">macro_rules!</span> <span class="ident">impl_cmp_os_str</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span>: <span class="ident">ty</span>) =&gt; {
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span>) -&gt; <span class="ident">bool</span> {
@@ -5509,6 +5777,7 @@
             }
         }
 
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span>) -&gt; <span class="ident">bool</span> {
@@ -5516,6 +5785,7 @@
             }
         }
 
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialOrd</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">std::cmp::Ordering</span><span class="op">&gt;</span> {
@@ -5523,6 +5793,7 @@
             }
         }
 
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::extra_unused_lifetimes</span>)]</span>
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">PartialOrd</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rhs</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">lhs</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">std::cmp::Ordering</span><span class="op">&gt;</span> {
@@ -5550,5 +5821,5 @@
     <span class="kw-2">&amp;</span><span class="kw-2">*</span>(<span class="ident">string</span> <span class="kw">as</span> <span class="kw-2">*const</span> <span class="ident">OsStr</span> <span class="kw">as</span> <span class="kw-2">*const</span> <span class="ident">str</span>)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="camino" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.1 (e092d0b6b 2022-07-16)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="camino" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
 </body></html>
