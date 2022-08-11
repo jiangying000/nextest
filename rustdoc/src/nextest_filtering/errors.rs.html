@@ -191,7 +191,7 @@
 }
 
 <span class="doccomment">/// An individual error that occurred while parsing a filter expression.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Error</span>, <span class="ident">Diagnostic</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Error</span>, <span class="ident">Diagnostic</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ParseSingleError</span> {
     <span class="doccomment">/// An invalid regex was encountered.</span>
