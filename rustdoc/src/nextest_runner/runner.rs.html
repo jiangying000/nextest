@@ -1624,6 +1624,8 @@
 <span id="1618">1618</span>
 <span id="1619">1619</span>
 <span id="1620">1620</span>
+<span id="1621">1621</span>
+<span id="1622">1622</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1917,7 +1919,9 @@
                                     <span class="comment">// The test succeeded.</span>
                                     <span class="ident">run_statuses</span>.<span class="ident">push</span>(<span class="ident">run_status</span>);
                                     <span class="kw">break</span>;
-                                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">attempt</span> <span class="op">&lt;</span> <span class="ident">total_attempts</span> {
+                                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">attempt</span> <span class="op">&lt;</span> <span class="ident">total_attempts</span>
+                                    <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">canceled_ref</span>.<span class="ident">load</span>(<span class="ident">Ordering::Acquire</span>)
+                                {
                                     <span class="comment">// Retry this test: send a retry event, then retry the loop.</span>
                                     <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">this_run_sender</span>.<span class="ident">send</span>(<span class="ident">InternalTestEvent::Retry</span> {
                                         <span class="ident">test_instance</span>,
