@@ -1609,23 +1609,6 @@
 <span id="1603">1603</span>
 <span id="1604">1604</span>
 <span id="1605">1605</span>
-<span id="1606">1606</span>
-<span id="1607">1607</span>
-<span id="1608">1608</span>
-<span id="1609">1609</span>
-<span id="1610">1610</span>
-<span id="1611">1611</span>
-<span id="1612">1612</span>
-<span id="1613">1613</span>
-<span id="1614">1614</span>
-<span id="1615">1615</span>
-<span id="1616">1616</span>
-<span id="1617">1617</span>
-<span id="1618">1618</span>
-<span id="1619">1619</span>
-<span id="1620">1620</span>
-<span id="1621">1621</span>
-<span id="1622">1622</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -2098,7 +2081,7 @@
 
         <span class="comment">// If creating a job fails, we might be on an old system. Ignore this -- job objects are a</span>
         <span class="comment">// best-effort thing.</span>
-        <span class="kw">let</span> <span class="ident">job</span> <span class="op">=</span> <span class="ident">imp::Job::new</span>().<span class="ident">ok</span>();
+        <span class="kw">let</span> <span class="ident">job</span> <span class="op">=</span> <span class="ident">imp::Job::create</span>().<span class="ident">ok</span>();
 
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">no_capture</span> {
             <span class="comment">// Capture stdout and stderr.</span>
@@ -2869,6 +2852,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
 <span class="kw">mod</span> <span class="ident">imp</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">use</span> <span class="ident">win32job::Job</span>;
     <span class="kw">use</span> <span class="ident">win32job::JobError</span>;
     <span class="kw">use</span> <span class="ident">windows::Win32</span>::{
         <span class="ident">Foundation</span>::{<span class="ident">SetHandleInformation</span>, <span class="ident">HANDLE</span>, <span class="ident">HANDLE_FLAGS</span>, <span class="ident">HANDLE_FLAG_INHERIT</span>},
@@ -2914,24 +2898,6 @@
         <span class="comment">// TODO: set process group on Windows for better ctrl-C handling.</span>
     }
 
-    <span class="doccomment">/// Wrapper around a Job that implements Send and Sync.</span>
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct</span> <span class="ident">Job</span> {
-        <span class="ident">inner</span>: <span class="ident">win32job::Job</span>,
-    }
-
-    <span class="kw">impl</span> <span class="ident">Job</span> {
-        <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">JobError</span><span class="op">&gt;</span> {
-            <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-                <span class="ident">inner</span>: <span class="ident">win32job::Job::create</span>()<span class="question-mark">?</span>,
-            })
-        }
-    }
-
-    <span class="comment">// https://github.com/ohadravid/win32job-rs/issues/1</span>
-    <span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Send</span> <span class="kw">for</span> <span class="ident">Job</span> {}
-    <span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Sync</span> <span class="kw">for</span> <span class="ident">Job</span> {}
-
     <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">assign_process_to_job</span>(
         <span class="ident">child</span>: <span class="kw-2">&amp;</span><span class="ident">tokio::process::Child</span>,
         <span class="ident">job</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Job</span><span class="op">&gt;</span>,
@@ -2947,7 +2913,7 @@
                 }
             };
 
-            <span class="ident">job</span>.<span class="ident">inner</span>.<span class="ident">assign_process</span>(<span class="ident">handle</span>)<span class="question-mark">?</span>;
+            <span class="ident">job</span>.<span class="ident">assign_process</span>(<span class="ident">handle</span>)<span class="question-mark">?</span>;
         }
 
         <span class="prelude-val">Ok</span>(())
@@ -2965,7 +2931,7 @@
             <span class="kw">return</span>;
         }
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">job</span>) <span class="op">=</span> <span class="ident">job</span> {
-            <span class="kw">let</span> <span class="ident">handle</span> <span class="op">=</span> <span class="ident">job</span>.<span class="ident">inner</span>.<span class="ident">handle</span>();
+            <span class="kw">let</span> <span class="ident">handle</span> <span class="op">=</span> <span class="ident">job</span>.<span class="ident">handle</span>();
             <span class="kw">unsafe</span> {
                 <span class="comment">// Ignore the error here -- it&#39;s likely due to the process exiting.</span>
                 <span class="comment">// Note: 1 is the exit code returned by Windows.</span>
@@ -3022,7 +2988,7 @@
     <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct</span> <span class="ident">Job</span>(());
 
     <span class="kw">impl</span> <span class="ident">Job</span> {
-        <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Infallible</span><span class="op">&gt;</span> {
+        <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">create</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Infallible</span><span class="op">&gt;</span> {
             <span class="prelude-val">Ok</span>(<span class="self">Self</span>(()))
         }
     }
