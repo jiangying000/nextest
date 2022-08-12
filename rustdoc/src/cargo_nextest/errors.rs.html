@@ -638,10 +638,10 @@
         <span class="attribute">#[<span class="ident">source</span>]</span>
         <span class="ident">err</span>: <span class="ident">std::io::Error</span>,
     },
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;cargo configs construction error&quot;</span>)]</span>
-    <span class="ident">CargoConfigsConstructError</span> {
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;cargo config error&quot;</span>)]</span>
+    <span class="ident">CargoConfigError</span> {
         <span class="attribute">#[<span class="ident">from</span>]</span>
-        <span class="ident">err</span>: <span class="ident">CargoConfigsConstructError</span>,
+        <span class="ident">err</span>: <span class="ident">CargoConfigError</span>,
     },
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;config parse error&quot;</span>)]</span>
     <span class="ident">ConfigParseError</span> {
@@ -881,7 +881,7 @@
             <span class="ident"><span class="self">Self</span>::ProfileNotFound</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::StoreDirCreateError</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::RootManifestNotFound</span> { .. }
-            <span class="op">|</span> <span class="ident"><span class="self">Self</span>::CargoConfigsConstructError</span> { .. }
+            <span class="op">|</span> <span class="ident"><span class="self">Self</span>::CargoConfigError</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::ConfigParseError</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::ArgumentFileReadError</span> { .. }
             <span class="op">|</span> <span class="ident"><span class="self">Self</span>::UnknownArchiveFormat</span> { .. }
@@ -965,7 +965,7 @@
                 );
                 <span class="prelude-val">Some</span>(<span class="ident">err</span> <span class="kw">as</span> <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Error</span>)
             }
-            <span class="ident"><span class="self">Self</span>::CargoConfigsConstructError</span> { <span class="ident">err</span> } =&gt; {
+            <span class="ident"><span class="self">Self</span>::CargoConfigError</span> { <span class="ident">err</span> } =&gt; {
                 <span class="macro">log::error!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">err</span>);
                 <span class="ident">err</span>.<span class="ident">source</span>()
             }

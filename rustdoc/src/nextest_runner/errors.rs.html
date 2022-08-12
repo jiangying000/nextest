@@ -1119,6 +1119,52 @@
 <span id="1113">1113</span>
 <span id="1114">1114</span>
 <span id="1115">1115</span>
+<span id="1116">1116</span>
+<span id="1117">1117</span>
+<span id="1118">1118</span>
+<span id="1119">1119</span>
+<span id="1120">1120</span>
+<span id="1121">1121</span>
+<span id="1122">1122</span>
+<span id="1123">1123</span>
+<span id="1124">1124</span>
+<span id="1125">1125</span>
+<span id="1126">1126</span>
+<span id="1127">1127</span>
+<span id="1128">1128</span>
+<span id="1129">1129</span>
+<span id="1130">1130</span>
+<span id="1131">1131</span>
+<span id="1132">1132</span>
+<span id="1133">1133</span>
+<span id="1134">1134</span>
+<span id="1135">1135</span>
+<span id="1136">1136</span>
+<span id="1137">1137</span>
+<span id="1138">1138</span>
+<span id="1139">1139</span>
+<span id="1140">1140</span>
+<span id="1141">1141</span>
+<span id="1142">1142</span>
+<span id="1143">1143</span>
+<span id="1144">1144</span>
+<span id="1145">1145</span>
+<span id="1146">1146</span>
+<span id="1147">1147</span>
+<span id="1148">1148</span>
+<span id="1149">1149</span>
+<span id="1150">1150</span>
+<span id="1151">1151</span>
+<span id="1152">1152</span>
+<span id="1153">1153</span>
+<span id="1154">1154</span>
+<span id="1155">1155</span>
+<span id="1156">1156</span>
+<span id="1157">1157</span>
+<span id="1158">1158</span>
+<span id="1159">1159</span>
+<span id="1160">1160</span>
+<span id="1161">1161</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1908,7 +1954,7 @@
 <span class="doccomment">/// instance.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Error</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CargoConfigsConstructError</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CargoConfigError</span> {
     <span class="doccomment">/// Failed to retrieve the current directory.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;failed to retrieve current directory&quot;</span>)]</span>
     <span class="ident">GetCurrentDir</span>(<span class="attribute">#[<span class="ident">source</span>]</span> <span class="ident">std::io::Error</span>),
@@ -1918,21 +1964,40 @@
     <span class="ident">CurrentDirInvalidUtf8</span>(<span class="attribute">#[<span class="ident">source</span>]</span> <span class="ident">FromPathBufError</span>),
 
     <span class="doccomment">/// Parsing a CLI config option failed.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;failed to parse --config option `{config_str}` as TOML&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;failed to parse --config argument `{config_str}` as TOML&quot;</span>)]</span>
     <span class="ident">CliConfigParseError</span> {
+        <span class="doccomment">/// The CLI config option.</span>
+        <span class="ident">config_str</span>: <span class="ident">String</span>,
+
+        <span class="doccomment">/// The error that occurred trying to parse the config.</span>
+        <span class="attribute">#[<span class="ident">source</span>]</span>
+        <span class="ident">error</span>: <span class="ident">toml_edit::TomlError</span>,
+    },
+
+    <span class="doccomment">/// Deserializing a CLI config option into domain types failed.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;failed to deserialize --config argument `{config_str}` as TOML&quot;</span>)]</span>
+    <span class="ident">CliConfigDeError</span> {
         <span class="doccomment">/// The CLI config option.</span>
         <span class="ident">config_str</span>: <span class="ident">String</span>,
 
         <span class="doccomment">/// The error that occurred trying to deserialize the config.</span>
         <span class="attribute">#[<span class="ident">source</span>]</span>
-        <span class="ident">error</span>: <span class="ident">toml::de::Error</span>,
+        <span class="ident">error</span>: <span class="ident">toml_edit::easy::de::Error</span>,
     },
-}
 
-<span class="doccomment">/// An error occurred while looking for Cargo configuration files.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Error</span>)]</span>
-<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CargoConfigSearchError</span> {
+    <span class="doccomment">/// A CLI config option is not in the dotted key format.</span>
+    <span class="attribute">#[<span class="ident">error</span>(
+        <span class="string">&quot;invalid format for --config argument `{config_str}` (should be a dotted key expression)&quot;</span>
+    )]</span>
+    <span class="ident">InvalidCliConfig</span> {
+        <span class="doccomment">/// The CLI config option.</span>
+        <span class="ident">config_str</span>: <span class="ident">String</span>,
+
+        <span class="doccomment">/// The reason why this Cargo CLI config is invalid.</span>
+        <span class="attribute">#[<span class="ident">source</span>]</span>
+        <span class="ident">reason</span>: <span class="ident">InvalidCargoCliConfigReason</span>,
+    },
+
     <span class="doccomment">/// A non-UTF-8 path was encountered.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;non-UTF-8 path encountered&quot;</span>)]</span>
     <span class="ident">NonUtf8Path</span>(<span class="attribute">#[<span class="ident">source</span>]</span> <span class="ident">FromPathBufError</span>),
@@ -1971,8 +2036,35 @@
 
         <span class="doccomment">/// The error that occurred trying to deserialize the config file</span>
         <span class="attribute">#[<span class="ident">source</span>]</span>
-        <span class="ident">error</span>: <span class="ident">toml::de::Error</span>,
+        <span class="ident">error</span>: <span class="ident">toml_edit::easy::de::Error</span>,
     },
+}
+
+<span class="doccomment">/// The reason an invalid CLI config failed.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Part of [`CargoConfigError::InvalidCliConfig`].</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Error</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">InvalidCargoCliConfigReason</span> {
+    <span class="doccomment">/// The argument is not a TOML dotted key expression.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;was not a TOML dotted key expression (such as `build.jobs = 2`)&quot;</span>)]</span>
+    <span class="ident">NotDottedKv</span>,
+
+    <span class="doccomment">/// The argument includes non-whitespace decoration.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;includes non-whitespace decoration&quot;</span>)]</span>
+    <span class="ident">IncludesNonWhitespaceDecoration</span>,
+
+    <span class="doccomment">/// The argument sets a value to an inline table.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;sets a value to an inline table, which is not accepted&quot;</span>)]</span>
+    <span class="ident">SetsValueToInlineTable</span>,
+
+    <span class="doccomment">/// The argument sets a value to an array of tables.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;sets a value to an array of tables, which is not accepted&quot;</span>)]</span>
+    <span class="ident">SetsValueToArrayOfTables</span>,
+
+    <span class="doccomment">/// The argument doesn&#39;t provide a value.</span>
+    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;doesn&#39;t provide a value&quot;</span>)]</span>
+    <span class="ident">DoesntProvideValue</span>,
 }
 
 <span class="doccomment">/// An error occurred while determining the cross-compiling target triple.</span>
@@ -1990,7 +2082,7 @@
     <span class="ident">CargoConfigSearchError</span>(
         <span class="attribute">#[<span class="ident">from</span>]</span>
         <span class="attribute">#[<span class="ident">source</span>]</span>
-        <span class="ident">CargoConfigSearchError</span>,
+        <span class="ident">CargoConfigError</span>,
     ),
 }
 
@@ -2033,7 +2125,7 @@
     <span class="ident">CargoConfigSearchError</span>(
         <span class="attribute">#[<span class="ident">from</span>]</span>
         <span class="attribute">#[<span class="ident">source</span>]</span>
-        <span class="ident">CargoConfigSearchError</span>,
+        <span class="ident">CargoConfigError</span>,
     ),
 }
 
