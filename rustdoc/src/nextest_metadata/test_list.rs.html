@@ -470,6 +470,9 @@
 <span id="464">464</span>
 <span id="465">465</span>
 <span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -743,6 +746,9 @@
 
     <span class="doccomment">/// Linked paths, relative to the target directory.</span>
     <span class="kw">pub</span> <span class="ident">linked_paths</span>: <span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
+
+    <span class="doccomment">/// The target triple used while compiling the Rust artifacts</span>
+    <span class="kw">pub</span> <span class="ident">target_triple</span>: <span class="ident">String</span>,
 }
 
 <span class="doccomment">/// A non-test Rust binary. Used to set the correct environment</span>

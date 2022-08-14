@@ -1581,8 +1581,6 @@
 <span id="1575">1575</span>
 <span id="1576">1576</span>
 <span id="1577">1577</span>
-<span id="1578">1578</span>
-<span id="1579">1579</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -2147,6 +2145,7 @@
         <span class="ident">graph</span>: <span class="kw-2">&amp;</span><span class="ident">PackageGraph</span>,
         <span class="ident">manifest_path</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Utf8Path</span><span class="op">&gt;</span>,
         <span class="ident">output</span>: <span class="ident">OutputContext</span>,
+        <span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TargetTriple</span><span class="op">&gt;</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">BinaryList</span><span class="op">&gt;</span> {
         <span class="comment">// Don&#39;t use the manifest path from the graph to ensure that if the user cd&#39;s into a</span>
         <span class="comment">// particular crate and runs cargo nextest, then it behaves identically to cargo test.</span>
@@ -2169,7 +2168,8 @@
             ));
         }
 
-        <span class="kw">let</span> <span class="ident">test_binaries</span> <span class="op">=</span> <span class="ident">BinaryList::from_messages</span>(<span class="ident">Cursor::new</span>(<span class="ident">output</span>.<span class="ident">stdout</span>), <span class="ident">graph</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">test_binaries</span> <span class="op">=</span>
+            <span class="ident">BinaryList::from_messages</span>(<span class="ident">Cursor::new</span>(<span class="ident">output</span>.<span class="ident">stdout</span>), <span class="ident">graph</span>, <span class="ident">target_triple</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">test_binaries</span>)
     }
 }
@@ -2338,6 +2338,9 @@
     <span class="ident">reuse_build</span>: <span class="ident">ReuseBuildInfo</span>,
     <span class="ident">cargo_opts</span>: <span class="ident">CargoOptions</span>,
     <span class="ident">config_opts</span>: <span class="ident">ConfigOpts</span>,
+
+    <span class="ident">cargo_configs</span>: <span class="ident">CargoConfigs</span>,
+    <span class="ident">target_runner</span>: <span class="ident">OnceCell</span><span class="op">&lt;</span><span class="ident">TargetRunner</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">BaseApp</span> {
@@ -2408,6 +2411,8 @@
             });
         }
 
+        <span class="kw">let</span> <span class="ident">cargo_configs</span> <span class="op">=</span> <span class="ident">CargoConfigs::new</span>(<span class="kw-2">&amp;</span><span class="ident">cargo_opts</span>.<span class="ident">config</span>)<span class="question-mark">?</span>;
+
         <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
             <span class="ident">output</span>,
             <span class="ident">graph_data</span>,
@@ -2416,7 +2421,15 @@
             <span class="ident">manifest_path</span>,
             <span class="ident">cargo_opts</span>,
             <span class="ident">config_opts</span>,
+            <span class="ident">cargo_configs</span>,
+
+            <span class="ident">target_runner</span>: <span class="ident">OnceCell::new</span>(),
         })
+    }
+
+    <span class="kw">fn</span> <span class="ident">load_runner</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">TargetTriple</span><span class="op">&gt;</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">TargetRunner</span> {
+        <span class="self">self</span>.<span class="ident">target_runner</span>
+            .<span class="ident">get_or_init</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">runner_for_target</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cargo_configs</span>, <span class="ident">triple</span>))
     }
 
     <span class="kw">fn</span> <span class="ident">exec_archive</span>(
@@ -2472,11 +2485,16 @@
                     })<span class="question-mark">?</span>;
                 <span class="ident">Arc::new</span>(<span class="ident">BinaryList::from_summary</span>(<span class="ident">binary_list</span>))
             }
-            <span class="prelude-val">None</span> =&gt; <span class="ident">Arc::new</span>(<span class="self">self</span>.<span class="ident">cargo_opts</span>.<span class="ident">compute_binary_list</span>(
-                <span class="self">self</span>.<span class="ident">graph</span>(),
-                <span class="self">self</span>.<span class="ident">manifest_path</span>.<span class="ident">as_deref</span>(),
-                <span class="self">self</span>.<span class="ident">output</span>,
-            )<span class="question-mark">?</span>),
+            <span class="prelude-val">None</span> =&gt; {
+                <span class="kw">let</span> <span class="ident">target_triple</span> <span class="op">=</span>
+                    <span class="ident">discover_target_triple</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cargo_configs</span>, <span class="self">self</span>.<span class="ident">cargo_opts</span>.<span class="ident">target</span>.<span class="ident">as_deref</span>());
+                <span class="ident">Arc::new</span>(<span class="self">self</span>.<span class="ident">cargo_opts</span>.<span class="ident">compute_binary_list</span>(
+                    <span class="self">self</span>.<span class="ident">graph</span>(),
+                    <span class="self">self</span>.<span class="ident">manifest_path</span>.<span class="ident">as_deref</span>(),
+                    <span class="self">self</span>.<span class="ident">output</span>,
+                    <span class="ident">target_triple</span>,
+                )<span class="question-mark">?</span>)
+            }
         };
         <span class="prelude-val">Ok</span>(<span class="ident">binary_list</span>)
     }
@@ -2491,9 +2509,6 @@
 <span class="kw">struct</span> <span class="ident">App</span> {
     <span class="ident">base</span>: <span class="ident">BaseApp</span>,
     <span class="ident">build_filter</span>: <span class="ident">TestBuildFilter</span>,
-    <span class="ident">cargo_configs</span>: <span class="ident">CargoConfigs</span>,
-    <span class="ident">target_triple</span>: <span class="ident">OnceCell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TargetTriple</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">target_runner</span>: <span class="ident">OnceCell</span><span class="op">&lt;</span><span class="ident">TargetRunner</span><span class="op">&gt;</span>,
 }
 
 <span class="comment">// (_output is not used, but must be passed in to ensure that the output is properly initialized</span>
@@ -2509,15 +2524,7 @@
     <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">base</span>: <span class="ident">BaseApp</span>, <span class="ident">build_filter</span>: <span class="ident">TestBuildFilter</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="ident">check_experimental_filtering</span>(<span class="ident">base</span>.<span class="ident">output</span>);
 
-        <span class="kw">let</span> <span class="ident">cargo_configs</span> <span class="op">=</span> <span class="ident">CargoConfigs::new</span>(<span class="kw-2">&amp;</span><span class="ident">base</span>.<span class="ident">cargo_opts</span>.<span class="ident">config</span>)<span class="question-mark">?</span>;
-
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-            <span class="ident">base</span>,
-            <span class="ident">build_filter</span>,
-            <span class="ident">cargo_configs</span>,
-            <span class="ident">target_triple</span>: <span class="ident">OnceCell::new</span>(),
-            <span class="ident">target_runner</span>: <span class="ident">OnceCell::new</span>(),
-        })
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span> { <span class="ident">base</span>, <span class="ident">build_filter</span> })
     }
 
     <span class="kw">fn</span> <span class="ident">build_filtering_expressions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">FilteringExpr</span><span class="op">&gt;</span><span class="op">&gt;</span> {
@@ -2575,20 +2582,6 @@
         <span class="prelude-val">Ok</span>(<span class="ident">profile</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">load_triple</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">TargetTriple</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">target_triple</span>
-            .<span class="ident">get_or_init</span>(<span class="op">|</span><span class="op">|</span> {
-                <span class="ident">discover_target_triple</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cargo_configs</span>, <span class="self">self</span>.<span class="ident">base</span>.<span class="ident">cargo_opts</span>.<span class="ident">target</span>.<span class="ident">as_deref</span>())
-            })
-            .<span class="ident">as_ref</span>()
-    }
-
-    <span class="kw">fn</span> <span class="ident">load_runner</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">TargetRunner</span> {
-        <span class="kw">let</span> <span class="ident">triple</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">load_triple</span>();
-        <span class="self">self</span>.<span class="ident">target_runner</span>
-            .<span class="ident">get_or_init</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">runner_for_target</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cargo_configs</span>, <span class="ident">triple</span>))
-    }
-
     <span class="kw">fn</span> <span class="ident">exec_list</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">message_format</span>: <span class="ident">MessageFormatOpts</span>,
@@ -2611,7 +2604,9 @@
                 <span class="ident">writer</span>.<span class="ident">flush</span>().<span class="ident">map_err</span>(<span class="ident">WriteTestListError::Io</span>)<span class="question-mark">?</span>;
             }
             <span class="ident">ListType::Full</span> =&gt; {
-                <span class="kw">let</span> <span class="ident">target_runner</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">load_runner</span>();
+                <span class="kw">let</span> <span class="ident">target_runner</span> <span class="op">=</span> <span class="self">self</span>
+                    .<span class="ident">base</span>
+                    .<span class="ident">load_runner</span>(<span class="ident">binary_list</span>.<span class="ident">rust_build_meta</span>.<span class="ident">target_triple</span>.<span class="ident">as_ref</span>());
                 <span class="kw">let</span> <span class="ident">test_list</span> <span class="op">=</span>
                     <span class="self">self</span>.<span class="ident">build_test_list</span>(<span class="ident">binary_list</span>, <span class="ident">test_filter_builder</span>, <span class="ident">target_runner</span>)<span class="question-mark">?</span>;
 
@@ -2641,12 +2636,13 @@
             .<span class="ident">make_config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">base</span>.<span class="ident">workspace_root</span>, <span class="self">self</span>.<span class="ident">base</span>.<span class="ident">graph</span>())<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">profile</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">load_profile</span>(<span class="ident">profile_name</span>, <span class="kw-2">&amp;</span><span class="ident">config</span>)<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">target_runner</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">load_runner</span>();
-
         <span class="kw">let</span> <span class="ident">filter_exprs</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">build_filtering_expressions</span>()<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">test_filter_builder</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">build_filter</span>.<span class="ident">make_test_filter_builder</span>(<span class="ident">filter_exprs</span>)<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">binary_list</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">base</span>.<span class="ident">build_binary_list</span>()<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">target_runner</span> <span class="op">=</span> <span class="self">self</span>
+            .<span class="ident">base</span>
+            .<span class="ident">load_runner</span>(<span class="ident">binary_list</span>.<span class="ident">rust_build_meta</span>.<span class="ident">target_triple</span>.<span class="ident">as_ref</span>());
 
         <span class="kw">let</span> <span class="ident">test_list</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">build_test_list</span>(<span class="ident">binary_list</span>, <span class="ident">test_filter_builder</span>, <span class="ident">target_runner</span>)<span class="question-mark">?</span>;
 

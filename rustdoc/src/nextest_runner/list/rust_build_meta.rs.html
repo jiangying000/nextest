@@ -143,10 +143,23 @@
 <span id="137">137</span>
 <span id="138">138</span>
 <span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">cargo_config::TargetTriple</span>,
     <span class="ident">helpers::convert_rel_path_to_main_sep</span>,
     <span class="ident">list</span>::{<span class="ident">BinaryListState</span>, <span class="ident">TestListState</span>},
     <span class="ident">reuse_build::PathMapper</span>,
@@ -180,18 +193,25 @@
     <span class="doccomment">/// requested them. We might consider adding a new field with metadata about that.</span>
     <span class="kw">pub</span> <span class="ident">linked_paths</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span>, <span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
+    <span class="doccomment">/// The target triple used while compiling the artifacts</span>
+    <span class="kw">pub</span> <span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TargetTriple</span><span class="op">&gt;</span>,
+
     <span class="ident">state</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">State</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">RustBuildMeta</span><span class="op">&lt;</span><span class="ident">BinaryListState</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Creates a new [`RustBuildMeta`].</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">target_directory</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
+        <span class="ident">target_directory</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Utf8PathBuf</span><span class="op">&gt;</span>,
+        <span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TargetTriple</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">target_directory</span>: <span class="ident">target_directory</span>.<span class="ident">into</span>(),
             <span class="ident">base_output_directories</span>: <span class="ident">BTreeSet::new</span>(),
             <span class="ident">non_test_binaries</span>: <span class="ident">BTreeMap::new</span>(),
             <span class="ident">linked_paths</span>: <span class="ident">BTreeMap::new</span>(),
             <span class="ident">state</span>: <span class="ident">PhantomData</span>,
+            <span class="ident">target_triple</span>,
         }
     }
 
@@ -207,6 +227,7 @@
             <span class="ident">non_test_binaries</span>: <span class="self">self</span>.<span class="ident">non_test_binaries</span>.<span class="ident">clone</span>(),
             <span class="ident">linked_paths</span>: <span class="self">self</span>.<span class="ident">linked_paths</span>.<span class="ident">clone</span>(),
             <span class="ident">state</span>: <span class="ident">PhantomData</span>,
+            <span class="ident">target_triple</span>: <span class="self">self</span>.<span class="ident">target_triple</span>.<span class="ident">clone</span>(),
         }
     }
 }
@@ -221,6 +242,7 @@
             <span class="ident">non_test_binaries</span>: <span class="ident">BTreeMap::new</span>(),
             <span class="ident">linked_paths</span>: <span class="ident">BTreeMap::new</span>(),
             <span class="ident">state</span>: <span class="ident">PhantomData</span>,
+            <span class="ident">target_triple</span>: <span class="prelude-val">None</span>,
         }
     }
 
@@ -269,6 +291,7 @@
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">linked_path</span><span class="op">|</span> (<span class="ident">linked_path</span>, <span class="ident">BTreeSet::new</span>()))
                 .<span class="ident">collect</span>(),
             <span class="ident">state</span>: <span class="ident">PhantomData</span>,
+            <span class="ident">target_triple</span>: <span class="ident">TargetTriple::deserialize</span>(<span class="ident">summary</span>.<span class="ident">target_triple</span>),
         }
     }
 
@@ -279,6 +302,7 @@
             <span class="ident">base_output_directories</span>: <span class="self">self</span>.<span class="ident">base_output_directories</span>.<span class="ident">clone</span>(),
             <span class="ident">non_test_binaries</span>: <span class="self">self</span>.<span class="ident">non_test_binaries</span>.<span class="ident">clone</span>(),
             <span class="ident">linked_paths</span>: <span class="self">self</span>.<span class="ident">linked_paths</span>.<span class="ident">keys</span>().<span class="ident">cloned</span>().<span class="ident">collect</span>(),
+            <span class="ident">target_triple</span>: <span class="ident">TargetTriple::serialize</span>(<span class="self">self</span>.<span class="ident">target_triple</span>.<span class="ident">as_ref</span>()),
         }
     }
 }

@@ -504,10 +504,18 @@
 <span id="498">498</span>
 <span id="499">499</span>
 <span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">cargo_config::TargetTriple</span>,
     <span class="ident">errors</span>::{<span class="ident">FromMessagesError</span>, <span class="ident">WriteTestListError</span>},
     <span class="ident">helpers::convert_rel_path_to_forward_slash</span>,
     <span class="ident">list</span>::{<span class="ident">BinaryListState</span>, <span class="ident">OutputFormat</span>, <span class="ident">RustBuildMeta</span>, <span class="ident">Styles</span>},
@@ -555,8 +563,9 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_messages</span>(
         <span class="ident">reader</span>: <span class="kw">impl</span> <span class="ident">io::BufRead</span>,
         <span class="ident">graph</span>: <span class="kw-2">&amp;</span><span class="ident">PackageGraph</span>,
+        <span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TargetTriple</span><span class="op">&gt;</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">FromMessagesError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">BinaryListBuildState::new</span>(<span class="ident">graph</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">BinaryListBuildState::new</span>(<span class="ident">graph</span>, <span class="ident">target_triple</span>);
 
         <span class="kw">for</span> <span class="ident">message</span> <span class="kw">in</span> <span class="ident">Message::parse_stream</span>(<span class="ident">reader</span>) {
             <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">message</span>.<span class="ident">map_err</span>(<span class="ident">FromMessagesError::ReadMessages</span>)<span class="question-mark">?</span>;
@@ -665,13 +674,13 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;g</span><span class="op">&gt;</span> <span class="ident">BinaryListBuildState</span><span class="op">&lt;</span><span class="lifetime">&#39;g</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">graph</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;g</span> <span class="ident">PackageGraph</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">graph</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;g</span> <span class="ident">PackageGraph</span>, <span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TargetTriple</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">rust_target_dir</span> <span class="op">=</span> <span class="ident">graph</span>.<span class="ident">workspace</span>().<span class="ident">target_directory</span>().<span class="ident">to_path_buf</span>();
 
         <span class="self">Self</span> {
             <span class="ident">graph</span>,
             <span class="ident">rust_binaries</span>: <span class="macro">vec!</span>[],
-            <span class="ident">rust_build_meta</span>: <span class="ident">RustBuildMeta::new</span>(<span class="ident">rust_target_dir</span>),
+            <span class="ident">rust_build_meta</span>: <span class="ident">RustBuildMeta::new</span>(<span class="ident">rust_target_dir</span>, <span class="ident">target_triple</span>),
         }
     }
 
@@ -867,7 +876,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::list::SerializableFormat</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">cargo_config::TargetTripleSource</span>, <span class="ident">list::SerializableFormat</span>};
     <span class="kw">use</span> <span class="ident">indoc::indoc</span>;
     <span class="kw">use</span> <span class="ident">maplit::btreeset</span>;
     <span class="kw">use</span> <span class="ident">pretty_assertions::assert_eq</span>;
@@ -893,7 +902,11 @@
             <span class="ident">build_platform</span>: <span class="ident">BuildPlatform::Host</span>,
         };
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rust_build_meta</span> <span class="op">=</span> <span class="ident">RustBuildMeta::new</span>(<span class="string">&quot;/fake/target&quot;</span>);
+        <span class="kw">let</span> <span class="ident">fake_triple</span> <span class="op">=</span> <span class="ident">TargetTriple</span> {
+            <span class="ident">triple</span>: <span class="string">&quot;fake-triple&quot;</span>.<span class="ident">to_owned</span>(),
+            <span class="ident">source</span>: <span class="ident">TargetTripleSource::CliOption</span>,
+        };
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rust_build_meta</span> <span class="op">=</span> <span class="ident">RustBuildMeta::new</span>(<span class="string">&quot;/fake/target&quot;</span>, <span class="prelude-val">Some</span>(<span class="ident">fake_triple</span>));
         <span class="ident">rust_build_meta</span>
             .<span class="ident">base_output_directories</span>
             .<span class="ident">insert</span>(<span class="string">&quot;my-profile&quot;</span>.<span class="ident">into</span>());
@@ -962,7 +975,8 @@
                 }
               ]
             },
-            &quot;linked-paths&quot;: []
+            &quot;linked-paths&quot;: [],
+            &quot;target-triple&quot;: &quot;fake-triple&quot;
           },
           &quot;rust-binaries&quot;: {
             &quot;fake-macro::proc-macro/fake-macro&quot;: {
