@@ -734,6 +734,88 @@
 <span id="728">728</span>
 <span id="729">729</span>
 <span id="730">730</span>
+<span id="731">731</span>
+<span id="732">732</span>
+<span id="733">733</span>
+<span id="734">734</span>
+<span id="735">735</span>
+<span id="736">736</span>
+<span id="737">737</span>
+<span id="738">738</span>
+<span id="739">739</span>
+<span id="740">740</span>
+<span id="741">741</span>
+<span id="742">742</span>
+<span id="743">743</span>
+<span id="744">744</span>
+<span id="745">745</span>
+<span id="746">746</span>
+<span id="747">747</span>
+<span id="748">748</span>
+<span id="749">749</span>
+<span id="750">750</span>
+<span id="751">751</span>
+<span id="752">752</span>
+<span id="753">753</span>
+<span id="754">754</span>
+<span id="755">755</span>
+<span id="756">756</span>
+<span id="757">757</span>
+<span id="758">758</span>
+<span id="759">759</span>
+<span id="760">760</span>
+<span id="761">761</span>
+<span id="762">762</span>
+<span id="763">763</span>
+<span id="764">764</span>
+<span id="765">765</span>
+<span id="766">766</span>
+<span id="767">767</span>
+<span id="768">768</span>
+<span id="769">769</span>
+<span id="770">770</span>
+<span id="771">771</span>
+<span id="772">772</span>
+<span id="773">773</span>
+<span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
+<span id="781">781</span>
+<span id="782">782</span>
+<span id="783">783</span>
+<span id="784">784</span>
+<span id="785">785</span>
+<span id="786">786</span>
+<span id="787">787</span>
+<span id="788">788</span>
+<span id="789">789</span>
+<span id="790">790</span>
+<span id="791">791</span>
+<span id="792">792</span>
+<span id="793">793</span>
+<span id="794">794</span>
+<span id="795">795</span>
+<span id="796">796</span>
+<span id="797">797</span>
+<span id="798">798</span>
+<span id="799">799</span>
+<span id="800">800</span>
+<span id="801">801</span>
+<span id="802">802</span>
+<span id="803">803</span>
+<span id="804">804</span>
+<span id="805">805</span>
+<span id="806">806</span>
+<span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -815,11 +897,6 @@
             }));
         }
 
-        <span class="comment">// Next, look at the CARGO_BUILD_TARGET env var.</span>
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">triple</span>) <span class="op">=</span> <span class="ident"><span class="self">Self</span>::from_env</span>()<span class="question-mark">?</span> {
-            <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">triple</span>));
-        }
-
         <span class="comment">// Finally, look at the cargo configs.</span>
         <span class="ident"><span class="self">Self</span>::from_cargo_configs</span>(<span class="ident">cargo_configs</span>)
     }
@@ -842,14 +919,25 @@
     }
 
     <span class="kw">fn</span> <span class="ident">from_cargo_configs</span>(<span class="ident">cargo_configs</span>: <span class="kw-2">&amp;</span><span class="ident">CargoConfigs</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">TargetTripleError</span><span class="op">&gt;</span> {
-        <span class="kw">for</span> (<span class="ident">source</span>, <span class="ident">config</span>) <span class="kw">in</span> <span class="ident">cargo_configs</span>.<span class="ident">discovered_configs</span>()<span class="question-mark">?</span> {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">triple</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">config</span>.<span class="ident">build</span>.<span class="ident">target</span> {
-                <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">TargetTriple</span> {
-                    <span class="ident">triple</span>: <span class="ident">triple</span>.<span class="ident">to_owned</span>(),
-                    <span class="ident">source</span>: <span class="ident">TargetTripleSource::CargoConfig</span> {
-                        <span class="ident">source</span>: <span class="ident">source</span>.<span class="ident">clone</span>(),
-                    },
-                }));
+        <span class="kw">for</span> <span class="ident">discovered_config</span> <span class="kw">in</span> <span class="ident">cargo_configs</span>.<span class="ident">discovered_configs</span>()<span class="question-mark">?</span> {
+            <span class="kw">match</span> <span class="ident">discovered_config</span> {
+                <span class="ident">DiscoveredConfig::CliOption</span> { <span class="ident">config</span>, <span class="ident">source</span> }
+                <span class="op">|</span> <span class="ident">DiscoveredConfig::File</span> { <span class="ident">config</span>, <span class="ident">source</span> } =&gt; {
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">triple</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">config</span>.<span class="ident">build</span>.<span class="ident">target</span> {
+                        <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">TargetTriple</span> {
+                            <span class="ident">triple</span>: <span class="ident">triple</span>.<span class="ident">to_owned</span>(),
+                            <span class="ident">source</span>: <span class="ident">TargetTripleSource::CargoConfig</span> {
+                                <span class="ident">source</span>: <span class="ident">source</span>.<span class="ident">clone</span>(),
+                            },
+                        }));
+                    }
+                }
+                <span class="ident">DiscoveredConfig::Env</span> =&gt; {
+                    <span class="comment">// Look at the CARGO_BUILD_TARGET env var.</span>
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">triple</span>) <span class="op">=</span> <span class="ident"><span class="self">Self</span>::from_env</span>()<span class="question-mark">?</span> {
+                        <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">triple</span>));
+                    }
+                }
             }
         }
 
@@ -978,16 +1066,46 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">discovered_configs</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>
-        <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span>(<span class="ident">CargoConfigSource</span>, <span class="ident">CargoConfig</span>)<span class="op">&gt;</span> <span class="op">+</span> <span class="ident">DoubleEndedIterator</span> <span class="op">+</span> <span class="lifetime">&#39;_</span>,
+        <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">DiscoveredConfig</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">DoubleEndedIterator</span> <span class="op">+</span> <span class="lifetime">&#39;_</span>,
         <span class="ident">CargoConfigError</span>,
     <span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">cli_iter</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">cli_configs</span>.<span class="ident">iter</span>();
-        <span class="kw">let</span> <span class="ident">file_iter</span> <span class="op">=</span> <span class="self">self</span>
+        <span class="comment">// TODO/NOTE: https://github.com/rust-lang/cargo/issues/10992 means that currently</span>
+        <span class="comment">// environment variables are privileged over files passed in over the CLI. Once this</span>
+        <span class="comment">// behavior is fixed in upstream cargo, it should also be fixed here.</span>
+        <span class="kw">let</span> <span class="ident">cli_option_iter</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">cli_configs</span>.<span class="ident">iter</span>().<span class="ident">filter_map</span>(<span class="op">|</span>(<span class="ident">source</span>, <span class="ident">config</span>)<span class="op">|</span> {
+            <span class="macro">matches!</span>(<span class="ident">source</span>, <span class="ident">CargoConfigSource::CliOption</span>)
+                .<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">DiscoveredConfig::CliOption</span> { <span class="ident">config</span>, <span class="ident">source</span> })
+        });
+
+        <span class="kw">let</span> <span class="ident">cli_file_iter</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">cli_configs</span>.<span class="ident">iter</span>().<span class="ident">filter_map</span>(<span class="op">|</span>(<span class="ident">source</span>, <span class="ident">config</span>)<span class="op">|</span> {
+            <span class="macro">matches!</span>(<span class="ident">source</span>, <span class="ident">CargoConfigSource::File</span>(<span class="kw">_</span>))
+                .<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">DiscoveredConfig::File</span> { <span class="ident">config</span>, <span class="ident">source</span> })
+        });
+
+        <span class="kw">let</span> <span class="ident">cargo_config_file_iter</span> <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">discovered</span>
             .<span class="ident">get_or_try_init</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">discover_impl</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cwd</span>, <span class="self">self</span>.<span class="ident">terminate_search_at</span>.<span class="ident">as_deref</span>()))<span class="question-mark">?</span>
-            .<span class="ident">iter</span>();
-        <span class="prelude-val">Ok</span>(<span class="ident">cli_iter</span>.<span class="ident">chain</span>(<span class="ident">file_iter</span>))
+            .<span class="ident">iter</span>()
+            .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">source</span>, <span class="ident">config</span>)<span class="op">|</span> <span class="ident">DiscoveredConfig::File</span> { <span class="ident">config</span>, <span class="ident">source</span> });
+
+        <span class="prelude-val">Ok</span>(<span class="ident">cli_option_iter</span>
+            .<span class="ident">chain</span>(<span class="ident">std::iter::once</span>(<span class="ident">DiscoveredConfig::Env</span>))
+            .<span class="ident">chain</span>(<span class="ident">cli_file_iter</span>)
+            .<span class="ident">chain</span>(<span class="ident">cargo_config_file_iter</span>))
     }
+}
+
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">DiscoveredConfig</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="ident">CliOption</span> {
+        <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">CargoConfig</span>,
+        <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">CargoConfigSource</span>,
+    },
+    <span class="comment">// Sentinel value to indicate to users that they should look up their config in the environment.</span>
+    <span class="ident">Env</span>,
+    <span class="ident">File</span> {
+        <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">CargoConfig</span>,
+        <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">CargoConfigSource</span>,
+    },
 }
 
 <span class="kw">fn</span> <span class="ident">parse_cli_configs</span>(
@@ -1305,7 +1423,7 @@
         <span class="kw">let</span> <span class="ident">dir_foo_bar_path</span> <span class="op">=</span> <span class="ident">dir_foo_path</span>.<span class="ident">join</span>(<span class="string">&quot;bar&quot;</span>);
 
         <span class="macro">assert_eq!</span>(
-            <span class="ident">find_target_triple</span>(<span class="kw-2">&amp;</span>[], <span class="kw-2">&amp;</span><span class="ident">dir_foo_bar_path</span>, <span class="kw-2">&amp;</span><span class="ident">dir_path</span>),
+            <span class="ident">find_target_triple</span>(<span class="kw-2">&amp;</span>[], <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">dir_foo_bar_path</span>, <span class="kw-2">&amp;</span><span class="ident">dir_path</span>),
             <span class="prelude-val">Some</span>(<span class="ident">TargetTriple</span> {
                 <span class="ident">triple</span>: <span class="string">&quot;x86_64-unknown-linux-gnu&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">source</span>: <span class="ident">TargetTripleSource::CargoConfig</span> {
@@ -1315,7 +1433,7 @@
         );
 
         <span class="macro">assert_eq!</span>(
-            <span class="ident">find_target_triple</span>(<span class="kw-2">&amp;</span>[], <span class="kw-2">&amp;</span><span class="ident">dir_foo_path</span>, <span class="kw-2">&amp;</span><span class="ident">dir_path</span>),
+            <span class="ident">find_target_triple</span>(<span class="kw-2">&amp;</span>[], <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">dir_foo_path</span>, <span class="kw-2">&amp;</span><span class="ident">dir_path</span>),
             <span class="prelude-val">Some</span>(<span class="ident">TargetTriple</span> {
                 <span class="ident">triple</span>: <span class="string">&quot;x86_64-pc-windows-msvc&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">source</span>: <span class="ident">TargetTripleSource::CargoConfig</span> {
@@ -1327,6 +1445,7 @@
         <span class="macro">assert_eq!</span>(
             <span class="ident">find_target_triple</span>(
                 <span class="kw-2">&amp;</span>[<span class="string">&quot;build.target=\&quot;aarch64-unknown-linux-gnu\&quot;&quot;</span>],
+                <span class="prelude-val">None</span>,
                 <span class="kw-2">&amp;</span><span class="ident">dir_foo_bar_path</span>,
                 <span class="kw-2">&amp;</span><span class="ident">dir_path</span>
             ),
@@ -1345,6 +1464,7 @@
                     <span class="string">&quot;build.target=\&quot;aarch64-unknown-linux-gnu\&quot;&quot;</span>,
                     <span class="string">&quot;build.target=\&quot;x86_64-unknown-linux-musl\&quot;&quot;</span>
                 ],
+                <span class="prelude-val">None</span>,
                 <span class="kw-2">&amp;</span><span class="ident">dir_foo_bar_path</span>,
                 <span class="kw-2">&amp;</span><span class="ident">dir_path</span>
             ),
@@ -1356,16 +1476,40 @@
             })
         );
 
-        <span class="comment">// --config &lt;path&gt; should be parsed correctly.</span>
+        <span class="comment">// --config is preferred over the environment.</span>
         <span class="macro">assert_eq!</span>(
             <span class="ident">find_target_triple</span>(
-                <span class="kw-2">&amp;</span>[
-                    <span class="string">&quot;extra-config.toml&quot;</span>,
-                    <span class="string">&quot;build.target=\&quot;x86_64-unknown-linux-musl\&quot;&quot;</span>,
-                ],
-                <span class="kw-2">&amp;</span><span class="ident">dir_foo_path</span>,
+                <span class="kw-2">&amp;</span>[<span class="string">&quot;build.target=\&quot;aarch64-unknown-linux-gnu\&quot;&quot;</span>,],
+                <span class="prelude-val">Some</span>(<span class="string">&quot;aarch64-pc-windows-msvc&quot;</span>),
+                <span class="kw-2">&amp;</span><span class="ident">dir_foo_bar_path</span>,
                 <span class="kw-2">&amp;</span><span class="ident">dir_path</span>
             ),
+            <span class="prelude-val">Some</span>(<span class="ident">TargetTriple</span> {
+                <span class="ident">triple</span>: <span class="string">&quot;aarch64-unknown-linux-gnu&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">source</span>: <span class="ident">TargetTripleSource::CargoConfig</span> {
+                    <span class="ident">source</span>: <span class="ident">CargoConfigSource::CliOption</span>,
+                },
+            })
+        );
+
+        <span class="comment">// The environment is preferred over local paths.</span>
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">find_target_triple</span>(
+                <span class="kw-2">&amp;</span>[],
+                <span class="prelude-val">Some</span>(<span class="string">&quot;aarch64-pc-windows-msvc&quot;</span>),
+                <span class="kw-2">&amp;</span><span class="ident">dir_foo_bar_path</span>,
+                <span class="kw-2">&amp;</span><span class="ident">dir_path</span>
+            ),
+            <span class="prelude-val">Some</span>(<span class="ident">TargetTriple</span> {
+                <span class="ident">triple</span>: <span class="string">&quot;aarch64-pc-windows-msvc&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">source</span>: <span class="ident">TargetTripleSource::Env</span>,
+            })
+        );
+
+        <span class="comment">// --config &lt;path&gt; should be parsed correctly. Config files currently come after</span>
+        <span class="comment">// keys and values passed in via --config, and after the environment.</span>
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">find_target_triple</span>(<span class="kw-2">&amp;</span>[<span class="string">&quot;extra-config.toml&quot;</span>], <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">dir_foo_path</span>, <span class="kw-2">&amp;</span><span class="ident">dir_path</span>),
             <span class="prelude-val">Some</span>(<span class="ident">TargetTriple</span> {
                 <span class="ident">triple</span>: <span class="string">&quot;aarch64-unknown-linux-gnu&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">source</span>: <span class="ident">TargetTripleSource::CargoConfig</span> {
@@ -1375,17 +1519,30 @@
         );
         <span class="macro">assert_eq!</span>(
             <span class="ident">find_target_triple</span>(
+                <span class="kw-2">&amp;</span>[<span class="string">&quot;extra-config.toml&quot;</span>],
+                <span class="prelude-val">Some</span>(<span class="string">&quot;aarch64-pc-windows-msvc&quot;</span>),
+                <span class="kw-2">&amp;</span><span class="ident">dir_foo_path</span>,
+                <span class="kw-2">&amp;</span><span class="ident">dir_path</span>
+            ),
+            <span class="prelude-val">Some</span>(<span class="ident">TargetTriple</span> {
+                <span class="ident">triple</span>: <span class="string">&quot;aarch64-pc-windows-msvc&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">source</span>: <span class="ident">TargetTripleSource::Env</span>,
+            })
+        );
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">find_target_triple</span>(
                 <span class="kw-2">&amp;</span>[
                     <span class="string">&quot;../extra-config.toml&quot;</span>,
                     <span class="string">&quot;build.target=\&quot;x86_64-unknown-linux-musl\&quot;&quot;</span>,
                 ],
+                <span class="prelude-val">None</span>,
                 <span class="kw-2">&amp;</span><span class="ident">dir_foo_bar_path</span>,
                 <span class="kw-2">&amp;</span><span class="ident">dir_path</span>
             ),
             <span class="prelude-val">Some</span>(<span class="ident">TargetTriple</span> {
-                <span class="ident">triple</span>: <span class="string">&quot;aarch64-unknown-linux-gnu&quot;</span>.<span class="ident">into</span>(),
+                <span class="ident">triple</span>: <span class="string">&quot;x86_64-unknown-linux-musl&quot;</span>.<span class="ident">into</span>(),
                 <span class="ident">source</span>: <span class="ident">TargetTripleSource::CargoConfig</span> {
-                    <span class="ident">source</span>: <span class="ident">CargoConfigSource::File</span>(<span class="ident">dir_foo_bar_path</span>.<span class="ident">join</span>(<span class="string">&quot;../extra-config.toml&quot;</span>)),
+                    <span class="ident">source</span>: <span class="ident">CargoConfigSource::CliOption</span>,
                 },
             })
         );
@@ -1395,6 +1552,7 @@
                     <span class="string">&quot;build.target=\&quot;x86_64-unknown-linux-musl\&quot;&quot;</span>,
                     <span class="string">&quot;extra-config.toml&quot;</span>,
                 ],
+                <span class="prelude-val">None</span>,
                 <span class="kw-2">&amp;</span><span class="ident">dir_foo_path</span>,
                 <span class="kw-2">&amp;</span><span class="ident">dir_path</span>
             ),
@@ -1406,7 +1564,7 @@
             })
         );
 
-        <span class="macro">assert_eq!</span>(<span class="ident">find_target_triple</span>(<span class="kw-2">&amp;</span>[], <span class="kw-2">&amp;</span><span class="ident">dir_path</span>, <span class="kw-2">&amp;</span><span class="ident">dir_path</span>), <span class="prelude-val">None</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">find_target_triple</span>(<span class="kw-2">&amp;</span>[], <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">dir_path</span>, <span class="kw-2">&amp;</span><span class="ident">dir_path</span>), <span class="prelude-val">None</span>);
     }
 
     <span class="kw">fn</span> <span class="ident">setup_temp_dir</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TempDir</span><span class="op">&gt;</span> {
@@ -1440,13 +1598,19 @@
 
     <span class="kw">fn</span> <span class="ident">find_target_triple</span>(
         <span class="ident">cli_configs</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>],
+        <span class="ident">env</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>,
         <span class="ident">start_search_at</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>,
         <span class="ident">terminate_search_at</span>: <span class="kw-2">&amp;</span><span class="ident">Utf8Path</span>,
     ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TargetTriple</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">configs</span> <span class="op">=</span>
             <span class="ident">CargoConfigs::new_with_isolation</span>(<span class="ident">cli_configs</span>, <span class="ident">start_search_at</span>, <span class="ident">terminate_search_at</span>)
                 .<span class="ident">unwrap</span>();
-        <span class="ident">TargetTriple::from_cargo_configs</span>(<span class="kw-2">&amp;</span><span class="ident">configs</span>).<span class="ident">unwrap</span>()
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">env</span>) <span class="op">=</span> <span class="ident">env</span> {
+            <span class="ident">std::env::set_var</span>(<span class="string">&quot;CARGO_BUILD_TARGET&quot;</span>, <span class="ident">env</span>);
+        }
+        <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="ident">TargetTriple::from_cargo_configs</span>(<span class="kw-2">&amp;</span><span class="ident">configs</span>).<span class="ident">unwrap</span>();
+        <span class="ident">std::env::remove_var</span>(<span class="string">&quot;CARGO_BUILD_TARGET&quot;</span>);
+        <span class="ident">ret</span>
     }
 
     <span class="kw">static</span> <span class="ident">FOO_CARGO_CONFIG_CONTENTS</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">r#&quot;
