@@ -291,7 +291,7 @@
                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">linked_path</span><span class="op">|</span> (<span class="ident">linked_path</span>, <span class="ident">BTreeSet::new</span>()))
                 .<span class="ident">collect</span>(),
             <span class="ident">state</span>: <span class="ident">PhantomData</span>,
-            <span class="ident">target_triple</span>: <span class="ident">TargetTriple::deserialize</span>(<span class="ident">summary</span>.<span class="ident">target_triple</span>),
+            <span class="ident">target_triple</span>: <span class="ident">TargetTriple::deserialize</span>(<span class="ident">summary</span>.<span class="ident">target_platform</span>),
         }
     }
 
@@ -302,7 +302,7 @@
             <span class="ident">base_output_directories</span>: <span class="self">self</span>.<span class="ident">base_output_directories</span>.<span class="ident">clone</span>(),
             <span class="ident">non_test_binaries</span>: <span class="self">self</span>.<span class="ident">non_test_binaries</span>.<span class="ident">clone</span>(),
             <span class="ident">linked_paths</span>: <span class="self">self</span>.<span class="ident">linked_paths</span>.<span class="ident">keys</span>().<span class="ident">cloned</span>().<span class="ident">collect</span>(),
-            <span class="ident">target_triple</span>: <span class="ident">TargetTriple::serialize</span>(<span class="self">self</span>.<span class="ident">target_triple</span>.<span class="ident">as_ref</span>()),
+            <span class="ident">target_platform</span>: <span class="ident">TargetTriple::serialize</span>(<span class="self">self</span>.<span class="ident">target_triple</span>.<span class="ident">as_ref</span>()),
         }
     }
 }

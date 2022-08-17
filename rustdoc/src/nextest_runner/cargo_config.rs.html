@@ -812,10 +812,6 @@
 <span id="806">806</span>
 <span id="807">807</span>
 <span id="808">808</span>
-<span id="809">809</span>
-<span id="810">810</span>
-<span id="811">811</span>
-<span id="812">812</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -847,17 +843,17 @@
     <span class="doccomment">/// cargo-nextest represents the host triple with `None` during runtime.</span>
     <span class="doccomment">/// However the build-metadata might be used on a system with a different host triple.</span>
     <span class="doccomment">/// Therefore the host triple is detected if `target_triple` is `None`</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">serialize</span>(<span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">TargetTriple</span><span class="op">&gt;</span>) -&gt; <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">serialize</span>(<span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">TargetTriple</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">target</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">target_triple</span> {
-            <span class="ident">target</span>.<span class="ident">triple</span>.<span class="ident">clone</span>()
+            <span class="prelude-val">Some</span>(<span class="ident">target</span>.<span class="ident">triple</span>.<span class="ident">clone</span>())
         } <span class="kw">else</span> {
             <span class="kw">match</span> <span class="ident">Platform::current</span>() {
-                <span class="prelude-val">Ok</span>(<span class="ident">host</span>) =&gt; <span class="ident">host</span>.<span class="ident">triple_str</span>().<span class="ident">to_owned</span>(),
+                <span class="prelude-val">Ok</span>(<span class="ident">host</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">host</span>.<span class="ident">triple_str</span>().<span class="ident">to_owned</span>()),
                 <span class="prelude-val">Err</span>(<span class="ident">err</span>) =&gt; {
                     <span class="macro">log::warn!</span>(
                         <span class="string">&quot;failed to detect host target: {err}!\n cargo nextest may use the wrong test runner for this archive.&quot;</span>
                     );
-                    <span class="ident">String::new</span>()
+                    <span class="prelude-val">None</span>
                 }
             }
         }
@@ -865,15 +861,11 @@
 
     <span class="doccomment">/// Converts a `String` that was output by `TargetTriple::serialize` back to a target triple.</span>
     <span class="doccomment">/// This target triple is assumed to orginiate from a build-metadata config.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialize</span>(<span class="ident">target_triple</span>: <span class="ident">String</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TargetTriple</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">target_triple</span>.<span class="ident">is_empty</span>() {
-            <span class="prelude-val">None</span>
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">TargetTriple</span> {
-                <span class="ident">triple</span>: <span class="ident">target_triple</span>,
-                <span class="ident">source</span>: <span class="ident">TargetTripleSource::Metadata</span>,
-            })
-        }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialize</span>(<span class="ident">target_triple</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TargetTriple</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Some</span>(<span class="ident">TargetTriple</span> {
+            <span class="ident">triple</span>: <span class="ident">target_triple</span><span class="question-mark">?</span>,
+            <span class="ident">source</span>: <span class="ident">TargetTripleSource::Metadata</span>,
+        })
     }
 
     <span class="doccomment">/// Find the target triple being built.</span>
