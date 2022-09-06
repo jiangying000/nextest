@@ -1581,6 +1581,11 @@
 <span id="1575">1575</span>
 <span id="1576">1576</span>
 <span id="1577">1577</span>
+<span id="1578">1578</span>
+<span id="1579">1579</span>
+<span id="1580">1580</span>
+<span id="1581">1581</span>
+<span id="1582">1582</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -2279,6 +2284,10 @@
         <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_FINAL_STATUS_LEVEL&quot;</span>
     )]</span>
     <span class="ident">final_status_level</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">FinalStatusLevelOpt</span><span class="op">&gt;</span>,
+
+    <span class="doccomment">/// Do not display the progress bar</span>
+    <span class="attribute">#[<span class="ident">clap</span>(<span class="ident">long</span>, <span class="ident">env</span> <span class="op">=</span> <span class="string">&quot;NEXTEST_HIDE_PROGRESS_BAR&quot;</span>)]</span>
+    <span class="ident">hide_progress_bar</span>: <span class="ident">bool</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">TestReporterOpts</span> {
@@ -2297,6 +2306,7 @@
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">final_status_level</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">final_status_level</span> {
             <span class="ident">builder</span>.<span class="ident">set_final_status_level</span>(<span class="ident">final_status_level</span>.<span class="ident">into_final_status_level</span>());
         }
+        <span class="ident">builder</span>.<span class="ident">set_hide_progress_bar</span>(<span class="self">self</span>.<span class="ident">hide_progress_bar</span>);
         <span class="ident">builder</span>
     }
 }
