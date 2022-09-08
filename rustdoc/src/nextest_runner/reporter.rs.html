@@ -1432,6 +1432,10 @@
 <span id="1426">1426</span>
 <span id="1427">1427</span>
 <span id="1428">1428</span>
+<span id="1429">1429</span>
+<span id="1430">1430</span>
+<span id="1431">1431</span>
+<span id="1432">1432</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright (c) The nextest Contributors</span>
 <span class="comment">// SPDX-License-Identifier: MIT OR Apache-2.0</span>
 
@@ -1802,16 +1806,17 @@
                 <span class="ident">progress_bar</span>.<span class="ident">set_style</span>(
                     <span class="ident">ProgressStyle::default_bar</span>()
                         .<span class="ident">progress_chars</span>(<span class="string">&quot;=&gt; &quot;</span>)
-                        .<span class="ident">template</span>(<span class="kw-2">&amp;</span><span class="ident">template</span>),
+                        .<span class="ident">template</span>(<span class="kw-2">&amp;</span><span class="ident">template</span>)
+                        .<span class="ident">expect</span>(<span class="string">&quot;template is known to be valid&quot;</span>),
                 );
-                <span class="comment">// Since we only update the progress bar on a steady tick (below), there&#39;s no need</span>
-                <span class="comment">// to buffer in ProgressDrawTarget.</span>
-                <span class="comment">//</span>
                 <span class="comment">// NOTE: set_draw_target must be called before enable_steady_tick to avoid a</span>
                 <span class="comment">// spurious extra line from being printed as the draw target changes.</span>
-                <span class="ident">progress_bar</span>.<span class="ident">set_draw_target</span>(<span class="ident">ProgressDrawTarget::stderr_nohz</span>());
+                <span class="comment">//</span>
+                <span class="comment">// This used to be unbuffered, but that option went away from indicatif 0.17.0. The</span>
+                <span class="comment">// refresh rate is now 20hz so that it&#39;s double the steady tick rate.</span>
+                <span class="ident">progress_bar</span>.<span class="ident">set_draw_target</span>(<span class="ident">ProgressDrawTarget::stderr_with_hz</span>(<span class="number">20</span>));
                 <span class="comment">// Enable a steady tick 10 times a second.</span>
-                <span class="ident">progress_bar</span>.<span class="ident">enable_steady_tick</span>(<span class="number">100</span>);
+                <span class="ident">progress_bar</span>.<span class="ident">enable_steady_tick</span>(<span class="ident">Duration::from_millis</span>(<span class="number">100</span>));
                 <span class="ident">ReporterStderrImpl::TerminalWithBar</span>(<span class="ident">progress_bar</span>)
             }
             <span class="ident">ReporterStderr::Buffer</span>(<span class="ident">buf</span>) =&gt; <span class="ident">ReporterStderrImpl::Buffer</span>(<span class="ident">buf</span>),
@@ -1872,8 +1877,11 @@
                 <span class="self">self</span>.<span class="ident">inner</span>
                     .<span class="ident">write_event_impl</span>(<span class="kw-2">&amp;</span><span class="ident">event</span>, <span class="kw-2">&amp;mut</span> <span class="ident">buf</span>)
                     .<span class="ident">map_err</span>(<span class="ident">WriteEventError::Io</span>)<span class="question-mark">?</span>;
-                <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">String::from_utf8_lossy</span>(<span class="kw-2">&amp;</span><span class="ident">buf</span>);
-                <span class="ident">progress_bar</span>.<span class="ident">println</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>);
+                <span class="comment">// ProgressBar::println doesn&#39;t print status lines if the bar is hidden. The suspend</span>
+                <span class="comment">// method prints it in both cases.</span>
+                <span class="ident">progress_bar</span>.<span class="ident">suspend</span>(<span class="op">|</span><span class="op">|</span> {
+                    <span class="kw">_</span> <span class="op">=</span> <span class="ident">std::io::stderr</span>().<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="ident">buf</span>);
+                });
 
                 <span class="ident">update_progress_bar</span>(<span class="kw-2">&amp;</span><span class="ident">event</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">styles</span>, <span class="ident">progress_bar</span>);
             }
